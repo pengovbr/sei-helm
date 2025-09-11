@@ -9,7 +9,6 @@ metadata:
     {{- include "sei-db.labels" . | nindent 4 }}
 spec:
   clusterIP: None
-  internalTrafficPolicy: Cluster
   ports:
   - name: default
     port: 3306
