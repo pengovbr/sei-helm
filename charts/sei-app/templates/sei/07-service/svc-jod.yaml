@@ -9,6 +9,5 @@ metadata:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
   externalName: jodinterno.{{ .Values.app.jodcluster }}.svc.cluster.local
-  internalTrafficPolicy: Cluster
   sessionAffinity: None
   type: ExternalName
