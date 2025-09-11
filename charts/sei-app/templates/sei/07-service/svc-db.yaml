@@ -9,6 +9,5 @@ metadata:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
   externalName: dbinterno.{{ .Values.app.dbcluster }}.svc.cluster.local
-  internalTrafficPolicy: Cluster
   sessionAffinity: None
   type: ExternalName
