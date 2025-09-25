@@ -1,0 +1,8 @@
+app:
+        
+    dbcluster: tests-ns-sei-db
+    jodcluster: tests-ns-sei-jod
+    solrcluster: tests-ns-sei-solr
+    memcachedcluster: tests-ns-sei-memcached1
+    
+    host: sei1.teste

@@ -1,0 +1,11 @@
+sei-app:
+
+    app:
+        
+        dbcluster: tests-ns-sei-umbrella
+        jodcluster: tests-ns-sei-umbrella
+        solrcluster: tests-ns-sei-umbrella
+        memcachedcluster: tests-ns-sei-umbrella
+        
+        host: sei1.teste
+    
