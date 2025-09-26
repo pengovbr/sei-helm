@@ -1,6 +1,8 @@
 SHELL := /bin/bash
 
-include ../envtest.env
+#qtde de loops aguardando o sei subir. Cada loop tenta conectar, caso de erro
+# espera 10 segundos para tentar novamente
+loops_espera ?= 15
 
 WARNING = "⚠️ --- "
 CURLCMD = curl -s -k -L --resolve "$(host_url):443:$(host_ip)" https://$(host_url)/sei
@@ -9,7 +11,7 @@ CURLCMD_301 = $(CURLCMD) | grep 301
 CURLCMDSEI_LOGIN = $(CURLCMD) | grep txtUsuario
 CURLCMDSIP_LOGIN = $(CURLCMD_SIP) | grep txtUsuario
 
-CMDSELENIUMCHROME=docker run -d --rm --name seleniumchrome -p 4444:4444 --add-host $(host_url):$(host_ip) -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
+CMDSELENIUMCHROME=docker run -d --rm --name seleniumchrome --add-host $(host_url):$(host_ip) -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
 
 CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/PythonExported:/t -w /t --link seleniumchrome linhares/pytestseleniumdocker:latest bash -c "pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
 
@@ -36,7 +38,7 @@ test_verificar_app_url: ## target de apoio verifica se a url do sei responde a p
 	@echo "*****************************************************"
 	@echo "*****************************************************";
 
-	@for i in {1..15}; do \
+	@for i in {1..$(loops_espera)}; do \
 		echo 'Tentando acessar...'; \
 		var=$$(echo $$($(CURLCMDSEI_LOGIN))); \
 		if [ "$$var" != "" ]; then \
