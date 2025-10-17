@@ -16,10 +16,6 @@ endif
 
 include envtest.env
 
-#qtde de loops aguardando o sei subir. Cada loop tenta conectar, caso de erro
-# espera 10 segundos para tentar novamente
-loops_espera ?= 30
-
 WARNING = "⚠️ --- "
 
 
@@ -111,7 +107,7 @@ install_chart: validar_chart_params chart_instalado ## target para instalacao ge
 	@if [[ "$(chart)" = "chart-generico-dev" || "$(chart)" = "sei-app" ]]; then \
         h="$($(kube_context).$(chart_name).app.host)"; \
         if [ "$$h" = "" ]; then h="$($(kube_context).$(chart_name).sei-app.app.host)"; fi; \
-        make -C Selenium loops_espera=$(loops_espera) host_url=$$h host_ip=$($(kube_context).ip-entrada) test_verificar_e_executar; \
+        make -C Selenium loops_espera=$($(kube_context).loops_espera) host_url=$$h host_ip=$($(kube_context).ip-entrada) test_verificar_e_executar; \
     fi; 
 
 
