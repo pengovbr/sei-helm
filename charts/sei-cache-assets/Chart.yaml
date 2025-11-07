@@ -1,0 +1,11 @@
+apiVersion: v2
+name: sei-cacheassets
+description: Helm chart para subir o cache de assets para o SEI
+
+type: application
+
+version: 1.0.0
+
+appVersion: "3.6.8"
+
+icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/memcachedlogo.png

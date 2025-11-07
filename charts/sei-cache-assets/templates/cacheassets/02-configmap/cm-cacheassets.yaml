@@ -1,0 +1,12 @@
+apiVersion: v1
+binaryData:
+  nginx.conf: |-
+    {{ .Files.Get "apoio/conf/nginx.conf" | b64enc }}
+kind: ConfigMap
+metadata:
+  name: cm-dbcreate
+  {{- with .Values.app.namespace }}
+  namespace: {{ . }}
+  {{- end }}
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
