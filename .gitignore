@@ -1,2 +1,12 @@
+**/.DS_Store
 **/Chart.lock
+**/__pycache__
+**/.pytest_cache
 charts/**/charts/*
+tests/values.yaml
+tests/values-original.yaml
+tests/values-original.yaml-e
+tests/Selenium/PythonExported/test_suiteBasics-executar.py-e
+tests/Selenium/PythonExported/test_suiteBasics-executar.py
+tests/Selenium/PythonExported/resultado.xml
+tests/envtest.env

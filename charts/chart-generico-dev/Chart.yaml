@@ -10,19 +10,19 @@ appVersion: "3.6.8"
 
 dependencies:
   - name: sei-app
-    version: 1.0.1
+    version: ">=1.0.0"
     repository: "file://../sei-app"
   - name: sei-db
-    version: 1.0.0
+    version: ">=1.0.0"
     repository: "file://../sei-db"
   - name: sei-jod
-    version: 1.0.0
+    version: ">=1.0.0"
     repository: "file://../sei-jod"
   - name: sei-memcached
-    version: 1.0.0
+    version: ">=1.0.0"
     repository: "file://../sei-memcached"
   - name: sei-solr
-    version: 1.0.0
+    version: ">=1.0.0"
     repository: "file://../sei-solr"
 
 icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/seidevlogo.png
