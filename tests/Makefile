@@ -79,7 +79,7 @@ lint: ## Valida determinado chart. Passe o parametro: chart=xxxx
     fi;
 	@echo "Rodando Lint no chart: $(chart)"; echo "";
 	@helm lint ../charts/$(chart)
-	@echo "======================================"; echo ""    
+	@echo "======================================"; echo ""
 
 
 lint_all: ## Valida todos os charts
@@ -108,7 +108,7 @@ install_chart: validar_chart_params chart_instalado ## target para instalacao ge
         h="$($(kube_context).$(chart_name).app.host)"; \
         if [ "$$h" = "" ]; then h="$($(kube_context).$(chart_name).sei-app.app.host)"; fi; \
         make -C Selenium loops_espera=$($(kube_context).loops_espera) host_url=$$h host_ip=$($(kube_context).ip-entrada) test_verificar_e_executar; \
-    fi; 
+    fi;
 
 
 uninstall_chart: validar_chart_namespace validar_chart_name validar_context ## target para desinstalacao generica de charts
@@ -125,7 +125,7 @@ uninstall_umbrella_chart: validar_context ## desinstala o chart sei-umbrella
 
 install_sei1_e_2: validar_context ## instala todos os pacotes montando 2 instalacoes do SEI reaproveitando banco, solr e jod
 	@make chart_ns=$($(kube_context).tests-sei-db.namespace) chart=sei-db chart_name=tests-sei-db install_chart
-	@make chart_ns=$($(kube_context).tests-sei-jod.namespace) chart=sei-jod chart_name=tests-sei-jod install_chart    
+	@make chart_ns=$($(kube_context).tests-sei-jod.namespace) chart=sei-jod chart_name=tests-sei-jod install_chart
 	@make chart_ns=$($(kube_context).tests-sei-solr.namespace) chart=sei-solr chart_name=tests-sei-solr install_chart
 	@make chart_ns=$($(kube_context).tests-sei-memcached1.namespace) chart=sei-memcached chart_name=tests-sei-memcached1 install_chart
 	@make chart_ns=$($(kube_context).tests-sei-app1.namespace) chart=sei-app chart_name=tests-sei-app1 install_chart

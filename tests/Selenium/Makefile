@@ -93,7 +93,7 @@ test_selenium_basico1: ## target de apoio roda um teste em selenium apontando pa
 	@echo ""; \
 	var=$$(grep "failure message" PythonExported/resultado.xml); \
 	if [ "$$var" != "" ]; then echo 'Deu erro no teste Selenium'; fi;
-	
+
 	@echo ""
 	@echo "Testes finalizados"
 	@echo "Obrigado SeleniumChrome, mas vou te destruir..."
