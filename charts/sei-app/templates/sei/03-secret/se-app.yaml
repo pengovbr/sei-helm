@@ -22,7 +22,9 @@ data:
   {{- end }}
   APP_SEI_CHAVE_ACESSO: {{ .Values.app.sei_chave_acesso | b64enc }}
   APP_SIP_CHAVE_ACESSO: {{ .Values.app.sip_chave_acesso | b64enc }}
+  {{- with .Values.app.fontes_git_privkey }}
   APP_FONTES_GIT_PRIVKEY_BASE64: {{ .Values.app.fontes_git_privkey | b64enc }}
+  {{- end }}
   GITUSER_REPO_MODULOS: {{ .Values.app.gituser_repo_modulos | b64enc }}
   GITPASS_REPO_MODULOS: {{ .Values.app.gitpass_repo_modulos | b64enc }}
   SOLRADMINUSER: {{ .Values.app.solrAdminUser | b64enc }}

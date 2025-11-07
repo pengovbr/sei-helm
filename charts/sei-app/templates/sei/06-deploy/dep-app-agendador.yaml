@@ -36,7 +36,7 @@ spec:
             name: sei-secret1
             optional: false
         image: processoeletronico/app-ci-php8-agendador:latest
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-app
         stdin: true
         tty: true

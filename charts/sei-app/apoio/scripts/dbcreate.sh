@@ -45,11 +45,11 @@ else
 
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} -e "create database ${DBID}sei;"
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} ${DBID}sei < sei_5_0_0_BD_Ref_Exec.sql
-    sleep 5
+    sleep 2
 
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} -e "create database ${DBID}sip;"
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} ${DBID}sip < sip_5_0_0_BD_Ref_Exec.sql
-    sleep 5
+    sleep 2
     
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} -e "show databases;"
 
@@ -66,3 +66,5 @@ else
 fi
 
 cd -
+
+touch /sei/controlador-instalacoes/bancoinstalado.ok

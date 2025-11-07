@@ -29,7 +29,7 @@ spec:
         - secretRef:
             name: sei-secret1
         image: processoeletronico/install-apoio:0.0.2
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-dbcreatekube
         stdin: true
         tty: true

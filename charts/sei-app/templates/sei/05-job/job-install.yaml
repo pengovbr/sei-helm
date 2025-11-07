@@ -19,14 +19,14 @@ spec:
     spec:
       containers:
       - command: [ "/bin/bash", "-c" ]
-        args: [ "/automationscripts/dbcreate.sh && /entrypoint-atualizador.sh" ]
+        args: [ "while [ ! -f /sei/controlador-instalacoes/bancoinstalado.ok ]; do echo 'Aguardando database job'; sleep 2; done; /entrypoint-atualizador.sh" ]
         envFrom:
         - configMapRef:
             name: sei-app
         - secretRef:
             name: sei-secret1
-        image: processoeletronico/app-ci-php8:latest
-        imagePullPolicy: Always
+        image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-inicializador
         stdin: true
         tty: true

@@ -26,7 +26,7 @@ spec:
           - name: ID_INSTALACAO
             value: {{ .Values.app.idInstalacao | quote }}
         image: processoeletronico/solr9.6.1:latest
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
         stdin: true
         tty: true

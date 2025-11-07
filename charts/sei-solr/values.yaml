@@ -11,8 +11,8 @@ solr:
     # caso contrario tera q criar o pv manualmente 
     storage:
         #storageclass: nfs-client
-        storageclass: ""
-        
+        storageClass: ""
+
     image:
         repository: processoeletronico/solr9.6.1
         pullPolicy: IfNotPresent
