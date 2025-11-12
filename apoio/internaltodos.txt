@@ -8,3 +8,5 @@ revisar annotations
 verificar uso do sei em http
 
 x-forward-for
+
+verificar servicos clusterip ou headless

@@ -84,6 +84,7 @@ lint: ## Valida determinado chart. Passe o parametro: chart=xxxx
 
 lint_all: ## Valida todos os charts
 	@make chart=sei-solr lint
+	@make chart=sei-cacheassets lint
 	@make chart=sei-memcached lint
 	@make chart=sei-jod lint
 	@make chart=sei-db lint
@@ -128,6 +129,7 @@ install_sei1_e_2: validar_context ## instala todos os pacotes montando 2 instala
 	@make chart_ns=$($(kube_context).tests-sei-jod.namespace) chart=sei-jod chart_name=tests-sei-jod install_chart
 	@make chart_ns=$($(kube_context).tests-sei-solr.namespace) chart=sei-solr chart_name=tests-sei-solr install_chart
 	@make chart_ns=$($(kube_context).tests-sei-memcached1.namespace) chart=sei-memcached chart_name=tests-sei-memcached1 install_chart
+	@make chart_ns=$($(kube_context).tests-sei-cacheassets.namespace) chart=sei-cacheassets chart_name=tests-sei-cacheassets install_chart
 	@make chart_ns=$($(kube_context).tests-sei-app1.namespace) chart=sei-app chart_name=tests-sei-app1 install_chart
 	@make chart_ns=$($(kube_context).tests-sei-memcached2.namespace) chart=sei-memcached chart_name=tests-sei-memcached2 install_chart
 	@make chart_ns=$($(kube_context).tests-sei-app2.namespace) chart=sei-app chart_name=tests-sei-app2 install_chart
@@ -138,6 +140,7 @@ uninstall_sei1_e_2: validar_context ## desinstala o sei1 e sei2 via helm
 	@make chart_ns=$($(kube_context).tests-sei-memcached1.namespace) chart_name=tests-sei-memcached1 uninstall_chart
 	@make chart_ns=$($(kube_context).tests-sei-app2.namespace) chart_name=tests-sei-app2 uninstall_chart
 	@make chart_ns=$($(kube_context).tests-sei-memcached2.namespace) chart_name=tests-sei-memcached2 uninstall_chart
+	@make chart_ns=$($(kube_context).tests-sei-cacheassets.namespace) chart_name=tests-sei-cacheassets uninstall_chart
 	@make chart_ns=$($(kube_context).tests-sei-solr.namespace) chart=sei-solr chart_name=tests-sei-solr uninstall_chart
 	@make chart_ns=$($(kube_context).tests-sei-jod.namespace) chart=sei-jod chart_name=tests-sei-jod uninstall_chart
 	@make chart_ns=$($(kube_context).tests-sei-db.namespace) chart=sei-db chart_name=tests-sei-db uninstall_chart
