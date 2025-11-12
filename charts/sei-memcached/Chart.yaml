@@ -4,7 +4,7 @@ description: Helm chart para subir o memcached para o SEI
 
 type: application
 
-version: 1.0.0
+version: 1.0.1
 
 appVersion: "3.6.8"
 

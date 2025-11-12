@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 510m
+  name: ing-cacheassets
+  {{- with .Values.cacheassets.namespace }}
+  namespace: {{ . }}
+  {{- end }}
+  labels:
+    {{- include "sei-cacheassets.labels" . | nindent 4 }}
+spec:
+  rules:
+  {{- range .Values.cacheassets.backends }}
+  - host: {{ .host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: cacheassets
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  {{- end }}
+  - http:
+      paths:
+      - backend:
+          service:
+            name: cacheassets
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+
