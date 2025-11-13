@@ -7,7 +7,7 @@ cacheassets:
     image:
         repository: nginx
         pullPolicy: IfNotPresent
-        tag: "latest"
+        tag: "1.29.3"
 
     nameOverride: ""
     fullnameOverride: ""
