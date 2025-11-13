@@ -1,0 +1,12 @@
+tratar image logo para o cache
+verificar tipo de servico para cada componente
+tratar rotas para diferentes seis no cache
+retirar stick do ingress
+revisar annotations
+
+
+verificar uso do sei em http
+
+x-forward-for
+
+verificar servicos clusterip ou headless

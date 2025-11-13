@@ -4,7 +4,7 @@ description: Helm chart para subir o nó de aplicação do SEI-5 / Agendador / I
 
 type: application
 
-version: 1.0.1
+version: 1.0.2
 
 appVersion: "3.6.8"
 icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/phplogo.png

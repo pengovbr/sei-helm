@@ -70,4 +70,14 @@ sei-solr:
     solr:
         # namespace onde roda o solr, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
         namespace: ""
+
+sei-cacheassets:
+    cacheassets:
+
+        # namespace onde roda o cache, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
+        namespace: ""
+
+        backends:
+            - namespace: default
+              host: localhost
         

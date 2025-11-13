@@ -10,7 +10,7 @@ db:
     # caso contrario tera q criar o pv manualmente
     storage:
         storageClass: ""
-    
+
     image:
         repository: processoeletronico/mariadb10.5-sei50
         pullPolicy: IfNotPresent

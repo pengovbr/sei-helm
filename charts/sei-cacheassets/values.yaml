@@ -1,0 +1,31 @@
+#orgao: orgaon
+cacheassets:
+
+    # namespace onde roda o cache, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
+    namespace: ""
+
+    image:
+        repository: nginx
+        pullPolicy: IfNotPresent
+        tag: "1.29.3"
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    # ========================
+    # IMPORTANTE
+    # ========================
+    # informe aqui o backend de cada instalacao
+    # o cache dos assets sera feito de forma independente para cada instancia
+    # o mesmo nginx podera fazer o cache para todas as instancias do mesmo cluster
+    # no array abaixo de backends informe o namespace e o host de cada instancia
+    # caso o nginx n encontre um backend ele vai conectar no primeiro da lista abaixo
+    # para tentar fazer o cache do asset
+    
+    backends:
+        - cluster: default
+          host: localhost
+        #- cluster: app2
+        #  host: sei2.teste
+        #- cluster: nsorgao1
+        #  host: orgao1.gov.br

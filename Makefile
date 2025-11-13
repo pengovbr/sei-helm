@@ -53,6 +53,7 @@ package_all: ## Empacota todos os charts
 	make chart=sei-memcached package
 	make chart=sei-jod package
 	make chart=sei-db package
+	make chart=sei-cacheassets package
 	make chart=sei-app package
 	make chart=chart-generico-dev package
 

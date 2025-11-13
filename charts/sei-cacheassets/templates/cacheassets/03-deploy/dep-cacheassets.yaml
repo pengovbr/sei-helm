@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cacheassets
+  {{- with .Values.cacheassets.namespace }}
+  namespace: {{ . }}
+  {{- end }}
+  labels:
+    {{- include "sei-cacheassets.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      servico: cacheassets
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: cacheassets
+        {{- include "sei-cacheassets.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: "{{ .Values.cacheassets.image.repository }}:{{ .Values.cacheassets.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.cacheassets.image.pullPolicy }}
+        name: cacheassets
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/
+          name: nginxconf
+            
+      restartPolicy: Always
+      volumes:
+      - name: nginxconf
+        configMap:
+          name: cm-cacheassets
+          defaultMode: 0644

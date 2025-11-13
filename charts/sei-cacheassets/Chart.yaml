@@ -1,10 +1,10 @@
 apiVersion: v2
-name: sei-memcached
-description: Helm chart para subir o memcached para o SEI
+name: sei-cacheassets
+description: Helm chart para subir o cache de assets para o SEI
 
 type: application
 
-version: 1.0.1
+version: 1.0.0
 
 appVersion: "3.6.8"
 

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cacheassets
+  {{- with .Values.cacheassets.namespace }}
+  namespace: {{ . }}
+  {{- end }}
+  labels:
+    {{- include "sei-cacheassets.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: tcp
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    servico: cacheassets
+  sessionAffinity: None
+  type: ClusterIP
