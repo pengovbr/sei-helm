@@ -1,0 +1,36 @@
+[php]
+; Parâmetros recomendados no Manual de Instalação
+include_path = ".:/php/includes:/opt/infra/infra_php"
+default_charset = "iso-8859-1"
+session.gc_maxlifetime = 28800
+short_open_tag = On
+default_socket_timeout = 60
+max_input_vars = 2000
+magic-quotes-gpc = 0
+magic_quotes_runtime = 0
+magic_quotes_sybase = 0
+post_max_size = 1200M
+upload_max_filesize = 1024M
+
+log_errors = On
+error_reporting = E_ALL
+display_errors = Off
+display_startup_errors = On
+html_errors = On
+always_populate_raw_post_data = -1
+
+fastcgi.logging = Off
+
+[Session]
+session.save_handler = memcache
+session.save_path = memcached:11211
+
+[opcache]
+opcache.enable=1
+; In a containerized environment where code doesn't change during runtime, disable timestamp validation for performance.
+opcache.validate_timestamps=0
+opcache.revalidate_freq=0
+opcache.max_accelerated_files=10000
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=32
+opcache.fast_shutdown=1
