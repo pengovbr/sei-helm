@@ -129,3 +129,85 @@ build-conteiner-app-apache-php: verificar-app-params
 		IMAGETMP_PATH=app \
 		IMAGETMP_TARGET=apachephp \
 		build-conteiner-generic2
+
+# build-conteiner-memcached construir imagem memcached
+build-conteiner-memcached: verificar-app-params
+	@make IMAGETMP=${IMAGE_MEMCACHED} \
+	    IMAGETMP_VERSION=$(IMAGE_MEMCACHED_VERSION) \
+		IMAGETMP_PATH=memcached \
+		build-conteiner-generic
+
+# build-conteiner-jod construir imagem jod
+build-conteiner-jod: verificar-app-params
+	@make IMAGETMP=${IMAGE_JOD} \
+	    IMAGETMP_VERSION=$(IMAGE_JOD_VERSION) \
+		IMAGETMP_PATH=jod \
+		build-conteiner-generic
+
+# build-conteiner-solr construir imagem solr
+build-conteiner-solr: verificar-app-params
+	@make IMAGETMP=${IMAGE_SOLR} \
+	    IMAGETMP_VERSION=$(IMAGE_SOLR_VERSION) \
+		IMAGETMP_PATH=solr \
+		build-conteiner-generic
+
+# build-conteiner-mariadb construir imagem mariadb
+build-conteiner-mariadb: verificar-app-params
+	@make IMAGETMP=${IMAGE_MARIADB} \
+	    IMAGETMP_VERSION=$(IMAGE_MARIADB_VERSION) \
+		IMAGETMP_PATH=mariadb \
+		build-conteiner-generic
+
+# build-conteiner-nginx construir imagem nginx cacheassets
+build-conteiner-nginx: verificar-app-params
+	@make IMAGETMP=${IMAGE_NGINX} \
+	    IMAGETMP_VERSION=$(IMAGE_NGINX_VERSION) \
+		IMAGETMP_PATH=nginx \
+		build-conteiner-generic
+
+#*****************************************************
+#*******PUBLISH CONTAINERS TARGETS********************
+#*****************************************************
+
+## publish-container-generic: target generico para publicar imagem passada via parametro
+publish-container-generic: verificar-docker-registry
+	@if test -z "$$(docker images -q $(IMAGEMTMP_FULL))"; then \
+		echo "Imagem $(IMAGEMTMP_FULL) nao existe. Rode o build respectivo antes"; \
+		exit 1; \
+	else \
+		echo "Publicando a imagem: $(IMAGEMTMP_FULL)"; \
+		echo "Caso nao publique verifique se vc esta logado no registry informado no seu env"; echo ""; \
+		set -e; \
+		docker push $(IMAGEMTMP_FULL); \
+	fi;
+
+
+publish-container-alpine: ## publicar imagem alpine
+	@make IMAGEMTMP_FULL=$(IMAGE_ALPINE):$(IMAGE_ALPINE_VERSION) publish-container-generic
+
+publish-container-phpmaketools: ## publicar imagem phpmaketools
+	@make IMAGEMTMP_FULL=$(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) publish-container-generic
+
+publish-container-app-apache: ## publicar imagem app-apache
+	@make IMAGEMTMP_FULL=$(IMAGE_APP_APACHE):$(IMAGE_APP_APACHE_VERSION) publish-container-generic
+
+publish-container-app-php: ## publicar imagem app-php
+	@make IMAGEMTMP_FULL=$(IMAGE_APP_PHP):$(IMAGE_APP_PHP_VERSION) publish-container-generic
+
+publish-container-app-apache-php: ## publicar imagem app-apache-php
+	@make IMAGEMTMP_FULL=$(IMAGE_APP_APACHE_PHP):$(IMAGE_APP_APACHE_PHP_VERSION) publish-container-generic
+
+publish-container-memcached: ## publicar imagem memcached
+	@make IMAGEMTMP_FULL=$(IMAGE_MEMCACHED):$(IMAGE_MEMCACHED_VERSION) publish-container-generic
+
+publish-container-jod: ## publicar imagem jod
+	@make IMAGEMTMP_FULL=$(IMAGE_JOD):$(IMAGE_JOD_VERSION) publish-container-generic
+
+publish-container-solr: ## publicar imagem solr
+	@make IMAGEMTMP_FULL=$(IMAGE_SOLR):$(IMAGE_SOLR_VERSION) publish-container-generic
+
+publish-container-mariadb: ## publicar imagem mariadb
+	@make IMAGEMTMP_FULL=$(IMAGE_MARIADB):$(IMAGE_MARIADB_VERSION) publish-container-generic
+
+publish-container-nginx: ## publicar imagem nginx
+	@make IMAGEMTMP_FULL=$(IMAGE_NGINX):$(IMAGE_NGINX_VERSION) publish-container-generic
