@@ -30,6 +30,8 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     find /opt/sip \( -name '*.php' -o -name '*.dat' \) -delete && \
     echo "Deletando arquivos php /opt/infra" && \
     find /opt/infra \( -name '*.php' -o -name '*.dat' \) -delete && \
+    cp /temp/fontes/sei/web/index.php /opt/sei/web/ && \
+    cp /temp/fontes/sip/web/index.php /opt/sip/web/ && \
     echo "Deletando disr vazios" && \
     find /opt/sei -type d -empty -delete && \
     find /opt/sip -type d -empty -delete && \
@@ -91,6 +93,7 @@ RUN apk add --no-cache \
     php82-pecl-igbinary \
     php82-pecl-mcrypt \
     php82-pecl-memcache \
+    #php82-pecl-xdebug \
     php82-phar \
     php82-pspell \
     php82-simplexml \
@@ -149,7 +152,11 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     cp -a /temp/fontes/infra /opt/ && \
     \cp /temp/conf/sei/ConfiguracaoSEI.php /opt/sei/config/ && \
     \cp /temp/conf/sei/ConfiguracaoSip.php /opt/sip/config/ && \
+    \cp /temp/conf/sei/sei-controlador_ws.php /opt/sei/web/controlador_ws.php && \
+    \cp /temp/conf/sei/sip-controlador_ws.php /opt/sip/web/controlador_ws.php && \
     \cp /temp/conf/sei/modulos/ConfiguracaoModAssinaturaEletronica.php /opt/sei/config/mod-assinatura-eletronica/ && \
+    rm -rf /opt/sei/scripts/* && \
+    rm -rf /opt/sip/scripts/* && \
     echo "Deletando arquivos php /opt/sei" && \
     find /opt/sei -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" ! -name "pdfboxmerge.jar" -delete && \
     echo "Deletando arquivos php /opt/sip" && \
@@ -160,15 +167,13 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     find /opt/sei -type d -empty -delete && \
     find /opt/sip -type d -empty -delete && \
     find /opt/infra -type d -empty -delete && \
-    mkdir -p /sei/arquivos && \
-    chown www-data /sei/arquivos && \
-    mkdir -p /sei/temp && \
-    chown www-data /sei/temp && \
-    ln -s /sei/temp /opt/sei/temp && \
-    ln -s /sei/temp /opt/sip/temp && \
-    mkdir -p /opt/sip/temp && \
-    chown www-data /opt/sei/temp && \
-    chown www-data /opt/sip/temp
+    mkdir -p /var/lib/sei/dbfiles && \
+    mkdir -p /var/lib/sei/dbcontrol && \
+    mkdir -p /var/lib/sei/tmpfiles && \
+    chown www-data /var/lib/sei/dbfiles && \
+    chown www-data /var/lib/sei/tmpfiles && \
+    ln -s /var/lib/sei/tmpfiles /opt/sei/temp && \
+    ln -s /var/lib/sei/tmpfiles /opt/sip/temp
 
 USER www-data
 
@@ -214,3 +219,38 @@ USER apache
 EXPOSE 80
 
 CMD ["/bin/sh", "-c", "php-fpm82 -D && httpd -DFOREGROUND"]
+
+
+# *****************************************************************
+# PHP INSTALL******************************************************
+# *****************************************************************
+FROM php AS php-install
+
+USER root
+
+RUN apk add --no-cache \
+    bash
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    \cp -R /temp/fontes/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/fontes/sip/scripts /opt/sip/scripts/ && \
+    mkdir -p /usr/share/sei/ && \
+    cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
+    chmod +x /usr/share/sei/tmpdelete.sh
+
+
+# *****************************************************************
+# PHP CRON*********************************************************
+# *****************************************************************
+FROM php AS php-cron
+
+USER root
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    cp /temp/conf/cron.d/cron.conf /etc/crontabs/root && \
+    mkdir -p /usr/share/sei/ && \
+    cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
+    chmod +x /usr/share/sei/tmpdelete.sh
+
+#todo verificar forma de subir sem root
+CMD ["crond", "-f"]

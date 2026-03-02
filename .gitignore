@@ -5,9 +5,6 @@
 
 containers/envcontainers.env
 containers/app/assets/fontes/*
-containers/app/assets/conf/php/sei-fpm.conf
-containers/app/assets/conf/apache/sei.conf
-containers/app/assets/conf/php/sei.ini
 
 helm/charts/**/charts/*
 helm/tests/values.yaml

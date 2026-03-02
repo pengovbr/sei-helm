@@ -102,30 +102,43 @@ build-conteiner-phpmaketools: verificar-imagem-alpine-params
 		build-conteiner-generic
 
 
-## build-conteiner-app-apache construir imagem app-apache
-build-conteiner-app-apache: verificar-app-params
-	@make arq_titular=app/assets/conf/apache/sei.conf arq_example=app/assets/conf/apache/sei.conf.example getexample
-	@make IMAGETMP=${IMAGE_APP_APACHE} \
-	    IMAGETMP_VERSION=$(IMAGE_APP_APACHE_VERSION) \
+## build-conteiner-apache construir imagem apache
+build-conteiner-apache: verificar-app-params
+	@make IMAGETMP=${IMAGE_APACHE} \
+	    IMAGETMP_VERSION=$(IMAGE_APACHE_VERSION) \
 		IMAGETMP_PATH=app \
 		IMAGETMP_TARGET=apache \
 		build-conteiner-generic2
 
 
-# build-conteiner-app-php construir imagem app-php
-build-conteiner-app-php: verificar-app-params
-	@make arq_titular=app/assets/conf/php/sei-fpm.conf arq_example=app/assets/conf/php/sei-fpm.conf.example getexample
-	@make arq_titular=app/assets/conf/php/sei.ini arq_example=app/assets/conf/php/sei.ini.example getexample
-	@make IMAGETMP=${IMAGE_APP_PHP} \
-	    IMAGETMP_VERSION=$(IMAGE_APP_PHP_VERSION) \
+# build-conteiner-php construir imagem php
+build-conteiner-php: verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_VERSION) \
 		IMAGETMP_PATH=app \
 		IMAGETMP_TARGET=php \
 		build-conteiner-generic2
 
-# build-conteiner-app-apache-php construir imagem app-apache-php
-build-conteiner-app-apache-php: verificar-app-params
-	@make IMAGETMP=${IMAGE_APP_APACHE_PHP} \
-	    IMAGETMP_VERSION=$(IMAGE_APP_APACHE_PHP_VERSION) \
+# build-conteiner-php-cron construir imagem php-cron
+build-conteiner-php-cron: verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP_CRON} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_CRON_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=php-cron \
+		build-conteiner-generic2
+
+# build-conteiner-php-install construir imagem php-install
+build-conteiner-php-install: verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP_INSTALL} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_INSTALL_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=php-install \
+		build-conteiner-generic2
+
+# build-conteiner-apache-php construir imagem apache-php
+build-conteiner-apache-php: verificar-app-params
+	@make IMAGETMP=${IMAGE_APACHE_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_APACHE_PHP_VERSION) \
 		IMAGETMP_PATH=app \
 		IMAGETMP_TARGET=apachephp \
 		build-conteiner-generic2
@@ -193,6 +206,12 @@ publish-container-app-apache: ## publicar imagem app-apache
 
 publish-container-app-php: ## publicar imagem app-php
 	@make IMAGEMTMP_FULL=$(IMAGE_APP_PHP):$(IMAGE_APP_PHP_VERSION) publish-container-generic
+
+publish-container-app-php-cron: ## publicar imagem app-php-cron
+	@make IMAGEMTMP_FULL=$(IMAGE_APP_PHP_CRON):$(IMAGE_APP_PHP_CRON_VERSION) publish-container-generic
+
+publish-container-app-php-install: ## publicar imagem app-php-install
+	@make IMAGEMTMP_FULL=$(IMAGE_APP_PHP_INSTALL):$(IMAGE_APP_PHP_INSTALL_VERSION) publish-container-generic
 
 publish-container-app-apache-php: ## publicar imagem app-apache-php
 	@make IMAGEMTMP_FULL=$(IMAGE_APP_APACHE_PHP):$(IMAGE_APP_APACHE_PHP_VERSION) publish-container-generic

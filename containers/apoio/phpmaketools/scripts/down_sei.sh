@@ -23,8 +23,6 @@ cp -R sei/* /fontes/sei/
 cp -R sip/* /fontes/sip/
 cp -R infra/* /fontes/infra/
 
-rm -rf /fontes/sip/scripts/*
-rm -rf /fontes/sei/scripts/*
 
 cd /
 rm -rf /opt2
@@ -53,5 +51,3 @@ yes | unzip mod-sei-assinatura-eletronica-*.zip
 \cp -R sei /fontes/
 \cp -R sip /fontes/
 
-rm -rf /fontes/sei/scripts/mod-assinatura-eletronica
-rm -rf /fontes/sip/scripts/mod-assinatura-eletronica

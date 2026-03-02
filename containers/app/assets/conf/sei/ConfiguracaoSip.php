@@ -27,7 +27,7 @@ class ConfiguracaoSip extends InfraConfiguracao
         'SiglaOrgaoSistema' => getenv('APP_ORGAO'),
         'SiglaSistema' => 'SIP',
         'PaginaLogin' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/login.php',
-        'SipWsdl' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/controlador_ws.php?servico=sip',
+        'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
         'ChaveAcesso' => getenv('APP_SIP_CHAVE_ACESSO'),
         'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
 
