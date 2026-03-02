@@ -1,7 +1,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: hpa-app
+  name: hpa-web
   {{- with .Values.app.namespace }}
   namespace: {{ . }}
   {{- end }}
@@ -20,4 +20,4 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: sei-app
+    name: web

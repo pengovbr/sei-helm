@@ -221,3 +221,5 @@ else
     fi
     touch /var/lib/sei/dbcontrol/atualizacao-sip-${VERSAO_ENCONTRADA}-recurso.ok
 fi
+
+touch /var/lib/sei/dbcontrol/install-initial.ok

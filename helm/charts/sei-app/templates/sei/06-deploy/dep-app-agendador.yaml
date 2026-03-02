@@ -36,6 +36,17 @@ spec:
         image: ghcr.io/pengovbr/sei-helm/php-cron:0.5.0
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-app
+        startupProbe:
+          exec:
+            command:
+            - sh
+            - '-c'
+            - ls /var/lib/sei/dbcontrol/install-initial.ok
+          failureThreshold: 100
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
         stdin: true
         tty: true
         volumeMounts:
