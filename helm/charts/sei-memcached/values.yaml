@@ -1,13 +1,13 @@
 #orgao: orgaon
 memcached:
 
-    # namespace onde roda o memcached, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm    
+    # namespace onde roda o memcached, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
     namespace: ""
 
     image:
-        repository: processoeletronico/memcached
+        repository: ghcr.io/pengovbr/sei-helm/memcached
         pullPolicy: IfNotPresent
-        tag: ""
-    
+        tag: "0.5.0"
+
     nameOverride: ""
     fullnameOverride: ""

@@ -5,9 +5,9 @@ cacheassets:
     namespace: ""
 
     image:
-        repository: nginx
+        repository: ghcr.io/pengovbr/sei-helm/nginx
         pullPolicy: IfNotPresent
-        tag: "1.29.3"
+        tag: "0.5.0"
 
     nameOverride: ""
     fullnameOverride: ""
@@ -21,7 +21,7 @@ cacheassets:
     # no array abaixo de backends informe o namespace e o host de cada instancia
     # caso o nginx n encontre um backend ele vai conectar no primeiro da lista abaixo
     # para tentar fazer o cache do asset
-    
+
     backends:
         - cluster: default
           host: localhost

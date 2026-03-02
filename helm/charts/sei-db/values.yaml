@@ -2,9 +2,9 @@ db:
     # namespace onde roda o db, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
     namespace: ""
 
-    # informe a classe do pvc onde sera criado o volume de banco 
+    # informe a classe do pvc onde sera criado o volume de banco
     # deve estar pre-instalado no seu kubernetes um provisionador nfs
-    # gluster ou outro. No caso do docker-desktop ja existe um provisionador 
+    # gluster ou outro. No caso do docker-desktop ja existe um provisionador
     # automatico que cria uma pasta na vm do host ou do linux wsl. Para isso deixe
     # o storageclass vazio
     # caso contrario tera q criar o pv manualmente
@@ -12,9 +12,9 @@ db:
         storageClass: ""
 
     image:
-        repository: processoeletronico/mariadb10.5-sei50
+        repository: ghcr.io/pengovbr/sei-helm/mariadb
         pullPolicy: IfNotPresent
-        tag: ""
-    
+        tag: "0.5.0"
+
     nameOverride: ""
     fullnameOverride: ""

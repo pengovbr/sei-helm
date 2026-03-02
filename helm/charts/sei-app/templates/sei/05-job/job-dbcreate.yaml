@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sei-dbcreate
+  name: job-dbcreate
   {{- with .Values.app.namespace }}
   namespace: {{ . }}
   {{- end }}
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sei-dbcreate
+        job-name: job-dbcreate
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       containers:
@@ -25,19 +25,19 @@ spec:
             value: {{ .Values.app.idInstalacao | quote }}
         envFrom:
         - configMapRef:
-            name: sei-app
+            name: cm-php
         - secretRef:
-            name: sei-secret1
+            name: se-php
         image: processoeletronico/install-apoio:0.0.2
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-        name: sei-dbcreatekube
+        name: job-dbcreate
         stdin: true
         tty: true
         volumeMounts:
         - mountPath: /automationscripts
-          name: dbcreate     
-        - mountPath: /sei/controlador-instalacoes
-          name: vol3
+          name: dbcreate
+        - mountPath: /var/lib/sei
+          name: vol-sei
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
       volumes:
@@ -45,6 +45,6 @@ spec:
         configMap:
           name: cm-dbcreate
           defaultMode: 0755
-      - name: vol3
+      - name: vol-sei
         persistentVolumeClaim:
-          claimName: vol-sei-controladorinstalacao
+          claimName: vol-sei

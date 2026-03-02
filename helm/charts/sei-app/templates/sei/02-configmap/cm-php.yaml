@@ -1,7 +1,8 @@
 apiVersion: v1
 data:
+  TZ: {{ .Values.app.tz | quote }}
   DB_RECREATE: {{ .Values.app.dbRecreate | quote }}
-  APP_PROTOCOLO: {{ .Values.app.protocolo | quote }}
+  APP_PROTOCOLO: http
   APP_HOST: {{ .Values.app.host | quote }}
   APP_ORGAO: {{ .Values.app.orgao | quote }}
   APP_ORGAO_DESCRICAO: {{ .Values.app.orgao_descricao | quote }}
@@ -100,10 +101,10 @@ data:
   MODULO_INCOM_USERWS: {{ .Values.app.modulo_incom_userws | quote }}
   MODULO_INCOM_PASSWS: {{ .Values.app.modulo_incom_passws | quote }}
   MODULO_INCOM_INCLUSAOPUBLICACAO: {{ .Values.app.modulo_incom_inclusaopublicacao | quote }}
-  
+
 kind: ConfigMap
 metadata:
-  name: sei-app
+  name: cm-php
   {{- with .Values.app.namespace }}
   namespace: {{ . }}
   {{- end }}

@@ -1,34 +1,36 @@
 app:
-    
+
     # namespace onde roda o app, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
     namespace: ""
-    
+
     # informe a classe do pvc onde serao criados os volumes do SEI
     # deve estar pre-instalado no seu kubernetes um provisionador nfs
-    # gluster ou outro. No caso do docker-desktop ja existe um provisionador 
+    # gluster ou outro. No caso do docker-desktop ja existe um provisionador
     # automatico que cria uma pasta na vm do host ou do linux wsl. Para isso deixe
     # o storageclass vazio
     # caso contrario tera q criar o pv manualmente
     storage:
         #storageclass: nfs-client
         storageclass: ""
-        
+
     image:
         repository: processoeletronico/app-ci-php8
         pullPolicy: IfNotPresent
         tag: ""
-    
+
     nameOverride: ""
     fullnameOverride: ""
 
     # as variaveis abaixo informam o namespace no qual os demais componentes
     # estao instalados, caso esteja com nome incorreto o sei nao encontrara o
-    # componente    
+    # componente
     dbcluster: default
     jodcluster: default
     solrcluster: default
     memcachedcluster: default
-    
+
+    tz: America/Sao_Paulo
+
     # indica se a automacao irah dropar e criar a base de dados
     # que foi informada abaixo para essa instancia
     dbRecreate: "true"
@@ -61,7 +63,7 @@ app:
     fontes_git_path: git@github.com:supergovbr/super
     fontes_git_checkout: 5.0.0-fix1
     openldap_presente: "false"
-    
+
     servico_pd_instalar: "false"
     servico_pd_sigla: GOV.BR
     servico_pd_nome: protocolo.gov.br
@@ -137,27 +139,27 @@ app:
     modulo_incom_userws: "xxx"
     modulo_incom_passws: "xxx"
     modulo_incom_inclusaopublicacao: "S"
-    
-    # secrets    
+
+    # secrets
     db_porta: "3306"
     db_root_password: P@ssword
     db_root_username: root
-    
+
     #ignore a base sera o nome orgao acima mais sei ex: orago1sei
     db_sei_base: ""
     db_sei_username: "c2VpX3VzZXI="
     db_sei_password: "c2VpX3VzZXI="
-    
+
     db_sip_base: "c2lw"
     db_sip_password: "c2lwX3VzZXI="
     db_sip_username: "c2lwX3VzZXI="
-    
-    solrAdminUser: "admin" 
+
+    solrAdminUser: "admin"
     solrAdminPass: "SolrAdmin123$"
-    
+
     mail_autenticar: "false"
     mail_porta: "25"
-    
+
     mail_seguranca: ""
     mail_usuario: ""
     mail_senha: ""

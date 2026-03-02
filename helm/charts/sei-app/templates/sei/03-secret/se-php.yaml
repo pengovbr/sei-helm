@@ -31,7 +31,7 @@ data:
   SOLRADMINPASS: {{ .Values.app.solrAdminPass | b64enc }}
 kind: Secret
 metadata:
-  name: sei-secret1
+  name: se-php
   {{- with .Values.app.namespace }}
   namespace: {{ . }}
   {{- end }}

@@ -1,12 +1,12 @@
 jod:
-    
+
     # namespace onde roda o jod, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
     namespace: ""
-    
+
     image:
-        repository: processoeletronico/jod4.4.8
+        repository: ghcr.io/pengovbr/sei-helm/jod
         pullPolicy: IfNotPresent
-        tag: ""
-    
+        tag: "0.5.0"
+
     nameOverride: ""
     fullnameOverride: ""

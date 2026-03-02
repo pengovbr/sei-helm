@@ -3,7 +3,9 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 510m
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
   name: ing-cacheassets
   {{- with .Values.cacheassets.namespace }}
   namespace: {{ . }}
