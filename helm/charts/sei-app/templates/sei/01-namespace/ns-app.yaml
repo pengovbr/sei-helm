@@ -1,6 +1,0 @@
-{{- with .Values.app.namespace }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ . }}
-{{- end }}

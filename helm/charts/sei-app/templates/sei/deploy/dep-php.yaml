@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: php
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: php
+        {{- include "sei-app.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - envFrom:
+        #- /entrypoint.sh
+        #envFrom:
+        - configMapRef:
+            name: cm-php
+            optional: false
+        - secretRef:
+            name: se-php
+            optional: false
+        image: "ghcr.io/pengovbr/sei-helm/php:0.5.0"
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        name: php
+        resources:
+          requests:
+            cpu: 500m
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #     - sh
+        #     - -c
+        #     - curl -s -L localhost/sei | grep frmLogin
+        #   failureThreshold: 5
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 20
+        #   successThreshold: 1
+        #   timeoutSeconds: 20
+        # readinessProbe:
+        #   exec:
+        #     command:
+        #     - sh
+        #     - -c
+        #     - curl -s -L localhost/sei | grep frmLogin
+        #   failureThreshold: 5
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 20
+        #   successThreshold: 1
+        #   timeoutSeconds: 20
+        startupProbe:
+          exec:
+            command:
+            - sh
+            - '-c'
+            - ls /var/lib/sei/dbcontrol/install-initial.ok
+          failureThreshold: 100
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /var/lib/sei
+          name: vol-sei
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: vol-sei
+        persistentVolumeClaim:
+          claimName: vol-sei

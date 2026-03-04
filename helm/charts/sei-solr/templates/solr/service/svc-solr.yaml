@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: solrinterno
+  labels:
+    {{- include "sei-solr.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    servico: solr
+  sessionAffinity: None
+  type: ClusterIP

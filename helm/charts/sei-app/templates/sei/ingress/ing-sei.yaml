@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    cert-manager.io/cluster-issuer: letsencrypt-dth
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    {{- if ne .Values.app.memcached_session "true" }}
+    nginx.ingress.kubernetes.io/affinity: cookie{{ .Values.app.memcached_session }}
+    {{- end }}
+    nginx.ingress.kubernetes.io/app-root: /sei/
+    {{- if ne .Values.app.memcached_session "true" }}
+    nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+    {{- end }}
+    nginx.ingress.kubernetes.io/proxy-body-size: 510m
+    nginx.ingress.kubernetes.io/lb-method: least_conn
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: ing-sei
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.app.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: web
+            port:
+              number: 80
+        path: /(.*\.php|sip$|sip\/$|sei$|sei\/$)
+        #path: /
+        pathType: ImplementationSpecific

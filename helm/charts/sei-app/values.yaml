@@ -1,8 +1,5 @@
 app:
 
-    # namespace onde roda o app, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
-    namespace: ""
-
     # informe a classe do pvc onde serao criados os volumes do SEI
     # deve estar pre-instalado no seu kubernetes um provisionador nfs
     # gluster ou outro. No caso do docker-desktop ja existe um provisionador

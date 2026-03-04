@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jod
+  labels:
+    {{- include "sei-jod.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: jod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: jod
+        {{- include "sei-jod.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.jod.image.pullPolicy }}
+        name: jod
+        stdin: true
+        tty: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

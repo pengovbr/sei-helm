@@ -1,9 +1,6 @@
 #orgao: orgaon
 cacheassets:
 
-    # namespace onde roda o cache, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
-    namespace: ""
-
     image:
         repository: ghcr.io/pengovbr/sei-helm/nginx
         pullPolicy: IfNotPresent
@@ -23,9 +20,9 @@ cacheassets:
     # para tentar fazer o cache do asset
 
     backends:
-        - cluster: default
+        - namespace: default
           host: localhost
-        #- cluster: app2
+        #- namespace: app2
         #  host: sei2.teste
-        #- cluster: nsorgao1
+        #- namespace: nsorgao1
         #  host: orgao1.gov.br

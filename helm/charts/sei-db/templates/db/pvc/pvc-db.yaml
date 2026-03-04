@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-db
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  {{- with .Values.db.storage.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}

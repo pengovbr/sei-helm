@@ -1,9 +1,6 @@
 #orgao: orgaon
 memcached:
 
-    # namespace onde roda o memcached, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
-    namespace: ""
-
     image:
         repository: ghcr.io/pengovbr/sei-helm/memcached
         pullPolicy: IfNotPresent

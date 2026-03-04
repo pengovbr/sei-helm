@@ -1,6 +1,0 @@
-{{- with .Values.jod.namespace }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ . }}
-{{- end }}

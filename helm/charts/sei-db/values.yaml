@@ -1,6 +1,4 @@
 db:
-    # namespace onde roda o db, salvo em alguns casos especificos deixe esse valor em branco e informe o namespace pelo helm
-    namespace: ""
 
     # informe a classe do pvc onde sera criado o volume de banco
     # deve estar pre-instalado no seu kubernetes um provisionador nfs

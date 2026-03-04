@@ -1,0 +1,9 @@
+apiVersion: v1
+binaryData:
+  dbcreate.sh: |-
+    {{ .Files.Get "apoio/scripts/dbcreate.sh" | b64enc }}
+kind: ConfigMap
+metadata:
+  name: cm-dbcreate
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
