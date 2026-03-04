@@ -25,7 +25,8 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     cp -R /temp/fontes/sip /opt/ && \
     cp -R /temp/fontes/infra /opt/ && \
     echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei \( -name '*.php' -o -name '*.dat' -o -name 'jodconverter-4.4.8.zip' -o -name 'pdfboxmerge.jar' \) -delete && \
+    find /opt/sei \( -name '*.php' -o -name '*.dat' -o -name 'jodconverter-4.4.8.zip'\
+         -o -name 'pdfboxmerge.jar' \) -delete && \
     echo "Deletando arquivos php /opt/sip" && \
     find /opt/sip \( -name '*.php' -o -name '*.dat' \) -delete && \
     echo "Deletando arquivos php /opt/infra" && \
@@ -152,17 +153,33 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     cp -a /temp/fontes/infra /opt/ && \
     \cp /temp/conf/sei/ConfiguracaoSEI.php /opt/sei/config/ && \
     \cp /temp/conf/sei/ConfiguracaoSip.php /opt/sip/config/ && \
-    \cp /temp/conf/sei/sei-controlador_ws.php /opt/sei/web/controlador_ws.php && \
-    \cp /temp/conf/sei/sip-controlador_ws.php /opt/sip/web/controlador_ws.php && \
+    sed -i "s|\$strServidor = ConfiguracaoSEI::getInstance()->getValor('SEI', 'URL');|if \
+        (\$_SERVER['HTTP_HOST'] == 'web' ) {\
+        \$strServidor = 'http://web/sei';\
+        } else {\
+        \$strServidor = ConfiguracaoSEI::getInstance()->getValor('SEI', 'URL');\
+        }|g" /opt/sei/web/controlador_ws.php && \
+    sed -i "s|\$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL');|if \
+        (\$_SERVER['HTTP_HOST'] == 'web' ) {\
+        \$strServidor = 'http://web/sip';\
+        } else {\
+        \$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL');\
+        }|g" /opt/sip/web/controlador_ws.php && \
+    sed -i "s|if (\$this->isBolRequerHttps()|if (\$this->isBolRequerHttps() \&\& \
+      !isset(\$_SERVER['HTTP_X_FORWARDED_FOR'])|" /opt/infra/infra_php/InfraPagina.php && \
     \cp /temp/conf/sei/modulos/ConfiguracaoModAssinaturaEletronica.php /opt/sei/config/mod-assinatura-eletronica/ && \
     rm -rf /opt/sei/scripts/* && \
     rm -rf /opt/sip/scripts/* && \
     echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" ! -name "pdfboxmerge.jar" -delete && \
+    find /opt/sei -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" \
+        ! -name "*.ttf" ! -name "pdfboxmerge.jar" -delete && \
     echo "Deletando arquivos php /opt/sip" && \
-    find /opt/sip -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" -delete && \
+    find /opt/sip -type f ! -name "*.php" ! -name "*.wsdl" \
+        ! -name "*.dat" ! -name "*.ttf" -delete && \
     echo "Deletando arquivos php /opt/infra" && \
-    find /opt/infra -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" -delete && \
+    find /opt/infra -type f ! -name "*.php" ! -name "*.wsdl" \
+        ! -name "*.dat" ! -name "*.ttf" -delete && \
+    \cp -R /temp/fontes/infra/infra_php/captcha /opt/infra/infra_php/ && \
     echo "Deletando disr vazios" && \
     find /opt/sei -type d -empty -delete && \
     find /opt/sip -type d -empty -delete && \

@@ -4,20 +4,29 @@
 # Container preparado e configurado para uso em desenvolvimento e testes
 ################################################################################
 
-ARG IMAGEM_BASE=rockylinux:9.3
+ARG IMAGE_SOLR_BASE=rodepelomakefile
+ARG IMAGE_SOLR_BASE_VERSION=rodepelomakefile
 
-FROM ${IMAGEM_BASE}
+FROM ${IMAGE_SOLR_BASE}:${IMAGE_SOLR_BASE_VERSION}
 
-ENV TERM xterm
+USER root
 
-ADD assets/ \
-   https://archive.apache.org/dist/solr/solr/9.6.1/solr-9.6.1.tgz \
-   https://github.com/spbgovbr/sei-docker-binarios/raw/main/pacoteslinux/msttcore-fonts-2.0-3.noarch.rpm \
-   /tmp/
-
-RUN ls -lh /tmp && sh /tmp/install.sh && rm -rf /tmp/*
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
+    msttcorefonts && \
+    #tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
 USER solr
 
-EXPOSE 8983
-CMD ["/command.sh"]
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+   mkdir -p /var/solr/data && \
+   cp -R /opt/solr-9.6.1/server/solr/configsets/sample_techproducts_configs/conf \
+      /var/solr/data/sei-protocolos/ && \
+   cp -R /opt/solr-9.6.1/server/solr/configsets/sample_techproducts_configs/conf \
+      /var/solr/data/sei-bases-conhecimento/ && \
+   cp -R /opt/solr-9.6.1/server/solr/configsets/sample_techproducts_configs/conf \
+      /var/solr/data/sei-publicacoes/ && \
+   cp -R /temp/sei-cores-9.6.1/* /var/solr/data/ && \
+   cp /temp/security.json /var/solr/data/
+

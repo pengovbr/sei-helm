@@ -94,6 +94,13 @@ build-conteiner-alpine:  verificar-imagem-alpine-params
 		IMAGETMP_PATH=alpine \
 		build-conteiner-generic
 
+## construir imagem solr-base
+build-conteiner-solr-base:
+	@make IMAGETMP=$(IMAGE_SOLR_BASE) \
+		IMAGETMP_VERSION=$(IMAGE_SOLR_BASE_VERSION) \
+		IMAGETMP_PATH=solr-base \
+		build-conteiner-generic
+
 ## build-conteiner-phpmaketools construir imagem build-conteiner-phpmaketools
 build-conteiner-phpmaketools: verificar-imagem-alpine-params
 	@make IMAGETMP=${IMAGE_APOIO_PHP} \
@@ -197,6 +204,9 @@ publish-container-generic: verificar-docker-registry
 
 publish-container-alpine: ## publicar imagem alpine
 	@make IMAGEMTMP_FULL=$(IMAGE_ALPINE):$(IMAGE_ALPINE_VERSION) publish-container-generic
+
+publish-container-solr-base: ## publicar imagem solr-base
+	@make IMAGEMTMP_FULL=$(IMAGE_SOLR_BASE):$(IMAGE_SOLR_BASE_VERSION) publish-container-generic
 
 publish-container-phpmaketools: ## publicar imagem phpmaketools
 	@make IMAGEMTMP_FULL=$(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) publish-container-generic
