@@ -16,52 +16,52 @@ do
     echo "Tentando acesso ao solr. Aguarde..."
     set +e
     curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr
-    e=$?    
+    e=$?
     set -e
     sleep 5
-        
+
 done
 
 echo "Criando indices do Solr"
 
-if [ ! -d /dados/${CORE_PROTOCOLOS} ]; then
-    
-    cp -R /dados/sei-protocolos /dados/${CORE_PROTOCOLOS}/
-    rm -rf /dados/${CORE_PROTOCOLOS}/core.properties
-    chown -R 1000:1000 /dados/${CORE_PROTOCOLOS}/
+if [ ! -d /var/solr/data/${CORE_PROTOCOLOS} ]; then
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PROTOCOLOS}\&instanceDir\=/dados/${CORE_PROTOCOLOS}\&config\=solrconfig.xml\&dataDir\=/dados/${CORE_PROTOCOLOS}/conteudo
+    cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_PROTOCOLOS}/
+    rm -rf /var/solr/data/${CORE_PROTOCOLOS}/core.properties
+    chown -R 8983:8983 /var/solr/data/${CORE_PROTOCOLOS}/
+
+    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PROTOCOLOS}\&instanceDir\=/var/solr/data/${CORE_PROTOCOLOS}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PROTOCOLOS}/conteudo
 
 else
-    
+
     echo "Indice ja existe no disco"
 
 fi
 
-if [ ! -d /dados/${CORE_PUBLICACOES} ]; then
-    
-    cp -R /dados/sei-protocolos /dados/${CORE_PUBLICACOES}/
-    rm -rf /dados/${CORE_PUBLICACOES}/core.properties
-    chown -R 1000:1000 /dados/${CORE_PUBLICACOES}/
+if [ ! -d /var/solr/data/${CORE_PUBLICACOES} ]; then
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PUBLICACOES}\&instanceDir\=/dados/${CORE_PUBLICACOES}\&config\=solrconfig.xml\&dataDir\=/dados/${CORE_PUBLICACOES}/conteudo
+    cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_PUBLICACOES}/
+    rm -rf /var/solr/data/${CORE_PUBLICACOES}/core.properties
+    chown -R 8983:8983 /var/solr/data/${CORE_PUBLICACOES}/
+
+    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PUBLICACOES}\&instanceDir\=/var/solr/data/${CORE_PUBLICACOES}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PUBLICACOES}/conteudo
 
 else
-    
+
     echo "Indice ja existe no disco"
 
 fi
 
-if [ ! -d /dados/${CORE_CONHECIMENTO} ]; then
-    
-    cp -R /dados/sei-protocolos /dados/${CORE_CONHECIMENTO}/
-    rm -rf /dados/${CORE_CONHECIMENTO}/core.properties
-    chown -R 1000:1000 /dados/${CORE_CONHECIMENTO}/
+if [ ! -d /var/solr/data/${CORE_CONHECIMENTO} ]; then
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_CONHECIMENTO}\&instanceDir\=/dados/${CORE_CONHECIMENTO}\&config\=solrconfig.xml\&dataDir\=/dados/${CORE_CONHECIMENTO}/conteudo
+    cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_CONHECIMENTO}/
+    rm -rf /var/solr/data/${CORE_CONHECIMENTO}/core.properties
+    chown -R 8983:8983 /var/solr/data/${CORE_CONHECIMENTO}/
+
+    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_CONHECIMENTO}\&instanceDir\=/var/solr/data/${CORE_CONHECIMENTO}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_CONHECIMENTO}/conteudo
 
 else
-    
+
     echo "Indice ja existe no disco"
 
 fi

@@ -25,7 +25,7 @@ spec:
         env:
           - name: ID_INSTALACAO
             value: {{ .Values.app.idInstalacao | quote }}
-        image: processoeletronico/solr9.6.1:latest
+        image: ghcr.io/pengovbr/sei-helm/solr:0.5.0
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
         stdin: true
@@ -33,7 +33,7 @@ spec:
         volumeMounts:
         - mountPath: /seiscripts
           name: solrcreate
-        - mountPath: /dados
+        - mountPath: /var/solr/data
           name: vol3
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
