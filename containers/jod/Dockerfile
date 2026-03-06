@@ -9,14 +9,8 @@ FROM ${IMAGE_ALPINE}:${IMAGE_ALPINE_VERSION} AS apache
 
 ARG JODLOC=https://github.com/pengovbr/sei-docker-binarios/raw/refs/heads/main/pacoteslinux/jodconverter-4.4.8.jar
 
-RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    mkdir -p /opt/app/ && \
-    cp /temp/application.yaml /opt/app/ && \
-    wget -P /opt/app/ ${JODLOC} && \
-    adduser -S jod && \
-    chown -R jod /opt/app && \
-    # packages
-    apk add -f --no-cache \
+RUN apk add -f --no-cache \
+        curl \
         libreoffice \
         openjdk17-jdk \
         font-terminus \
@@ -42,8 +36,20 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     rm -rf /tmp/* && \
     apk del .build-deps
 
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    mkdir -p /opt/app/ && \
+    cp /temp/application.yaml /opt/app/ && \
+    wget -P /opt/app/ ${JODLOC} && \
+    adduser -S jod && \
+    chown -R jod /opt/app && \
+    cp -R /temp/healthcheck /opt/app/ && \
+    chmod +x /opt/app/healthcheck/readiness/readiness.sh && \
+    chmod +x /opt/app/healthcheck/liveness/liveness.sh && \
+    chown -R jod /opt/app/healthcheck && \
+    rm -rf /tmp/*
+
 WORKDIR /opt/app
 
 USER jod
 
-CMD java -jar jodconverter-4.4.8.jar
+CMD ["java", "-jar", "jodconverter-4.4.8.jar"]

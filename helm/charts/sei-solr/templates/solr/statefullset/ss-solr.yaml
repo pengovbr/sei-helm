@@ -65,6 +65,9 @@ spec:
             solr e que as permissoes do arquivo estejam com o Solr" ; fi;  exit 0
           image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.solr.image.pullPolicy }}
+          envFrom:
+          - configMapRef:
+            name: cm-solr
           name: solr-init
           resources:
             limits:

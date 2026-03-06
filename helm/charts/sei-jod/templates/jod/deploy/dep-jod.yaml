@@ -6,7 +6,7 @@ metadata:
     {{- include "sei-jod.labels" . | nindent 4 }}
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.jod.initial_replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -25,8 +25,41 @@ spec:
       containers:
       - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.jod.image.pullPolicy }}
+        {{- with .Values.jod.kuberesources }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+        envFrom:
+        - configMapRef:
+            name: cm-jod
         name: jod
         stdin: true
         tty: true
+        livenessProbe:
+          exec:
+            command:
+            - /opt/app/healthcheck/liveness/liveness.sh
+          failureThreshold: 2
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 35
+        readinessProbe:
+          exec:
+            command:
+            - /opt/app/healthcheck/readiness/readiness.sh
+          failureThreshold: 1
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3
+        volumeMounts:
+        - mountPath: /opt/app/application.yaml
+          name: jodconfig
+          subPath: application.yaml
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: jodconfig
+          configMap:
+            name: cm-jod-application
+            defaultMode: 0644

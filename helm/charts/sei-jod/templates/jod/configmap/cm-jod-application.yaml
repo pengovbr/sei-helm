@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  application.yaml: |
+    jodconverter:
+      local:
+        port-numbers:
+          {{- .Values.jod.servico.portnumbers | toYaml | nindent 12 }}
+        # change the tmp folder
+        working-dir: /tmp
+    # change upload sizes
+    spring:
+      servlet:
+        multipart:
+          max-file-size: {{ .Values.jod.servico.maxfilesize }}
+          max-request-size: {{ .Values.jod.servico.maxrequestsize }}
+    # change the server port (where the REST app is listenting)
+    server:
+      port: 8080
+kind: ConfigMap
+metadata:
+  name: cm-jod-application
+  labels:
+    {{- include "sei-jod.labels" . | nindent 4 }}
