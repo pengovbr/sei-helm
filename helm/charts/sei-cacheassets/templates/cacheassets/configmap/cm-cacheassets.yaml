@@ -1,7 +1,9 @@
 apiVersion: v1
 data:
   nginx.conf: |
-    resolver kube-dns.kube-system.svc.cluster.local ipv6=off valid=30s;
+    resolver kube-dns.kube-system.svc.cluster.local. ipv6=off valid=30s;
+
+    proxy_hide_header Upgrade;
 
     proxy_cache_path /var/cache/nginx
                      keys_zone=mycache:10m

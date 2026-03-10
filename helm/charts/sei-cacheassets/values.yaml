@@ -26,3 +26,13 @@ cacheassets:
         #  host: sei2.teste
         #- namespace: nsorgao1
         #  host: orgao1.gov.br
+
+app:
+
+    host: meusei.br
+
+    # Nome do secret com o certificado TLS para o ingress.
+    # Crie esse secret com antecedencia para o ingress caso
+    # nao possua uma ferramenta emissora.
+    # Adicione no formato crt e key padrao para ingress do kube
+    tls_secret_name: "mysecret"

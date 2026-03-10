@@ -10,6 +10,10 @@ metadata:
   labels:
     {{- include "sei-cacheassets.labels" . | nindent 4 }}
 spec:
+  tls:
+  - hosts:
+    - {{ .Values.app.host }}
+    secretName: {{ .Values.app.tls_secret_name }}
   rules:
   {{- range .Values.cacheassets.backends }}
   - host: {{ .host }}

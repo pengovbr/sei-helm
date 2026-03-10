@@ -28,6 +28,12 @@ app:
 
     tz: America/Sao_Paulo
 
+    # Nome do secret com o certificado TLS para o ingress.
+    # Crie esse secret com antecedencia para o ingress caso
+    # nao possua uma ferramenta emissora.
+    # Adicione no formato crt e key padrao para ingress do kube
+    tls_secret_name: "mysecret"
+
     # indica se a automacao irah dropar e criar a base de dados
     # que foi informada abaixo para essa instancia
     dbRecreate: "true"
@@ -39,7 +45,7 @@ app:
     idInstalacao: "orgao1"
 
     protocolo: https
-    host: localhost
+    host: meusei.br
     orgao: ORGAO1
     orgao_descricao: Orgao Helm1
     nome_complemento: Orgao Helm1

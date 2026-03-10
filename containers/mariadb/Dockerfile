@@ -1,7 +1,7 @@
 
 ARG IMAGEM_BASE=mariadb:10.5
 
-FROM ${IMAGEM_BASE} as builder
+FROM ${IMAGEM_BASE} AS builder
 
 #ARG GIT_DB_REF=https://github.com/spbgovbr/sei-db-ref-executivo/raw/feat/master
 ARG GIT_DB_REF=https://github.com/spbgovbr/sei-db-ref-executivo/raw/master
