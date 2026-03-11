@@ -106,13 +106,13 @@ getexample: ## traz o arquivo de exemplo caso o titular n exista
 		cp $(arq_example) $(arq_titular); \
 	fi;
 
-## get-fontes-modulos: get fontes e modulos
-get-fontes-modulos:
+## get-fontes-ready: get fontes e modulos
+get-fontes-ready:
 	@docker run -it --rm \
 	    -v "${PWD}"/app/assets/fontes:/fontes \
-		-v "${PWD}"/apoio/phpmaketools/scripts:/scripts \
+		-v "${PWD}"/apoio/phpmaketools/assets:/assets \
 		--env-file envcontainers.env $(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) \
-		sh -c "scripts/down_sei.sh"
+		sh -c "/assets/scripts/get_ready.sh"
 
 
 #*****************************************************

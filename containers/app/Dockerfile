@@ -21,32 +21,13 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     sed -i 's|LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|' /etc/apache2/httpd.conf
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    cp -R /temp/fontes/sei /opt/ && \
-    cp -R /temp/fontes/sip /opt/ && \
-    cp -R /temp/fontes/infra /opt/ && \
-    echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei \( -name '*.php'\
-        -o -name '*.dat'\
-        -o -name 'jodconverter-4.4.8.zip'\
-        -o -name 'pdfboxmerge.jar'\
-        -o -name 'bcmail-jdk15-1.45.jar'\
-        -o -name 'bcprov-jdk15-1.45.jar'\
-        -o -name 'verify-1.1.jar' \) -delete && \
-    echo "Deletando arquivos php /opt/sip" && \
-    find /opt/sip \( -name '*.php' -o -name '*.dat' \) -delete && \
-    echo "Deletando arquivos php /opt/infra" && \
-    find /opt/infra \( -name '*.php' -o -name '*.dat' \) -delete && \
-    cp /temp/fontes/sei/web/index.php /opt/sei/web/ && \
-    cp /temp/fontes/sip/web/index.php /opt/sip/web/ && \
-    echo "Deletando disr vazios" && \
-    find /opt/sei -type d -empty -delete && \
-    find /opt/sip -type d -empty -delete && \
-    find /opt/infra -type d -empty -delete && \
+    cp -R /temp/fontes/apache/sei /opt/ && \
+    cp -R /temp/fontes/apache/sip /opt/ && \
+    cp -R /temp/fontes/apache/infra /opt/ && \
     chown -R apache:apache \
         /opt/sei \
         /opt/sip \
         /opt/infra
-
 
 USER apache
 
@@ -153,52 +134,9 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     ln -s /usr/bin/php82 /usr/bin/php
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    cp -a /temp/fontes/sei /opt/ && \
-    cp -a /temp/fontes/sip /opt/ && \
-    cp -a /temp/fontes/infra /opt/ && \
-    \cp /temp/conf/sei/ConfiguracaoSEI.php /opt/sei/config/ && \
-    \cp /temp/conf/sei/ConfiguracaoSip.php /opt/sip/config/ && \
-    sed -i "s|\$strServidor = ConfiguracaoSEI::getInstance()->getValor('SEI', 'URL');|if \
-        (\$_SERVER['HTTP_HOST'] == 'web' ) {\
-        \$strServidor = 'http://web/sei';\
-        } else {\
-        \$strServidor = ConfiguracaoSEI::getInstance()->getValor('SEI', 'URL');\
-        }|g" /opt/sei/web/controlador_ws.php && \
-    sed -i "s|\$strServidor = str_replace|; //\$strServidor = str_replace|g" \
-        /opt/sei/web/controlador_ws.php && \
-    sed -i "s|\$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL');|if \
-        (\$_SERVER['HTTP_HOST'] == 'web' ) {\
-        \$strServidor = 'http://web/sip';\
-        } else {\
-        \$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL');\
-        }|g" /opt/sip/web/controlador_ws.php && \
-    sed -i "s|if (\$this->isBolRequerHttps()|if (\$this->isBolRequerHttps() \&\& \
-      !isset(\$_SERVER['HTTP_X_FORWARDED_FOR'])|" /opt/infra/infra_php/InfraPagina.php && \
-    \cp /temp/conf/sei/modulos/ConfiguracaoModAssinaturaEletronica.php /opt/sei/config/mod-assinatura-eletronica/ && \
-    rm -rf /opt/sei/scripts/* && \
-    rm -rf /opt/sip/scripts/* && \
-    echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei -type f ! -name "*.php" \
-        ! -name "*.wsdl" \
-        ! -name "*.dat" \
-        ! -name "*.ttf" \
-        ! -name "pdfboxmerge.jar" \
-        ! -name "bcmail-jdk15-1.45.jar" \
-        ! -name "bcprov-jdk15-1.45.jar" \
-        ! -name "certificadora.csr" \
-        ! -name "verify-1.1.jar" \
-        -delete && \
-    echo "Deletando arquivos php /opt/sip" && \
-    find /opt/sip -type f ! -name "*.php" ! -name "*.wsdl" \
-        ! -name "*.dat" ! -name "*.ttf" -delete && \
-    echo "Deletando arquivos php /opt/infra" && \
-    find /opt/infra -type f ! -name "*.php" ! -name "*.wsdl" \
-        ! -name "*.dat" ! -name "*.ttf" -delete && \
-    \cp -R /temp/fontes/infra/infra_php/captcha /opt/infra/infra_php/ && \
-    echo "Deletando disr vazios" && \
-    find /opt/sei -type d -empty -delete && \
-    find /opt/sip -type d -empty -delete && \
-    find /opt/infra -type d -empty -delete && \
+    cp -a /temp/fontes/php/sei /opt/ && \
+    cp -a /temp/fontes/php/sip /opt/ && \
+    cp -a /temp/fontes/php/infra /opt/ && \
     mkdir -p /var/lib/sei/dbfiles && \
     mkdir -p /var/lib/sei/dbcontrol && \
     mkdir -p /var/lib/sei/tmpfiles && \
@@ -264,8 +202,8 @@ RUN apk add --no-cache \
     bash
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    \cp -R /temp/fontes/sei/scripts /opt/sei/scripts/ && \
-    \cp -R /temp/fontes/sip/scripts /opt/sip/scripts/ && \
+    \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
     mkdir -p /usr/share/sei/ && \
     cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
     chmod +x /usr/share/sei/tmpdelete.sh
@@ -279,6 +217,8 @@ FROM php AS php-cron
 USER root
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
     cp /temp/conf/cron.d/cron.conf /etc/crontabs/root && \
     mkdir -p /usr/share/sei/ && \
     cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \

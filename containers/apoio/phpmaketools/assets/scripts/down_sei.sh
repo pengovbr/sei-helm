@@ -1,5 +1,6 @@
-
 #!/bin/sh
+
+set -e
 
 mkdir /opt2
 cd /opt2
@@ -38,16 +39,12 @@ echo "******************************"
 
 # todo baixar a release do zip
 
-git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ASSINATURA_URL}
-cd mod-sei-assinatura-eletronica
-git checkout ${GIT_MODULO_ASSINATURA_VERSION}
+#git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ASSINATURA_URL}
+#cd mod-sei-assinatura-eletronica
+#git checkout ${GIT_MODULO_ASSINATURA_VERSION}
 
-touch docs/changelogs/CHANGELOG-1.3.0.md
-make dist
+#touch docs/changelogs/CHANGELOG-1.3.0.md
+#make dist
 
-cd dist
-yes | unzip mod-sei-assinatura-eletronica-*.zip
-
-\cp -R sei /fontes/
-\cp -R sip /fontes/
-
+#cd dist
+#yes | unzip mod-sei-assinatura-eletronica-*.zip

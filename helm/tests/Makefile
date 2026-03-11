@@ -116,13 +116,6 @@ uninstall_chart: validar_chart_namespace validar_chart_name validar_context ## t
 	@helm -n $(chart_ns) uninstall $(chart_name)
 
 
-install_umbrella_chart: validar_context ## instala o chart sei-umbrella de acordo com os parametros do arquivo envtest.env
-	@make chart_ns=$($(kube_context).tests-sei-umbrella.namespace) chart=chart-generico-dev chart_name=tests-sei-umbrella install_chart
-
-
-uninstall_umbrella_chart: validar_context ## desinstala o chart sei-umbrella
-	@make chart_ns=$($(kube_context).tests-sei-umbrella.namespace) chart=chart-generico-dev chart_name=tests-sei-umbrella uninstall_chart
-
 
 install_sei1_e_2: validar_context ## instala todos os pacotes montando 2 instalacoes do SEI reaproveitando banco, solr e jod
 	@make chart_ns=$($(kube_context).tests-sei-db.namespace) chart=sei-db chart_name=tests-sei-db install_chart
@@ -151,8 +144,6 @@ test_all_contexts: ## roda todos os testes de provisionamento rotacionando os cl
         echo "======================================================"; \
         echo "Alterando para o contexto: $${context}"; \
         kubectl config use-context $${context}; \
-        make kube_context=$${context} install_umbrella_chart; \
-        make kube_context=$${context} uninstall_umbrella_chart; \
         make kube_context=$${context} install_sei1_e_2; \
         make kube_context=$${context} uninstall_sei1_e_2; \
     done;
