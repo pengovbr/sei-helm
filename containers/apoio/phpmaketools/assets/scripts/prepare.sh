@@ -9,6 +9,11 @@ cp -R /fontes/sei /fontes/apache/
 cp -R /fontes/sip /fontes/apache/
 cp -R /fontes/infra /fontes/apache/
 
+rm -rf /fontes/sei/config/ConfiguracaoSEI.exemplo.php
+rm -rf /fontes/sei/config/ConfiguracaoSEI.testes.php
+rm -rf /fontes/sip/config/ConfiguracaoSip.exemplo.php
+rm -rf /fontes/sip/config/ConfiguracaoSip.testes.php
+
 
 ##########
 # APACHE

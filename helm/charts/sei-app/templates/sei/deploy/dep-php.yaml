@@ -78,6 +78,9 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/sei
           name: vol-sei
+        - mountPath: /opt/sei/config/ConfiguracaoSEI.php
+          name: seiconf
+          subPath: ConfiguracaoSEI.php
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -85,3 +88,6 @@ spec:
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei
+      - name: seiconf
+        configMap:
+          name: cm-seiconfig

@@ -76,12 +76,12 @@ app:
     mail_maxdestinatarios: 999
     mail_max_tamanho_anexos: 999
 
-    servico_pd_instalar: "false"
+    servico_pd_instalar: false
     servico_pd_sigla: GOV.BR
     servico_pd_nome: protocolo.gov.br
     servico_pd_operacoes: 3,2,15,0,1
 
-    modulo_estatisticas_instalar: "true"
+    modulo_estatisticas_instalar: true
     modulo_estatisticas_versao: "master"
     modulo_estatisticas_url: "https://estatistica.dev.processoeletronico.gov.br"
     modulo_estatisticas_sigla: "SEIPUBLICO"

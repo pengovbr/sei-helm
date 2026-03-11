@@ -26,7 +26,6 @@ data:
   SERVICO_PD_SIGLA: {{ .Values.app.servico_pd_sigla | quote }}
   SERVICO_PD_NOME: {{ .Values.app.servico_pd_nome | quote }}
   SERVICO_PD_OPERACOES: {{ .Values.app.servico_pd_operacoes | quote }}
-  MODULO_ESTATISTICAS_INSTALAR: {{ .Values.app.modulo_estatisticas_instalar | quote }}
   MODULO_ESTATISTICAS_VERSAO: {{ .Values.app.modulo_estatisticas_versao | quote }}
   MODULO_ESTATISTICAS_URL: {{ .Values.app.modulo_estatisticas_url | quote }}
   MODULO_ESTATISTICAS_SIGLA: {{ .Values.app.modulo_estatisticas_sigla | quote }}

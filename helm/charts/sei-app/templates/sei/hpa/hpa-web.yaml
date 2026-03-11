@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  maxReplicas: 6
+  maxReplicas: 3
   metrics:
   - resource:
       name: cpu

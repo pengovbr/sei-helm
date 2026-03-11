@@ -34,6 +34,17 @@ echo "****DOWNLOADING MODULOS*******"
 echo "******************************"
 
 echo "******************************"
+echo "****DOWNLOADING ESTATISTICAS**"
+echo "******************************"
+
+git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ESTATISTICAS_URL}
+cd mod-sei-estatisticas
+git checkout ${GIT_MODULO_ESTATISTICAS_VERSION}
+
+mkdir -p /fontes/sei/web/modulos/mod-sei-estatisticas
+\cp -R * /fontes/sei/web/modulos/mod-sei-estatisticas/
+
+echo "******************************"
 echo "****DOWNLOADING ASSINATURA****"
 echo "******************************"
 

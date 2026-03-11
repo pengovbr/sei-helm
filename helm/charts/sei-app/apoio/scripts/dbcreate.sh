@@ -15,12 +15,9 @@ do
     mysql -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} -e "show databases;"
     e=$?
     set -e
+    sleep 5
 
 done
-
-
-
-
 
 if [ "$DB_RECREATE" == "true" ]; then
     echo "Apagando bases caso existam"
