@@ -7,7 +7,7 @@ solr:
     # o storageclass vazio
     # caso contrario tera q criar o pv manualmente
     storage:
-        #storageclass: nfs-client
+        #storageClass: nfs-client
         storageClass: ""
 
     tz: America/Sao_Paulo

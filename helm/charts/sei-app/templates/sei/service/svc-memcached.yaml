@@ -5,6 +5,6 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  externalName: memcachedinterno.{{ .Values.app.memcachedcluster }}.svc.cluster.local
+  externalName: memcachedinterno.{{ .Values.app.memcachednamespace }}.svc.cluster.local
   sessionAffinity: None
   type: ExternalName

@@ -5,6 +5,6 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  externalName: dbinterno.{{ .Values.app.dbcluster }}.svc.cluster.local
+  externalName: dbinterno.{{ .Values.app.dbnamespace }}.svc.cluster.local
   sessionAffinity: None
   type: ExternalName

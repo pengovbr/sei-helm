@@ -75,6 +75,14 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         tty: true
+        volumeMounts:
+        - mountPath: /etc/apache2/conf.d/zzz-sei.conf
+          name: seiconf
+          subPath: zzz-sei.conf
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: seiconf
+        configMap:
+          name: cm-apache

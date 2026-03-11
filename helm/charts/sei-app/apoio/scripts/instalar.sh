@@ -2,8 +2,7 @@
 
 set -e
 
-if [ -z "$APP_PROTOCOLO" ] || \
-   [ -z "$APP_HOST" ] || \
+if [ -z "$APP_HOST" ] || \
    [ -z "$APP_ORGAO" ] || \
    [ -z "$APP_ORGAO_DESCRICAO" ] || \
    [ -z "$APP_NOMECOMPLEMENTO" ] || \
@@ -18,7 +17,6 @@ if [ -z "$APP_PROTOCOLO" ] || \
    [ -z "$APP_DB_ROOT_USERNAME" ] || \
    [ -z "$APP_DB_ROOT_PASSWORD" ]; then
     echo "Informe as seguinte variáveis de ambiente no seu docker-compose ou no container:"
-    echo "APP_PROTOCOLO=$APP_PROTOCOLO"
     echo "APP_HOST=$APP_HOST"
     echo "APP_ORGAO=$APP_ORGAO"
     echo "APP_ORGAO_DESCRICAO=$APP_ORGAO_DESCRICAO"
@@ -49,7 +47,7 @@ while [ ! -f /var/lib/sei/dbcontrol/bancoinstalado.ok ]; do
     sleep 2
 done
 
-APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
+APP_HOST_URL=http://$APP_HOST
 
 # vefificar se existe codigo fonte
 if [ ! -f /opt/sei/web/SEI.php ] || [ ! -f /opt/sip/web/Sip.php ] ; then
@@ -96,7 +94,7 @@ if [ ! -f /var/lib/sei/dbcontrol/sistema.ok ]; then
     \$conexao = BancoSip::getInstance();
     \$conexao->abrirConexao();
     \$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP'\");
-    \$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='http://app/sei/controlador_ws.php?servico=sip' where sigla='SEI'\");
+    \$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='http://web/sei/controlador_ws.php?servico=sip' where sigla='SEI'\");
     " 2>&1 | tee -a /var/lib/sei/dbcontrol/sistema.output
 
     touch /var/lib/sei/dbcontrol/sistema.ok

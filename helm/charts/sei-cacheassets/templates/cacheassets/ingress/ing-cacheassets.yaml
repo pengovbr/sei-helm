@@ -13,7 +13,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.app.host }}
-    secretName: {{ .Values.app.tls_secret_name }}
+    secretName: {{ .Values.app.ingress.tls_secret_name }}
   rules:
   {{- range .Values.cacheassets.backends }}
   - host: {{ .host }}

@@ -7,8 +7,8 @@ app:
     # o storageclass vazio
     # caso contrario tera q criar o pv manualmente
     storage:
-        #storageclass: nfs-client
-        storageclass: ""
+        #storageClass: nfs-client
+        storageClass: ""
 
     image:
         repository: processoeletronico/app-ci-php8
@@ -18,21 +18,34 @@ app:
     nameOverride: ""
     fullnameOverride: ""
 
+    ingress:
+        proxyBodySize: 510m
+
+        # Nome do secret com o certificado TLS para o ingress.
+        # Crie esse secret com antecedencia para o ingress caso
+        # nao possua uma ferramenta emissora.
+        # Adicione no formato crt e key padrao para ingress do kube
+        tls_secret_name: "mysecret"
+
+        # anotacoes opcionais, renomeie de zopcionais para opcionais,
+        # apos isso, todos as anotacoes listadas serao publicadas no ingress
+        # alem dos exemplos abaixo, vc pode informar as suas especificas
+        zopcionais:
+            #cert-manager.io/cluster-issuer: letsencrypt-dth
+            #kubernetes.io/ingress.class: nginx
+            #kubernetes.io/tls-acme: "true"
+            #nginx.ingress.kubernetes.io/affinity: cookie1
+            #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+
     # as variaveis abaixo informam o namespace no qual os demais componentes
     # estao instalados, caso esteja com nome incorreto o sei nao encontrara o
     # componente
-    dbcluster: default
-    jodcluster: default
-    solrcluster: default
-    memcachedcluster: default
+    dbnamespace: default
+    jodnamespace: default
+    solrnamespace: default
+    memcachednamespace: default
 
     tz: America/Sao_Paulo
-
-    # Nome do secret com o certificado TLS para o ingress.
-    # Crie esse secret com antecedencia para o ingress caso
-    # nao possua uma ferramenta emissora.
-    # Adicione no formato crt e key padrao para ingress do kube
-    tls_secret_name: "mysecret"
 
     # indica se a automacao irah dropar e criar a base de dados
     # que foi informada abaixo para essa instancia
@@ -44,7 +57,6 @@ app:
     # caso instale o mesmo id com a opcao de reconstruir o banco, a automacao ira apagar os dados
     idInstalacao: "orgao1"
 
-    protocolo: https
     host: meusei.br
     orgao: ORGAO1
     orgao_descricao: Orgao Helm1
@@ -63,31 +75,33 @@ app:
     mail_codificacao: 8bit
     mail_maxdestinatarios: 999
     mail_max_tamanho_anexos: 999
-    fontes_git_path: git@github.com:supergovbr/super
-    fontes_git_checkout: 5.0.0-fix1
-    openldap_presente: "false"
 
     servico_pd_instalar: "false"
     servico_pd_sigla: GOV.BR
     servico_pd_nome: protocolo.gov.br
     servico_pd_operacoes: 3,2,15,0,1
+
     modulo_estatisticas_instalar: "true"
     modulo_estatisticas_versao: "master"
     modulo_estatisticas_url: "https://estatistica.dev.processoeletronico.gov.br"
     modulo_estatisticas_sigla: "SEIPUBLICO"
     modulo_estatisticas_chave: "seipublico"
+
     modulo_rest_instalar: "false"
     modulo_rest_versao: "master"
     modulo_rest_url_notificacao: ""
     modulo_rest_id_app: ""
     modulo_rest_chave: ""
     modulo_rest_token_secret: ""
+
     modulo_resposta_instalar: "false"
     modulo_resposta_versao: "master"
     modulo_resposta_sistema_id: ""
     modulo_resposta_documento_id: ""
+
     modulo_gestaodocumental_instalar: "false"
     modulo_gestaodocumental_versao: "master"
+
     modulo_loginunico_instalar: "false"
     modulo_loginunico_versao: "master"
     modulo_loginunico_clientid: "sistemas/homologacao/sei/controlador_externo"
@@ -101,6 +115,7 @@ app:
     modulo_loginunico_cientidvalidacao: "sei.xxx.nuvem.gov.br/validacaosenha"
     modulo_loginunico_secretvalidacao: "xxx"
     modulo_loginunico_orgao: "0"
+
     modulo_assinaturavancada_instalar: "false"
     modulo_assinaturavancada_versao: "master"
     modulo_assinaturavancada_clientid: "assinaturaavancadaxxx"
@@ -111,6 +126,7 @@ app:
     modulo_assinaturavancada_integra_icp_url: "https://informar"
     modulo_assinaturavancada_integra_icp_url_clearings: "/get-clearings"
     modulo_assinaturavancada_integra_icp_url_assinar: "/sign"
+
     modulo_pen_instalar: "false"
     modulo_pen_versao: "master"
     modulo_pen_webservice: "https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/"
@@ -124,15 +140,18 @@ app:
     modulo_pen_unidade_geradora: ""
     modulo_pen_unidade_associacao_pen: ""
     modulo_pen_unidade_associacao_sei: ""
+
     modulo_peticionamento_instalar: "false"
     modulo_peticionamento_versao: "master"
     modulo_peticionamento_url: "https://github.com/anatelgovbr/mod-sei-peticionamento"
+
     modulo_pi_instalar: "false"
     modulo_pi_versao: "master"
     modulo_pi_url: "https://protocolointegrado.preprod.nuvem.gov.br/protocolows/integradorservice?wsdl"
     modulo_pi_usuario: "usuariodeconexaopi"
     modulo_pi_senha: "senhadeconexaoaopi"
     modulo_pi_email: "email@example.com"
+
     modulo_incom_instalar: "false"
     modulo_incom_versao: "v1.0.4"
     modulo_incom_veiculoid: "2"
@@ -148,12 +167,9 @@ app:
     db_root_password: P@ssword
     db_root_username: root
 
-    #ignore a base sera o nome orgao acima mais sei ex: orago1sei
-    db_sei_base: ""
     db_sei_username: "c2VpX3VzZXI="
     db_sei_password: "c2VpX3VzZXI="
 
-    db_sip_base: "c2lw"
     db_sip_password: "c2lwX3VzZXI="
     db_sip_username: "c2lwX3VzZXI="
 
@@ -168,9 +184,3 @@ app:
     mail_senha: ""
     sei_chave_acesso: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
     sip_chave_acesso: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"
-    #chave privada do github em formato base64 onde encontra-se o fonte, veja mais informacoes no readme do projeto no githup
-    # caso nao informe tera q fornecer o fonte manualmente no volume. O app vai esperar ate encontrar um volume valido
-    fontes_git_privkey: ""
-    gituser_repo_modulos: dummy
-    gitpass_repo_modulos: dummy
-

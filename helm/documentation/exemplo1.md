@@ -3,7 +3,7 @@
 Há inúmeras formas para subir os charts.
 Abaixo vamos listar uma das formas para subir 2 instâncias.
 
-Recomendações: 
+Recomendações:
 
 - subir cada chart em seu namespace separadamente
 - evite subir o chart sei-umbrella a não ser para uma observação rápida
@@ -83,30 +83,28 @@ Ao subir o sei-app, altere durante a instalação os seguintes valores do arquiv
 
 ```
 storageclass: <nome da sua storageclass ou deixe em branco para default>
-dbcluster: db
-jodcluster: jod
-solrcluster: solr
-memcachedcluster: memcached1
+dbnamespace: db
+jodnamespace: jod
+solrnamespace: solr
+memcachednamespace: memcached1
 host: sei1.teste.gov.br
 orgao: ORGAO1
 orgao_descricao: Orgao Helm1
 nome_complemento: Orgao Helm1
-fontes_git_privkey: <<chavegitdofonteseinoformatoacima>>
 
 ```
 
 Suba um segundo sei:
 ```
 storageclass: <nome da sua storageclass ou deixe em branco para default>
-dbcluster: db
-jodcluster: jod
-solrcluster: solr
-memcachedcluster: memcached1
+dbnamespace: db
+jodnamespace: jod
+solrnamespace: solr
+memcachednamespace: memcached1
 host: sei1.teste.gov.br
 orgao: ORGAO1
 orgao_descricao: Orgao Helm1
 nome_complemento: Orgao Helm1
-fontes_git_privkey: <<chavegitdofonteseinoformatoacima>>
 
 ```
 

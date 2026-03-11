@@ -25,8 +25,13 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     cp -R /temp/fontes/sip /opt/ && \
     cp -R /temp/fontes/infra /opt/ && \
     echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei \( -name '*.php' -o -name '*.dat' -o -name 'jodconverter-4.4.8.zip'\
-         -o -name 'pdfboxmerge.jar' \) -delete && \
+    find /opt/sei \( -name '*.php'\
+        -o -name '*.dat'\
+        -o -name 'jodconverter-4.4.8.zip'\
+        -o -name 'pdfboxmerge.jar'\
+        -o -name 'bcmail-jdk15-1.45.jar'\
+        -o -name 'bcprov-jdk15-1.45.jar'\
+        -o -name 'verify-1.1.jar' \) -delete && \
     echo "Deletando arquivos php /opt/sip" && \
     find /opt/sip \( -name '*.php' -o -name '*.dat' \) -delete && \
     echo "Deletando arquivos php /opt/infra" && \
@@ -159,6 +164,8 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
         } else {\
         \$strServidor = ConfiguracaoSEI::getInstance()->getValor('SEI', 'URL');\
         }|g" /opt/sei/web/controlador_ws.php && \
+    sed -i "s|\$strServidor = str_replace|; //\$strServidor = str_replace|g" \
+        /opt/sei/web/controlador_ws.php && \
     sed -i "s|\$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL');|if \
         (\$_SERVER['HTTP_HOST'] == 'web' ) {\
         \$strServidor = 'http://web/sip';\
@@ -171,8 +178,16 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     rm -rf /opt/sei/scripts/* && \
     rm -rf /opt/sip/scripts/* && \
     echo "Deletando arquivos php /opt/sei" && \
-    find /opt/sei -type f ! -name "*.php" ! -name "*.wsdl" ! -name "*.dat" \
-        ! -name "*.ttf" ! -name "pdfboxmerge.jar" -delete && \
+    find /opt/sei -type f ! -name "*.php" \
+        ! -name "*.wsdl" \
+        ! -name "*.dat" \
+        ! -name "*.ttf" \
+        ! -name "pdfboxmerge.jar" \
+        ! -name "bcmail-jdk15-1.45.jar" \
+        ! -name "bcprov-jdk15-1.45.jar" \
+        ! -name "certificadora.csr" \
+        ! -name "verify-1.1.jar" \
+        -delete && \
     echo "Deletando arquivos php /opt/sip" && \
     find /opt/sip -type f ! -name "*.php" ! -name "*.wsdl" \
         ! -name "*.dat" ! -name "*.ttf" -delete && \

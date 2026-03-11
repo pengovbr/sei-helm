@@ -5,6 +5,6 @@ binaryData:
 kind: ConfigMap
 metadata:
   name: cm-solrcreate-{{ .Values.app.idInstalacao | lower }}
-  namespace: {{ .Values.app.solrcluster }}
+  namespace: {{ .Values.app.solrnamespace }}
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}

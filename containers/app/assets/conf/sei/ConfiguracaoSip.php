@@ -17,7 +17,7 @@ class ConfiguracaoSip extends InfraConfiguracao
   {
     return array(
       'Sip' => array(
-        'URL' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip',
+        'URL' => 'http://'.getenv('APP_HOST').'/sip',
         'Producao' => true
       ),
 
@@ -26,10 +26,10 @@ class ConfiguracaoSip extends InfraConfiguracao
       'SessaoSip' => array(
         'SiglaOrgaoSistema' => getenv('APP_ORGAO'),
         'SiglaSistema' => 'SIP',
-        'PaginaLogin' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/login.php',
+        'PaginaLogin' => 'http://'.getenv('APP_HOST').'/sip/login.php',
         'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
         'ChaveAcesso' => getenv('APP_SIP_CHAVE_ACESSO'),
-        'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
+        'https' => false),
 
       'BancoSip'  => array(
           'Servidor' => getenv('APP_DB_HOST'),

@@ -16,7 +16,6 @@ do
     e=$?
     set -e
 
-    sleep 3
 done
 
 

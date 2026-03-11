@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
-  namespace: {{ .Values.app.solrcluster }}
+  namespace: {{ .Values.app.solrnamespace }}
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:

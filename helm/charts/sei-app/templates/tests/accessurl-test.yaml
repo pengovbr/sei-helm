@@ -14,6 +14,6 @@ spec:
           - -c
           - >-
               echo "192.168.0.2 {{ .Values.app.host }}" >> /etc/hosts &&
-              wget --no-check-certificate {{ .Values.app.protocolo }}://{{ .Values.app.host }}
+              wget --no-check-certificate https://{{ .Values.app.host }}
   restartPolicy: Never
 
