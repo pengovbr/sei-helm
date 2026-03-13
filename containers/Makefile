@@ -276,6 +276,10 @@ publish-container-generic: verificar-docker-registry
 publish-container-alpine:
 	@make IMAGEMTMP_FULL=$(IMAGE_ALPINE):$(IMAGE_ALPINE_VERSION) publish-container-generic
 
+## publicar imagem memcached-base
+publish-container-memcached-base:
+	@make IMAGEMTMP_FULL=$(IMAGE_MEMCACHED_BASE):$(IMAGE_MEMCACHED_BASE_VERSION) publish-container-generic
+
 ## publicar imagem solr-base
 publish-container-solr-base:
 	@make IMAGEMTMP_FULL=$(IMAGE_SOLR_BASE):$(IMAGE_SOLR_BASE_VERSION) publish-container-generic

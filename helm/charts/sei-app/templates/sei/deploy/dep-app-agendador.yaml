@@ -47,11 +47,27 @@ spec:
         stdin: true
         tty: true
         volumeMounts:
+        volumeMounts:
+        - mountPath: /etc/php82/conf.d/zzz-sei.ini
+          name: phpconf
+          subPath: zzz-sei.ini
+        - mountPath: /etc/php82/php-fpm.d/zzz-sei-fpm.conf
+          name: phpconf
+          subPath: zzz-sei-fpm.conf
+        - mountPath: /opt/sei/config/ConfiguracaoSEI.php
+          name: seiconf
+          subPath: ConfiguracaoSEI.php
         - mountPath: /var/lib/sei
           name: vol-sei
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
+      - name: seiconf
+        configMap:
+          name: cm-seiconfig
+      - name: phpconf
+        configMap:
+          name: cm-phpconf
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei

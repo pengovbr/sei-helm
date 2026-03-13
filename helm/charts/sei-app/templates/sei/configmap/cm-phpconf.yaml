@@ -1,0 +1,11 @@
+apiVersion: v1
+binaryData:
+  zzz-sei.ini: |-
+    {{ tpl (.Files.Get "apoio/userTemplates/php/sei.ini") . | b64enc }}
+  zzz-sei-fpm.conf: |-
+    {{ tpl (.Files.Get "apoio/userTemplates/php/sei-fpm.conf") . | b64enc }}
+kind: ConfigMap
+metadata:
+  name: cm-phpconf
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
