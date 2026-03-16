@@ -25,6 +25,42 @@ spec:
       - image: "{{ .Values.memcached.image.repository }}:{{ .Values.memcached.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.memcached.image.pullPolicy }}
         name: memcached
+        args:
+        {{- with .Values.memcached.config.verbose }}
+        - "-v"
+        {{- end }}
+        {{- with .Values.memcached.config.maxRequestsEvent }}
+        - "-R {{ . }}"
+        {{- end }}
+        {{- if not .Values.memcached.config.compareSwap }}
+        - "-C"
+        {{- end }}
+        {{- with .Values.memcached.config.maxConnections }}
+        - "-c {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.config.threads }}
+        - "-t {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.config.memory }}
+        - "-m {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.resources }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.startupProbe }}
+        startupProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.livenessProbe }}
+        livenessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.readinessProbe }}
+        readinessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+
         stdin: true
         tty: true
       restartPolicy: Always
