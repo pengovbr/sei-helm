@@ -15,14 +15,16 @@ jod:
 
 
     # tune os resources e tb o servico portnumbers abaixo
-    kuberesources:
-        resources:
-            limits:
-                cpu: 500m
-                memory: 2048Mi
-            requests:
-                cpu: 500m
-                memory: 2048Mi
+    # resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo:
+    # resources:
+    #     limits:
+    #         cpu: 500m
+    #         memory: 2048Mi
+    #     requests:
+    #         cpu: 500m
+    #         memory: 2048Mi
 
     # port numbers sao as portas internas que o libreoffice deixarah disponivel
     # para processamento dentro de cada conteiner q for instanciado.

@@ -25,8 +25,9 @@ spec:
       containers:
       - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.jod.image.pullPolicy }}
-        {{- with .Values.jod.kuberesources }}
-        {{- . | toYaml | nindent 8 }}
+        {{- with .Values.jod.resources }}
+        resources:
+        {{- . | toYaml | nindent 12 }}
         {{- end }}
         envFrom:
         - configMapRef:
