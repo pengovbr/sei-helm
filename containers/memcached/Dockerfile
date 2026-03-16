@@ -2,6 +2,7 @@
 # Memcached Oficial - apenas redundancia do repo oficial
 ################################################################################
 
-ARG MEMCACHED_ORIGINAL_VERSION=1.6.40-alpine
+ARG IMAGE_MEMCACHED_BASE=rodepleomakefile
+ARG IMAGE_MEMCACHED_BASE_VERSION=rodepleomakefile
 
-FROM memcached:${MEMCACHED_ORIGINAL_VERSION}
+FROM ${IMAGE_MEMCACHED_BASE}:${IMAGE_MEMCACHED_BASE_VERSION}
