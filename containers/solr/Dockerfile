@@ -15,11 +15,14 @@ ARG CONF=/opt/solr-9.6.1/server/solr/configsets/sample_techproducts_configs/conf
 
 USER root
 
-RUN apt update && \
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
     ttf-mscorefonts-installer && \
     fc-cache -f && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    cp -R /temp/probes / && \
+    chmod +x /probes/*
 
 USER solr
 

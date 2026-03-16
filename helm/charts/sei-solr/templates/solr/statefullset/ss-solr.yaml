@@ -24,28 +24,27 @@ spec:
         envFrom:
         - configMapRef:
             name: cm-solr
+        - secretRef:
+            name: se-solr
+            optional: false
         name: solr
-        args: [ "-Duser.timezone=GMT-03:00" ]
-        #livenessProbe:
-        #  failureThreshold: 3
-        #  httpGet:
-        #    path: /solr/admin/info/system
-        #    port: 8983
-        #    scheme: HTTP
-        #  initialDelaySeconds: 20
-        #  periodSeconds: 10
-        #  successThreshold: 1
-        #  timeoutSeconds: 10
-        #readinessProbe:
-        #  failureThreshold: 3
-        #  httpGet:
-        #    path: /solr/admin/info/system
-        #    port: 8983
-        #    scheme: HTTP
-        #  initialDelaySeconds: 20
-        #  periodSeconds: 10
-        #  successThreshold: 1
-        #  timeoutSeconds: 10
+        args: [ "-Duser.timezone=GMT-03:00", "-m", "{{ .Values.solr.memory }}" ]
+        {{- with .Values.solr.resources }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.solr.startupProbe }}
+        startupProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.solr.livenessProbe }}
+        livenessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.solr.readinessProbe }}
+        readinessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         stdin: true
         tty: true
         volumeMounts:
