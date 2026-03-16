@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dbinterno
+  name: db
   labels:
     {{- include "sei-db.labels" . | nindent 4 }}
 spec:
@@ -14,4 +14,3 @@ spec:
   selector:
     servico: db
   sessionAffinity: None
-  type: ClusterIP
