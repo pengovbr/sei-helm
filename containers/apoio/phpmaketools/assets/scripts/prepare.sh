@@ -108,10 +108,12 @@ find /fontes/php/infra -type f ! -name "*.php" ! -name "*.wsdl" \
 
 \cp -R /fontes/infra/infra_php/captcha /fontes/php/infra/infra_php/
 
-echo "Deletando disr vazios"
+echo "Deletando dirs vazios"
 find /fontes/php/sei -type d -empty -delete
 find /fontes/php/sip -type d -empty -delete
 find /fontes/php/infra -type d -empty -delete
+
+echo "Copiando arquivos novos e deletando fontes iniciais"
 
 mkdir -p /fontes/scripts/sei/scripts
 mkdir -p /fontes/scripts/sip/scripts
