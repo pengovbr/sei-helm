@@ -15,7 +15,7 @@ while [ ! "$e" == "0" ]
 do
     echo "Tentando acesso ao solr. Aguarde..."
     set +e
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr
+    curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr
     e=$?
     set -e
     sleep 5
@@ -30,7 +30,7 @@ if [ ! -d /var/solr/data/${CORE_PROTOCOLOS} ]; then
     rm -rf /var/solr/data/${CORE_PROTOCOLOS}/core.properties
     chown -R 8983:8983 /var/solr/data/${CORE_PROTOCOLOS}/
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PROTOCOLOS}\&instanceDir\=/var/solr/data/${CORE_PROTOCOLOS}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PROTOCOLOS}/conteudo
+    curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PROTOCOLOS}\&instanceDir\=/var/solr/data/${CORE_PROTOCOLOS}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PROTOCOLOS}/conteudo
 
 else
 
@@ -44,7 +44,7 @@ if [ ! -d /var/solr/data/${CORE_PUBLICACOES} ]; then
     rm -rf /var/solr/data/${CORE_PUBLICACOES}/core.properties
     chown -R 8983:8983 /var/solr/data/${CORE_PUBLICACOES}/
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PUBLICACOES}\&instanceDir\=/var/solr/data/${CORE_PUBLICACOES}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PUBLICACOES}/conteudo
+    curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_PUBLICACOES}\&instanceDir\=/var/solr/data/${CORE_PUBLICACOES}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_PUBLICACOES}/conteudo
 
 else
 
@@ -58,7 +58,7 @@ if [ ! -d /var/solr/data/${CORE_CONHECIMENTO} ]; then
     rm -rf /var/solr/data/${CORE_CONHECIMENTO}/core.properties
     chown -R 8983:8983 /var/solr/data/${CORE_CONHECIMENTO}/
 
-    curl http://${SOLRUSER}:${SOLRPASS}@solrinterno:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_CONHECIMENTO}\&instanceDir\=/var/solr/data/${CORE_CONHECIMENTO}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_CONHECIMENTO}/conteudo
+    curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr/admin/cores\?action\=CREATE\&name\=${CORE_CONHECIMENTO}\&instanceDir\=/var/solr/data/${CORE_CONHECIMENTO}\&config\=solrconfig.xml\&dataDir\=/var/solr/data/${CORE_CONHECIMENTO}/conteudo
 
 else
 
@@ -68,12 +68,12 @@ fi
 
 echo "Apagando Documentos do Solr para o ${ID_INSTALACAO}"
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solrinterno:8983/solr/${CORE_PROTOCOLOS}/update?commit=true -H "Content-Type: text/xml" \
+curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_PROTOCOLOS}/update?commit=true -H "Content-Type: text/xml" \
     --data-binary '<delete><query>*:*</query></delete>'
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solrinterno:8983/solr/${CORE_CONHECIMENTO}/update?commit=true -H "Content-Type: text/xml" \
+curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_CONHECIMENTO}/update?commit=true -H "Content-Type: text/xml" \
     --data-binary '<delete><query>*:*</query></delete>'
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solrinterno:8983/solr/${CORE_PUBLICACOES}/update?commit=true -H "Content-Type: text/xml" \
+curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_PUBLICACOES}/update?commit=true -H "Content-Type: text/xml" \
     --data-binary '<delete><query>*:*</query></delete>'
 

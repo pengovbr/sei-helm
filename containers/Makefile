@@ -250,7 +250,7 @@ build-conteiner-nginx:
 		build-conteiner-generic
 
 ## build-conteiner-all-base construir todas as imagens base (alpine e solr-base)
-build-conteiner-all-base: build-conteiner-alpine build-conteiner-memcached-base build-conteiner-solr-base
+build-conteiner-base-all: build-conteiner-alpine build-conteiner-memcached-base build-conteiner-solr-base
 
 ## build-conteiner-all construir todas as imagens (exceto as imagens base)
 build-conteiner-all:
