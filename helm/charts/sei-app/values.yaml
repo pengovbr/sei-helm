@@ -37,25 +37,46 @@ app:
             #nginx.ingress.kubernetes.io/affinity: cookie1
             #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
 
-    # as variaveis abaixo informam o namespace no qual os demais componentes
-    # estao instalados, caso esteja com nome incorreto o sei nao encontrara o
-    # componente
-    dbnamespace: default
-    jodnamespace: default
-    solrnamespace: default
-    memcachednamespace: default
+    # endereco ou ip onde encontram-se os servicos externos
+    servicoExterno:
+        db: dbhostname
+        jod: jodhostname
+        solr: solrhostname
+        memcached: memcachedhostname
+        mail: mailhostname
 
     tz: America/Sao_Paulo
 
-    # indica se a automacao irah dropar e criar a base de dados
-    # que foi informada abaixo para essa instancia
-    dbRecreate: "true"
+    install:
 
-    # id identificador do ambiente numero unico para diferenciar as bases solr e banco
-    # ATENCAO PRESTAR ATENCAO NESTA STRING
-    # o as bases de dados sei e solr terao esse id no nome
-    # caso instale o mesmo id com a opcao de reconstruir o banco, a automacao ira apagar os dados
-    idInstalacao: "orgao1"
+        # id identificador do ambiente numero unico para diferenciar as bases solr e banco
+        # ATENCAO PRESTAR ATENCAO NESTA STRING
+        # o as bases de dados sei e solr terao esse id no nome
+        # caso instale o mesmo id com a opcao de reconstruir o banco, a automacao ira apagar os dados
+        idInstalacao: "orgao1"
+
+        db:
+            # se enable vai criar um database para o sei e sip no banco
+            # se disable crie manualmente seguindo a nomenclatura do instalador
+            enable: true
+            # indica se a automacao irah dropar e criar a base de dados
+            # que foi informada para essa instancia
+            recreate: true
+
+        solr:
+            # enable: true vai montar um job no namespace do solr informado
+            # e criar os indices para esta instancia
+            # caso nao deseje essa automacao coloque false e provisione os indices manualmente
+            enable: true
+            # Necessario para o instalador criar indice no solr para esta instancia
+            namespace: solrnamespace
+
+        sei:
+            # se enable roda o instalador do sei a primeira vez q o ambiente subir
+            # para instalar o sei e modulos
+            # se desabilitado vc tera q rodar manualmente os instaladores
+            enable: true
+
 
     host: meusei.br
     orgao: ORGAO1

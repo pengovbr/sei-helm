@@ -5,6 +5,6 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  externalName: solr.{{ .Values.app.solrnamespace }}.svc.cluster.local.
+  externalName: {{ .Values.app.servicoExterno.solr }}
   sessionAffinity: None
   type: ExternalName

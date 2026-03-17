@@ -89,7 +89,7 @@ verificar-app-params: ## target de apoio para verificar se token git foi passado
 
 verificar-fontes: ## verifica se os fontes originais estao posicionados
 	@if [ ! -f "app/assets/fontes/sei/web/SEI.php" ]; then echo "Fonte do SEI nao encontrado"; exit 1; fi
-	@if [ ! -f "app/assets/fontes/sip/web/SIP.php" ]; then echo "Fonte do SIP nao encontrado"; exit 1; fi
+	@if [ ! -f "app/assets/fontes/sip/web/Sip.php" ]; then echo "Fonte do SIP nao encontrado"; exit 1; fi
 	@if [ ! -f "app/assets/fontes/infra/infra_php/InfraSip.php" ]; then echo "Fonte do Infra nao encontrado"; exit 1; fi
 
 getenv: ## target de apoio para copiar o arquivo envcontainers.env baseado no modelo envcontaners.env.modelo

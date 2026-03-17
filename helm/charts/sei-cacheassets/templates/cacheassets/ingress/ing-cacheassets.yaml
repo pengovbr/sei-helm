@@ -27,13 +27,13 @@ spec:
         path: /
         pathType: Prefix
   {{- end }}
-  - http:
-      paths:
-      - backend:
-          service:
-            name: cacheassets
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
+  # - http:
+  #     paths:
+  #     - backend:
+  #         service:
+  #           name: cacheassets
+  #           port:
+  #             number: 80
+  #       path: /
+  #       pathType: Prefix
 

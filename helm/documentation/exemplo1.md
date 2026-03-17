@@ -1,3 +1,6 @@
+# todo Reescrever Orientacao
+
+
 # Como Subir
 
 Há inúmeras formas para subir os charts.

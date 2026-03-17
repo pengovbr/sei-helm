@@ -1,7 +1,6 @@
 apiVersion: v1
 data:
   TZ: {{ .Values.app.tz | quote }}
-  DB_RECREATE: {{ .Values.app.dbRecreate | quote }}
   APP_HOST: {{ .Values.app.host | quote }}
   APP_ORGAO: {{ .Values.app.orgao | quote }}
   APP_ORGAO_DESCRICAO: {{ .Values.app.orgao_descricao | quote }}
@@ -11,11 +10,11 @@ data:
   APP_DB_TIPO: {{ .Values.app.db_tipo | quote }}
   APP_DB_HOST: "db"
   APP_SOLR_URL: {{ .Values.app.solr_url | quote }}
-  APP_SOLR_CORE_PROTOCOLOS: "{{ .Values.app.idInstalacao | lower }}-sei-protocolos"
+  APP_SOLR_CORE_PROTOCOLOS: "{{ .Values.app.install.idInstalacao | lower }}-sei-protocolos"
   APP_SOLR_TEMPO_COMMIT_PROTOCOLOS: {{ .Values.app.solr_tempo_commit_protocolos | quote }}
-  APP_SOLR_CORE_BASECONHECIMENTO: "{{ .Values.app.idInstalacao | lower }}-sei-bases-conhecimento"
+  APP_SOLR_CORE_BASECONHECIMENTO: "{{ .Values.app.install.idInstalacao | lower }}-sei-bases-conhecimento"
   APP_SOLR_TEMPO_COMMIT_BASECONHECIMENTO: {{ .Values.app.solr_tempo_commit_base_conhecimento | quote }}
-  APP_SOLR_CORE_PUBLICACOES: "{{ .Values.app.idInstalacao | lower }}-sei-publicacoes"
+  APP_SOLR_CORE_PUBLICACOES: "{{ .Values.app.install.idInstalacao | lower }}-sei-publicacoes"
   APP_SOLR_TEMPO_COMMIT_PUBLICACOES: {{ .Values.app.solr_tempo_commit_publicacoes | quote }}
   APP_MAIL_TIPO: {{ .Values.app.mail_tipo | quote }}
   APP_MAIL_SERVIDOR: {{ .Values.app.mail_servidor | quote }}

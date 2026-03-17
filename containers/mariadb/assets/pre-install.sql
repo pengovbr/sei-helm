@@ -11,4 +11,3 @@ CREATE DATABASE sip;
 USE sip;
 CREATE USER 'sip_user'@'%' IDENTIFIED BY 'sip_user';
 GRANT ALL PRIVILEGES ON sip.* TO 'sip_user'@'%';
-

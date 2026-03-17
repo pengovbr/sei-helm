@@ -22,9 +22,11 @@ solr:
     nameOverride: ""
     fullnameOverride: ""
 
-    host: meusolr.br
+    # caso deseje desabilitar ingress para o solr passe assim:
+    # ingress: {}
     ingress:
         tls_secret_name: mysecret
+        host: meusolr.br
 
     # tune os resources e tb o memory abaixo
     # Em prd eh bom o Solr ficar sozinho em um node.

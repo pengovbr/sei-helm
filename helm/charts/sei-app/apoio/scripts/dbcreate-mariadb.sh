@@ -4,6 +4,8 @@ set -e
 
 DBID=$( echo -n "${ID_INSTALACAO}" | tr '[:upper:]' '[:lower:]' )
 
+DB_RECREATE="{{ .Values.app.install.db.recreate | ternary "true" "false" }}"
+
 cd /dbref
 
 e=1

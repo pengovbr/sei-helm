@@ -47,7 +47,6 @@ spec:
         stdin: true
         tty: true
         volumeMounts:
-        volumeMounts:
         - mountPath: /etc/php82/conf.d/zzz-sei.ini
           name: phpconf
           subPath: zzz-sei.ini

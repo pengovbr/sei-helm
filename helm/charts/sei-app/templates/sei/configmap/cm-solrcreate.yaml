@@ -4,7 +4,7 @@ binaryData:
     {{ .Files.Get "apoio/scripts/solrcreate.sh" | b64enc }}
 kind: ConfigMap
 metadata:
-  name: cm-solrcreate-{{ .Values.app.idInstalacao | lower }}
-  namespace: {{ .Values.app.solrnamespace }}
+  name: cm-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
+  namespace: {{ .Values.app.install.solr.namespace }}
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}

@@ -1,8 +1,9 @@
+{{- if .Values.app.install.solr.enable }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
-  namespace: {{ .Values.app.solrnamespace }}
+  name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
+  namespace: {{ .Values.app.install.solr.namespace }}
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
@@ -12,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
+        job-name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       containers:
@@ -20,14 +21,14 @@ spec:
         - /seiscripts/solrcreate.sh
         envFrom:
         - secretRef:
-            name: sei-solr-secret1-{{ .Values.app.idInstalacao | lower }}
+            name: sei-solr-secret1-{{ .Values.app.install.idInstalacao | lower }}
             optional: false
         env:
           - name: ID_INSTALACAO
-            value: {{ .Values.app.idInstalacao | quote }}
+            value: {{ .Values.app.install.idInstalacao | quote }}
         image: ghcr.io/pengovbr/sei-helm/solr:0.5.0
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-        name: sei-solrcreate-{{ .Values.app.idInstalacao | lower }}
+        name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
         stdin: true
         tty: true
         volumeMounts:
@@ -40,8 +41,9 @@ spec:
       volumes:
       - name: solrcreate
         configMap:
-          name: cm-solrcreate-{{ .Values.app.idInstalacao | lower }}
+          name: cm-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
           defaultMode: 0755
       - name: vol3
         persistentVolumeClaim:
           claimName: vol-sei-solr
+{{- end }}

@@ -5,6 +5,6 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  externalName: jod.{{ .Values.app.jodnamespace }}.svc.cluster.local.
+  externalName: {{ .Values.app.servicoExterno.jod }}
   sessionAffinity: None
   type: ExternalName

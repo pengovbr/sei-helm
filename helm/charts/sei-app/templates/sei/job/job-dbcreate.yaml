@@ -1,3 +1,4 @@
+{{- if .Values.app.install.db.enable }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,7 +20,7 @@ spec:
         - /automationscripts/dbcreate.sh
         env:
           - name: ID_INSTALACAO
-            value: {{ .Values.app.idInstalacao | quote }}
+            value: {{ .Values.app.install.idInstalacao | quote }}
         envFrom:
         - configMapRef:
             name: cm-php
@@ -45,3 +46,4 @@ spec:
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei
+{{- end }}
