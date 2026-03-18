@@ -14,5 +14,39 @@ db:
         pullPolicy: IfNotPresent
         tag: "0.5.0"
 
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
     nameOverride: ""
     fullnameOverride: ""
+
+    # atencao aos resources
+    # seu dba devera orientar se liga ou desliga o mesmo
+    # resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo:
+    # resources:
+    #     limits:
+    #         cpu: 12000m
+    #         memory: 16384Mi
+    #     requests:
+    #         cpu: 12000m
+    #         memory: 16384Mi
+
+
+    # passe aqui o seu arquivo my.cnf com suas configs de prd
+    # o dba devera informar
+    # atencao a identacao abaixo que eh obrigatoria
+    # o mesmo sera criado no mariadb sem a identacao
+    mycnf: |-
+        [mysqld]
+        #sql-mode=STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+        character-set-server    = latin1
+        collation-server        = latin1_swedish_ci
+        connect_timeout         = 28000
+        net_read_timeout        = 28000
+        max_allowed_packet      = 128M
+        thread_stack            = 192K
+        thread_cache_size       = 8
+        innodb_buffer_pool_size = 128M

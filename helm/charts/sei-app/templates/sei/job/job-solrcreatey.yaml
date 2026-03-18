@@ -16,6 +16,8 @@ spec:
         job-name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.app.image.secret }}
       containers:
       - command:
         - /seiscripts/solrcreate.sh

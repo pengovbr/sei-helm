@@ -158,6 +158,10 @@ CMD ["php-fpm82"]
 # APACHE PHP*******************************************************
 # *****************************************************************
 
+# Esta imagem esta incompleta (seria a juncao da imagem web e php acima)
+# No momento estamos priorizando o modelo de php isolado do servidor web
+# Use as demais imagens presentes nesse multibuild enquanto essa nao fica pronta
+
 FROM php AS apachephp
 
 USER root

@@ -21,7 +21,6 @@ data:
   APP_MAIL_CODIFICACAO: {{ .Values.app.mail_codificacao | quote }}
   APP_MAIL_MAXDESTINATARIOS: {{ .Values.app.mail_maxdestinatarios | quote }}
   APP_MAIL_MAXTAMANHOANEXOSMB: {{ .Values.app.mail_max_tamanho_anexos | quote }}
-  SERVICO_PD_INSTALAR: {{ .Values.app.servico_pd_instalar | quote }}
   SERVICO_PD_SIGLA: {{ .Values.app.servico_pd_sigla | quote }}
   SERVICO_PD_NOME: {{ .Values.app.servico_pd_nome | quote }}
   SERVICO_PD_OPERACOES: {{ .Values.app.servico_pd_operacoes | quote }}
@@ -29,19 +28,15 @@ data:
   MODULO_ESTATISTICAS_URL: {{ .Values.app.modulo_estatisticas_url | quote }}
   MODULO_ESTATISTICAS_SIGLA: {{ .Values.app.modulo_estatisticas_sigla | quote }}
   MODULO_ESTATISTICAS_CHAVE: {{ .Values.app.modulo_estatisticas_chave | quote }}
-  MODULO_REST_INSTALAR: {{ .Values.app.modulo_rest_instalar | quote }}
   MODULO_REST_VERSAO: {{ .Values.app.modulo_rest_versao | quote }}
   MODULO_REST_URL_NOTIFICACAO: {{ .Values.app.modulo_rest_url_notificacao | quote }}
   MODULO_REST_ID_APP: {{ .Values.app.modulo_rest_id_app | quote }}
   MODULO_REST_CHAVE: {{ .Values.app.modulo_rest_chave | quote }}
   MODULO_REST_TOKEN_SECRET: {{ .Values.app.modulo_rest_token_secret | quote }}
-  MODULO_RESPOSTA_INSTALAR: {{ .Values.app.modulo_resposta_instalar | quote }}
   MODULO_RESPOSTA_VERSAO: {{ .Values.app.modulo_resposta_versao | quote }}
   MODULO_RESPOSTA_SISTEMA_ID: {{ .Values.app.modulo_resposta_sistema_id | quote }}
   MODULO_RESPOSTA_DOCUMENTO_ID: {{ .Values.app.modulo_resposta_documento_id | quote }}
-  MODULO_GESTAODOCUMENTAL_INSTALAR: {{ .Values.app.modulo_gestaodocumental_instalar | quote }}
   MODULO_GESTAODOCUMENTAL_VERSAO: {{ .Values.app.modulo_gestaodocumental_versao | quote }}
-  MODULO_LOGINUNICO_INSTALAR: {{ .Values.app.modulo_loginunico_instalar | quote }}
   MODULO_LOGINUNICO_VERSAO: {{ .Values.app.modulo_loginunico_versao | quote }}
   MODULO_LOGINUNICO_CLIENTID: {{ .Values.app.modulo_loginunico_clientid | quote }}
   MODULO_LOGINUNICO_SECRET: {{ .Values.app.modulo_loginunico_secret | quote }}
@@ -54,7 +49,6 @@ data:
   MODULO_LOGINUNICO_CIENTIDVALIDACAO: {{ .Values.app.modulo_loginunico_cientidvalidacao | quote }}
   MODULO_LOGINUNICO_SECRETVALIDACAO: {{ .Values.app.modulo_loginunico_secretvalidacao | quote }}
   MODULO_LOGINUNICO_ORGAO: {{ .Values.app.modulo_loginunico_orgao | quote }}
-  MODULO_ASSINATURAVANCADA_INSTALAR: {{ .Values.app.modulo_assinaturavancada_instalar | quote }}
   MODULO_ASSINATURAVANCADA_VERSAO: {{ .Values.app.modulo_assinaturavancada_versao | quote }}
   MODULO_ASSINATURAVANCADA_CLIENTID: {{ .Values.app.modulo_assinaturavancada_clientid | quote }}
   MODULO_ASSINATURAVANCADA_SECRET: {{ .Values.app.modulo_assinaturavancada_secret | quote }}
@@ -64,7 +58,6 @@ data:
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL: {{ .Values.app.modulo_assinaturavancada_integra_icp_url | quote }}
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL_CLEARINGS: {{ .Values.app.modulo_assinaturavancada_integra_icp_url_clearings | quote }}
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL_ASSINAR: {{ .Values.app.modulo_assinaturavancada_integra_icp_url_assinar | quote }}
-  MODULO_PEN_INSTALAR: {{ .Values.app.modulo_pen_instalar | quote }}
   MODULO_PEN_VERSAO: {{ .Values.app.modulo_pen_versao | quote }}
   MODULO_PEN_WEBSERVICE: {{ .Values.app.modulo_pen_webservice | quote }}
   MODULO_PEN_CERTIFICADO_SENHA: {{ .Values.app.modulo_pen_certificado_senha | quote }}
@@ -80,13 +73,11 @@ data:
   MODULO_PETICIONAMENTO_INSTALAR: {{ .Values.app.modulo_peticionamento_instalar | quote }}
   MODULO_PETICIONAMENTO_VERSAO: {{ .Values.app.modulo_peticionamento_versao | quote }}
   MODULO_PETICIONAMENTO_URL: {{ .Values.app.modulo_peticionamento_url | quote }}
-  MODULO_PI_INSTALAR: {{ .Values.app.modulo_pi_instalar | quote }}
   MODULO_PI_VERSAO: {{ .Values.app.modulo_pi_versao | quote }}
   MODULO_PI_URL: {{ .Values.app.modulo_pi_url | quote }}
   MODULO_PI_USUARIO: {{ .Values.app.modulo_pi_usuario | quote }}
   MODULO_PI_SENHA: {{ .Values.app.modulo_pi_senha | quote }}
   MODULO_PI_EMAIL: {{ .Values.app.modulo_pi_email | quote }}
-  MODULO_INCOM_INSTALAR: {{ .Values.app.modulo_incom_instalar | quote }}
   MODULO_INCOM_VERSAO: {{ .Values.app.modulo_incom_versao | quote }}
   MODULO_INCOM_VEICULOID: {{ .Values.app.modulo_incom_veiculoid | quote }}
   MODULO_INCOM_SERIEID: {{ .Values.app.modulo_incom_serieid | quote }}

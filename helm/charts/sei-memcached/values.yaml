@@ -6,6 +6,9 @@ memcached:
         pullPolicy: IfNotPresent
         tag: "0.5.0"
 
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
     nameOverride: ""
     fullnameOverride: ""
 

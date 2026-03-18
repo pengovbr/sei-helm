@@ -18,13 +18,22 @@ spec:
         servico: db
         {{- include "sei-db.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.db.image.secret }}
       containers:
       - image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.db.image.pullPolicy }}
         name: db
         stdin: true
         tty: true
+        {{- with .Values.db.resources }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         volumeMounts:
+        - mountPath: /etc/mysql/mariadb.conf.d/99-sei.cnf
+          name: mycnf
+          subPath: 99-sei.cnf
         - mountPath: /var/lib/mysql
           name: vol1
       initContainers:
@@ -50,6 +59,9 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
       volumes:
+      - name: mycnf
+        configMap:
+          name: cm-db
       - name: vol1
         persistentVolumeClaim:
           claimName: vol-sei-db

@@ -18,6 +18,8 @@ spec:
         servico: solr
         {{- include "sei-solr.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.solr.image.secret }}
       containers:
       - image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.solr.image.pullPolicy }}

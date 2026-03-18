@@ -15,6 +15,9 @@ app:
         pullPolicy: IfNotPresent
         tag: ""
 
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
     nameOverride: ""
     fullnameOverride: ""
 

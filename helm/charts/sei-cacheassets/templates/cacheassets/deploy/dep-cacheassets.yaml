@@ -20,6 +20,8 @@ spec:
         servico: cacheassets
         {{- include "sei-cacheassets.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.cacheassets.image.secret }}
       containers:
       - image: "{{ .Values.cacheassets.image.repository }}:{{ .Values.cacheassets.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.cacheassets.image.pullPolicy }}

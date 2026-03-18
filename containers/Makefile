@@ -140,7 +140,6 @@ build-conteiner-generic2: verificar-docker-registry verificar-parametro-imagemtm
 	@make IMAGETMP=$(IMAGETMP) IMAGETMP_VERSION=$(IMAGETMP_VERSION) verificar-conteiner-imagem-rodando
 	docker build $(DOCKER_CACHE_ARG) --progress=plain $(BUILD_ARGS) -t $(IMAGETMP):$(IMAGETMP_VERSION) --target $(IMAGETMP_TARGET) $(IMAGETMP_PATH)
 
-
 ## construir imagem alpine. Necessario rodar apenas uma vez por registry
 ## Nao esqueca de fazer o make publish-container-alpine
 build-conteiner-alpine:  verificar-imagem-alpine-params
@@ -163,6 +162,14 @@ build-conteiner-memcached-base:
 	@make IMAGETMP=$(IMAGE_MEMCACHED_BASE) \
 		IMAGETMP_VERSION=$(IMAGE_MEMCACHED_BASE_VERSION) \
 		IMAGETMP_PATH=memcached-base \
+		build-conteiner-generic
+
+## construir imagem mariadb-base. Necessario rodar apenas uma vez por registry
+## Nao esqueca de fazer o make publish-container-mariadb-base
+build-conteiner-mariadb-base:
+	@make IMAGETMP=$(IMAGE_MARIADB_BASE) \
+		IMAGETMP_VERSION=$(IMAGE_MARIADB_BASE_VERSION) \
+		IMAGETMP_PATH=mariadb-base \
 		build-conteiner-generic
 
 ## build-conteiner-phpmaketools construir imagem build-conteiner-phpmaketools
@@ -250,7 +257,11 @@ build-conteiner-nginx:
 		build-conteiner-generic
 
 ## build-conteiner-all-base construir todas as imagens base (alpine e solr-base)
-build-conteiner-base-all: build-conteiner-alpine build-conteiner-memcached-base build-conteiner-solr-base
+build-conteiner-base-all:
+	@make build-conteiner-alpine
+	@make build-conteiner-memcached-base
+	@make build-conteiner-solr-base
+	@make build-conteiner-mariadb-base
 
 ## build-conteiner-all construir todas as imagens (exceto as imagens base)
 build-conteiner-all:
@@ -294,6 +305,10 @@ publish-container-memcached-base:
 ## publicar imagem solr-base
 publish-container-solr-base:
 	@make IMAGEMTMP_FULL=$(IMAGE_SOLR_BASE):$(IMAGE_SOLR_BASE_VERSION) publish-container-generic
+
+# publicar imagem mariadb-base
+publish-container-mariadb-base:
+	@make IMAGEMTMP_FULL=$(IMAGE_MARIADB_BASE):$(IMAGE_MARIADB_BASE_VERSION) publish-container-generic
 
 ## publicar imagem phpmaketools
 publish-container-phpmaketools:
@@ -340,7 +355,11 @@ publish-container-nginx:
 	@make IMAGEMTMP_FULL=$(IMAGE_NGINX):$(IMAGE_NGINX_VERSION) publish-container-generic
 
 ## publish-all-base: target para publicar as imagens base (alpine e solr-base)
-publish-all-base: publish-container-alpine publish-container-memcached-base publish-container-solr-base
+publish-all-base:
+	@make publish-container-alpine
+	@make publish-container-memcached-base
+	@make publish-container-solr-base
+	@make publish-container-mariadb-base
 
 ## publish-all: target para publicar todas as imagens (exceto as imagens base)
 publish-all:
@@ -355,3 +374,152 @@ publish-all:
 	@make publish-container-solr
 	@make publish-container-mariadb
 	@make publish-container-nginx
+
+
+
+#####################################################
+##
+#####################################################
+
+## buildx-conteiner-generic: target generico para construir imagens multiplataforma passadas por parametro
+buildx-conteiner-generic: verificar-docker-registry verificar-parametro-imagemtmp-path
+	@make IMAGETMP=$(IMAGETMP) IMAGETMP_VERSION=$(IMAGETMP_VERSION) verificar-conteiner-imagem-rodando
+	docker buildx build --platform $(DOCKER_MULTIPLATFORM) --push $(DOCKER_CACHE_ARG) --progress=plain $(BUILD_ARGS) -t $(IMAGETMP):$(IMAGETMP_VERSION) $(IMAGETMP_PATH)
+
+## buildx-conteiner-generic2: target generico para construir imagens multiplataforma passadas por parametro
+buildx-conteiner-generic2: verificar-docker-registry verificar-parametro-imagemtmp-path
+	@make IMAGETMP=$(IMAGETMP) IMAGETMP_VERSION=$(IMAGETMP_VERSION) verificar-conteiner-imagem-rodando
+	docker buildx build --platform $(DOCKER_MULTIPLATFORM) --push $(DOCKER_CACHE_ARG) --progress=plain $(BUILD_ARGS) -t $(IMAGETMP):$(IMAGETMP_VERSION) --target $(IMAGETMP_TARGET) $(IMAGETMP_PATH)
+
+## construir imagem alpine. Necessario rodar apenas uma vez por registry
+buildx-conteiner-alpine:  verificar-imagem-alpine-params
+	@make IMAGETMP=$(IMAGE_ALPINE) \
+		IMAGETMP_VERSION=$(IMAGE_ALPINE_VERSION) \
+		IMAGETMP_PATH=alpine \
+		buildx-conteiner-generic
+
+## construir imagem solr-base. Necessario rodar apenas uma vez por registry
+buildx-conteiner-solr-base:
+	@make IMAGETMP=$(IMAGE_SOLR_BASE) \
+		IMAGETMP_VERSION=$(IMAGE_SOLR_BASE_VERSION) \
+		IMAGETMP_PATH=solr-base \
+		buildx-conteiner-generic
+
+## construir imagem memcached-base. Necessario rodar apenas uma vez por registry
+buildx-conteiner-memcached-base:
+	@make IMAGETMP=$(IMAGE_MEMCACHED_BASE) \
+		IMAGETMP_VERSION=$(IMAGE_MEMCACHED_BASE_VERSION) \
+		IMAGETMP_PATH=memcached-base \
+		buildx-conteiner-generic
+
+## construir imagem mariadb-base. Necessario rodar apenas uma vez por registry
+buildx-conteiner-mariadb-base:
+	@make IMAGETMP=$(IMAGE_MARIADB_BASE) \
+		IMAGETMP_VERSION=$(IMAGE_MARIADB_BASE_VERSION) \
+		IMAGETMP_PATH=mariadb-base \
+		buildx-conteiner-generic
+
+## buildx-conteiner-phpmaketools construir imagem build-conteiner-phpmaketools
+buildx-conteiner-phpmaketools: verificar-imagem-alpine
+	@make IMAGETMP=${IMAGE_APOIO_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_APOIO_PHP_VERSION) \
+		IMAGETMP_PATH=apoio/phpmaketools \
+		buildx-conteiner-generic
+
+
+## buildx-conteiner-apache construir imagem apache
+buildx-conteiner-apache: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_APACHE} \
+	    IMAGETMP_VERSION=$(IMAGE_APACHE_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=apache \
+		buildx-conteiner-generic2
+
+
+## buildx-conteiner-php construir imagem php
+buildx-conteiner-php: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=php \
+		buildx-conteiner-generic2
+
+## buildx-conteiner-php-cron construir imagem php-cron
+buildx-conteiner-php-cron: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP_CRON} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_CRON_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=php-cron \
+		buildx-conteiner-generic2
+
+## buildx-conteiner-php-install construir imagem php-install
+buildx-conteiner-php-install: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_PHP_INSTALL} \
+	    IMAGETMP_VERSION=$(IMAGE_PHP_INSTALL_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=php-install \
+		buildx-conteiner-generic2
+
+## buildx-conteiner-apache-php construir imagem apache-php
+buildx-conteiner-apache-php: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_APACHE_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_APACHE_PHP_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=apachephp \
+		buildx-conteiner-generic2
+
+## buildx-conteiner-memcached construir imagem memcached
+buildx-conteiner-memcached: verificar-imagem-memcached-base
+	@make IMAGETMP=${IMAGE_MEMCACHED} \
+	    IMAGETMP_VERSION=$(IMAGE_MEMCACHED_VERSION) \
+		IMAGETMP_PATH=memcached \
+		buildx-conteiner-generic
+
+## buildx-conteiner-jod construir imagem jod
+buildx-conteiner-jod: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_JOD} \
+	    IMAGETMP_VERSION=$(IMAGE_JOD_VERSION) \
+		IMAGETMP_PATH=jod \
+		buildx-conteiner-generic
+
+## buildx-conteiner-solr construir imagem solr
+buildx-conteiner-solr: verificar-imagem-solr-base
+	@make IMAGETMP=${IMAGE_SOLR} \
+	    IMAGETMP_VERSION=$(IMAGE_SOLR_VERSION) \
+		IMAGETMP_PATH=solr \
+		buildx-conteiner-generic
+
+## buildx-conteiner-mariadb construir imagem mariadb
+buildx-conteiner-mariadb:
+	@make IMAGETMP=${IMAGE_MARIADB} \
+	    IMAGETMP_VERSION=$(IMAGE_MARIADB_VERSION) \
+		IMAGETMP_PATH=mariadb \
+		buildx-conteiner-generic
+
+## buildx-conteiner-nginx construir imagem nginx cacheassets
+buildx-conteiner-nginx:
+	@make IMAGETMP=${IMAGE_NGINX} \
+	    IMAGETMP_VERSION=$(IMAGE_NGINX_VERSION) \
+		IMAGETMP_PATH=nginx \
+		buildx-conteiner-generic
+
+## buildx-conteiner-all-base construir todas as imagens base (alpine e solr-base)
+buildx-conteiner-base-all:
+	@make buildx-conteiner-alpine
+	@make buildx-conteiner-memcached-base
+	@make buildx-conteiner-solr-base
+	@make buildx-conteiner-mariadb-base
+
+## build-conteiner-all construir todas as imagens (exceto as imagens base)
+buildx-conteiner-all:
+	@make buildx-conteiner-phpmaketools
+	@make buildx-conteiner-apache
+	@make buildx-conteiner-php
+	@make buildx-conteiner-php-cron
+	@make buildx-conteiner-php-install
+	@make buildx-conteiner-apache-php
+	@make buildx-conteiner-memcached
+	@make buildx-conteiner-jod
+	@make buildx-conteiner-solr
+	@make buildx-conteiner-mariadb
+	@make buildx-conteiner-nginx

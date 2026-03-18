@@ -1,0 +1,9 @@
+apiVersion: v1
+binaryData:
+  99-sei.cnf: |-
+    {{ tpl (.Files.Get "apoio/my.cnf") . | b64enc }}
+kind: ConfigMap
+metadata:
+  name: cm-db
+  labels:
+    {{- include "sei-db.labels" . | nindent 4 }}

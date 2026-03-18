@@ -22,6 +22,8 @@ spec:
         servico: jod
         {{- include "sei-jod.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.jod.image.secret }}
       containers:
       - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.jod.image.pullPolicy }}

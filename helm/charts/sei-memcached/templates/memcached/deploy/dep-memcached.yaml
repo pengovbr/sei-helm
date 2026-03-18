@@ -21,6 +21,8 @@ spec:
         servico: memcached
         {{- include "sei-memcached.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.memcached.image.secret }}
       containers:
       - image: "{{ .Values.memcached.image.repository }}:{{ .Values.memcached.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.memcached.image.pullPolicy }}

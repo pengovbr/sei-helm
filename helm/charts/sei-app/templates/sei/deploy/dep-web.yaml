@@ -22,6 +22,8 @@ spec:
         servico: web
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.app.image.secret }}
       containers:
       - envFrom:
         #- /entrypoint.sh
