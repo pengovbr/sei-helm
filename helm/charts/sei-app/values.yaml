@@ -47,6 +47,7 @@ app:
         solr: solrhostname
         memcached: memcachedhostname
         mail: mailhostname
+        ldap: ldaphostname
 
     tz: America/Sao_Paulo
 
@@ -79,6 +80,26 @@ app:
             # para instalar o sei e modulos
             # se desabilitado vc tera q rodar manualmente os instaladores
             enable: true
+
+        ldap:
+            # se true vai habilitar o orgao 0 no ldap
+            enable: false
+            # nome descritivo para o servidor (tela de cadastro de servidor ldap)
+            nome: meuLdap
+            # LDAP ou AD
+            tipo: LDAP
+            # nao altere, vai usar o servico ldap, o nome ou ip vai buscar do app.servicoExterno
+            # definido mais acima
+            endereco: ldap
+            porta: 389
+            sufixo:
+            usuarioPesquisa: "cn=admin,dc=pen,dc=gov,dc=br"
+            senhaPesquisa: "entrecomsenhadoldap"
+            contextoPesquisa: "dc=pen,dc=gov,dc=br"
+            filtroPesquisa: uid
+            retornoPesquisa: distinguishedName
+            # versao do AD ou ldap
+            numeroVersao: 3
 
 
     host: meusei.br

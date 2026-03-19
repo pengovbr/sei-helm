@@ -31,8 +31,12 @@ spec:
         stdin: true
         tty: true
         volumeMounts:
-        - mountPath: /automationscripts
+        - mountPath: /automationscripts/instalar.sh
           name: sei-install
+          subPath: instalar.sh
+        - mountPath: /automationscripts/ldap/sip-config-openldap.php
+          name: sei-install
+          subPath: sip-config-openldap.php
         - mountPath: /var/lib/sei
           name: vol-sei
       restartPolicy: Never

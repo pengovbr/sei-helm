@@ -92,14 +92,14 @@ verificar-fontes: ## verifica se os fontes originais estao posicionados
 	@if [ ! -f "app/assets/fontes/sip/web/Sip.php" ]; then echo "Fonte do SIP nao encontrado"; exit 1; fi
 	@if [ ! -f "app/assets/fontes/infra/infra_php/InfraSip.php" ]; then echo "Fonte do Infra nao encontrado"; exit 1; fi
 
-getenv: ## target de apoio para copiar o arquivo envcontainers.env baseado no modelo envcontaners.env.modelo
-		@cp -f envcontainers.env.modelo envcontainers.env
+getenv: ## target de apoio para copiar o arquivo envcontainers.env baseado no modelo envcontaners.example.env
+		@cp -f envcontainers.example.env envcontainers.env
 		@echo "Arquivo envcontainers.env criado com valores default.";
 		@echo "Abra o arquivo e faca as alteracoes para o seu ambiente.";
 
 envcontainers.env: ## target de apoio para verificar se existe arquivo envcontaners.env
 		@echo "Nao encontrado arquivo env para as operacoes de containeres."
-		@echo "Ha um arquivo modelo (envcontainers.env.modelo) que vc pode usar para preencher com suas informacoes."
+		@echo "Ha um arquivo modelo (envcontainers.example.env) que vc pode usar para preencher com suas informacoes."
 		@echo "Basta rodar make getenv"
 		@echo "Em seguida, altere nesse arquivo as informacoes para o seu ambiente"
 		exit 1

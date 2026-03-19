@@ -1,7 +1,9 @@
 apiVersion: v1
 binaryData:
   instalar.sh: |-
-    {{ .Files.Get "apoio/scripts/instalar.sh" | b64enc }}
+    {{ tpl (.Files.Get "apoio/scripts/instalar.sh") . | b64enc }}
+  sip-config-openldap.php: |-
+    {{ tpl (.Files.Get "apoio/scripts/ldap/sip-config-openldap.php") . | b64enc }}
 kind: ConfigMap
 metadata:
   name: cm-initial

@@ -220,4 +220,29 @@ else
     touch /var/lib/sei/dbcontrol/atualizacao-sip-${VERSAO_ENCONTRADA}-recurso.ok
 fi
 
+{{- if .Values.app.install.ldap.enable }}
+
+echo "***************************************************"
+echo "***************************************************"
+echo "**HABILITAR LDAP***********************************"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ ! -f /var/lib/sei/dbcontrol/openldap.ok ]; then
+
+        echo "Vamos tentar criar a conexao ao Ldap no SIP..."
+
+        php /automationscripts/ldap/sip-config-openldap.php
+
+        touch /var/lib/sei/dbcontrol/openldap.ok
+
+        echo ""
+    else
+
+        echo "Arquivo de controle do Ldap encontrado pulando configuracao do Ldap"
+
+    fi
+{{- end }}
+
+
 touch /var/lib/sei/dbcontrol/install-initial.ok
