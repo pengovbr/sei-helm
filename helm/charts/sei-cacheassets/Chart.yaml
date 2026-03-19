@@ -6,6 +6,6 @@ type: application
 
 version: 1.0.0
 
-appVersion: "3.6.8"
+appVersion: "5.1.0"
 
 icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/memcachedlogo.png

@@ -4,9 +4,9 @@ description: Helm chart para subir o SOLR para o SEI-5
 
 type: application
 
-version: 1.0.1
+version: 1.0.0
 
-appVersion: "3.6.8"
+appVersion: "5.1.0"
 
 
 icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/solrlogo.png
