@@ -10,13 +10,39 @@ app:
         #storageClass: nfs-client
         storageClass: ""
 
-    image:
-        repository: processoeletronico/app-ci-php8
+    imagePhp:
+        repository: ghcr.io/pengovbr/sei-helm/php
         pullPolicy: IfNotPresent
-        tag: ""
-
+        tag: 0.5.0
         # secret cadastrado no kube para o registry
         secret: secregistry
+
+    imageCron:
+        repository: ghcr.io/pengovbr/sei-helm/php-cron
+        pullPolicy: IfNotPresent
+        tag: 0.5.0
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    imageWeb:
+        repository: ghcr.io/pengovbr/sei-helm/apache
+        pullPolicy: IfNotPresent
+        tag: 0.5.0
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    imageInstall:
+        repository: ghcr.io/pengovbr/sei-helm/php-install
+        pullPolicy: IfNotPresent
+        tag: 0.5.0
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+
+
+
+
+
 
     nameOverride: ""
     fullnameOverride: ""
@@ -40,12 +66,13 @@ app:
             #nginx.ingress.kubernetes.io/affinity: cookie1
             #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
 
-    # endereco ou ip onde encontram-se os servicos externos
+    # endereco (nome) onde encontram-se os servicos externos
     servicoExterno:
         db: dbhostname
         jod: jodhostname
         solr: solrhostname
         memcached: memcachedhostname
+        # nome ou ip
         mail: mailhostname
         ldap: ldaphostname
 
@@ -120,6 +147,9 @@ app:
     mail_codificacao: 8bit
     mail_maxdestinatarios: 999
     mail_max_tamanho_anexos: 999
+    mail_protegido: ""
+
+    federacao_habilitar: false
 
     servico_pd_instalar: false
     servico_pd_sigla: GOV.BR
@@ -172,14 +202,11 @@ app:
     modulo_assinaturavancada_integra_icp_url_clearings: "/get-clearings"
     modulo_assinaturavancada_integra_icp_url_assinar: "/sign"
 
-    modulo_pen_instalar: "false"
+    modulo_pen_instalar: false
     modulo_pen_versao: "master"
     modulo_pen_webservice: "https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/"
     modulo_pen_certificado_senha: "1234"
-    modulo_pen_certificado_base64: "ls0tls1crudjtibdrvjusuzjq0furs0tlxxxxx"
-    modulo_pen_gearman_ip: ""
-    modulo_pen_gearman_porta: ""
-    modulo_pen_qtd_worker_proc: "1"
+    modulo_pen_certificado_base64: "YXNkZgo="
     modulo_pen_repositorio_origem: ""
     modulo_pen_tipo_processo_externo: ""
     modulo_pen_unidade_geradora: ""

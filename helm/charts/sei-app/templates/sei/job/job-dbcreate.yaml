@@ -16,7 +16,7 @@ spec:
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      - name: {{ .Values.app.image.secret }}
+      - name: {{ .Values.app.imageInstall.secret }}
       containers:
       - command:
         - /automationscripts/dbcreate.sh
@@ -28,8 +28,8 @@ spec:
             name: cm-php
         - secretRef:
             name: se-php
-        image: processoeletronico/install-apoio:0.0.2
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-dbcreate
         stdin: true
         tty: true

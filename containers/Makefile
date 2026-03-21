@@ -172,14 +172,6 @@ build-conteiner-mariadb-base:
 		IMAGETMP_PATH=mariadb-base \
 		build-conteiner-generic
 
-## build-conteiner-phpmaketools construir imagem build-conteiner-phpmaketools
-build-conteiner-phpmaketools: verificar-imagem-alpine
-	@make IMAGETMP=${IMAGE_APOIO_PHP} \
-	    IMAGETMP_VERSION=$(IMAGE_APOIO_PHP_VERSION) \
-		IMAGETMP_PATH=apoio/phpmaketools \
-		build-conteiner-generic
-
-
 ## build-conteiner-apache construir imagem apache
 build-conteiner-apache: verificar-imagem-alpine verificar-app-params
 	@make IMAGETMP=${IMAGE_APACHE} \
@@ -188,6 +180,13 @@ build-conteiner-apache: verificar-imagem-alpine verificar-app-params
 		IMAGETMP_TARGET=apache \
 		build-conteiner-generic2
 
+## build-conteiner-phpmaketools construir imagem phpmaketools
+build-conteiner-phpmaketools: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_APOIO_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_APOIO_PHP_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=phpmaketools \
+		build-conteiner-generic2
 
 ## build-conteiner-php construir imagem php
 build-conteiner-php: verificar-imagem-alpine verificar-app-params
@@ -419,14 +418,6 @@ buildx-conteiner-mariadb-base:
 		IMAGETMP_PATH=mariadb-base \
 		buildx-conteiner-generic
 
-## buildx-conteiner-phpmaketools construir imagem build-conteiner-phpmaketools
-buildx-conteiner-phpmaketools: verificar-imagem-alpine
-	@make IMAGETMP=${IMAGE_APOIO_PHP} \
-	    IMAGETMP_VERSION=$(IMAGE_APOIO_PHP_VERSION) \
-		IMAGETMP_PATH=apoio/phpmaketools \
-		buildx-conteiner-generic
-
-
 ## buildx-conteiner-apache construir imagem apache
 buildx-conteiner-apache: verificar-imagem-alpine verificar-app-params
 	@make IMAGETMP=${IMAGE_APACHE} \
@@ -435,6 +426,13 @@ buildx-conteiner-apache: verificar-imagem-alpine verificar-app-params
 		IMAGETMP_TARGET=apache \
 		buildx-conteiner-generic2
 
+## buildx-conteiner-phpmaketools construir imagem phpmaketools
+buildx-conteiner-phpmaketools: verificar-imagem-alpine verificar-app-params
+	@make IMAGETMP=${IMAGE_APOIO_PHP} \
+	    IMAGETMP_VERSION=$(IMAGE_APOIO_PHP_VERSION) \
+		IMAGETMP_PATH=app \
+		IMAGETMP_TARGET=phpmaketools \
+		buildx-conteiner-generic2
 
 ## buildx-conteiner-php construir imagem php
 buildx-conteiner-php: verificar-imagem-alpine verificar-app-params

@@ -49,3 +49,21 @@ Selector labels
 app.kubernetes.io/name: {{ include "sei-app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Test if the given value is an IP address
+*/}}
+{{- define "prefix.isIpAddress" -}}
+{{- $rc := . -}}
+{{- $parts := splitList "." . -}}
+{{- if eq (len $parts) 4 -}}
+    {{- range $parts -}}
+        {{- if and (not (atoi .)) (ne . "0") -}}
+            {{- $rc = "" -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- $rc = "" -}}
+{{- end -}}
+{{- print $rc }}
+{{- end -}}

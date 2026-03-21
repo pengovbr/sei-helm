@@ -23,7 +23,7 @@ spec:
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      - name: {{ .Values.app.image.secret }}
+      - name: {{ .Values.app.imageWeb.secret }}
       containers:
       - envFrom:
         #- /entrypoint.sh
@@ -34,8 +34,8 @@ spec:
         - secretRef:
             name: se-php
             optional: false
-        image: "ghcr.io/pengovbr/sei-helm/apache:0.5.0"
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        image: {{ .Values.app.imageWeb.repository }}:{{ .Values.app.imageWeb.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.app.imageWeb.pullPolicy }}
         name: web
         resources:
           requests:

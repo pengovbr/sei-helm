@@ -23,7 +23,7 @@ spec:
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      - name: {{ .Values.app.image.secret }}
+      - name: {{ .Values.app.imageCron.secret }}
       containers:
       - envFrom:
         - configMapRef:
@@ -32,15 +32,15 @@ spec:
         - secretRef:
             name: se-php
             optional: false
-        image: ghcr.io/pengovbr/sei-helm/php-cron:0.5.0
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.app.imageCron.pullPolicy }}
         name: sei-app
         startupProbe:
           exec:
             command:
             - sh
             - '-c'
-            - ls /var/lib/sei/dbcontrol/install-initial.ok
+            - ls /var/lib/sei/dbcontrol/modulos-install.ok
           failureThreshold: 100
           initialDelaySeconds: 5
           periodSeconds: 5
@@ -56,13 +56,35 @@ spec:
           name: phpconf
           subPath: zzz-sei-fpm.conf
         - mountPath: /opt/sei/config/ConfiguracaoSEI.php
-          name: seiconf
+          name: se-php-files
           subPath: ConfiguracaoSEI.php
+        - mountPath: /opt/sip/config/ConfiguracaoSip.php
+          name: se-php-files
+          subPath: ConfiguracaoSip.php
+        - mountPath: /opt/sei/config/mod-pen/certificado.pem
+          name: se-php-files
+          subPath: certificado.pem
+        - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+          name: se-php-files
+          subPath: ConfiguracaoModPEN.php
         - mountPath: /var/lib/sei
           name: vol-sei
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
+      - name: se-php-files
+        secret:
+          secretName: se-php-files
+          items:
+          - key: modPenCertificado.pem
+            path: certificado.pem
+          - key: modPenConfiguracaoModPen.php
+            path: ConfiguracaoModPEN.php
+          - key: seiConfiguracao.php
+            path: ConfiguracaoSEI.php
+          - key: sipConfiguracao.php
+            path: ConfiguracaoSip.php
+          defaultMode: 0444
       - name: seiconf
         configMap:
           name: cm-seiconfig

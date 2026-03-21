@@ -18,7 +18,7 @@
         return array(
 
             'SEI' => array(
-                'URL' => 'https://'.getenv('APP_HOST').'/sei',
+                'URL' => 'https://{{ .Values.app.host }}/sei',
                 'Producao' => true,
                 'RepositorioArquivos' => '/var/lib/sei/dbfiles',
                 'WebServices' => true,
@@ -26,20 +26,23 @@
                   {{- if .Values.app.modulo_estatisticas_instalar }}
                   'MdEstatisticas' => 'mod-sei-estatisticas',
                   {{- end }}
+                  {{- if .Values.app.modulo_pen_instalar }}
+                  'PENIntegracao' => 'pen',
+                  {{- end }}
                 ),
             ),
 
             {{- if .Values.app.modulo_estatisticas_instalar }}
             'MdEstatisticas' => array(
-              'url' => '$MODULO_ESTATISTICAS_URL',
-              'sigla' => '$MODULO_ESTATISTICAS_SIGLA',
-              'chave' => '$MODULO_ESTATISTICAS_CHAVE'
+              'url' => '{{ .Values.app.modulo_estatisticas_url }}',
+              'sigla' => '{{ .Values.app.modulo_estatisticas_sigla }}',
+              'chave' => '{{ .Values.app.modulo_estatisticas_chave }}'
             ),
             {{- end }}
 
             'PaginaSEI' => array(
                 'NomeSistema' => 'SEI',
-                'NomeSistemaComplemento' => '',
+                'NomeSistemaComplemento' => '{{ .Values.app.nome_complemento }}',
                 'LogoMenu' => '',
                 'Login' => true,
                 'Ouvidoria' => true,
@@ -50,22 +53,22 @@
             ),
 
             'SessaoSEI' => array(
-                'SiglaOrgaoSistema' => getenv('APP_ORGAO'),
+                'SiglaOrgaoSistema' => '{{ .Values.app.orgao }}',
                 'SiglaSistema' => 'SEI',
-                'PaginaLogin' => 'http://'.getenv('APP_HOST').'/sip/login.php',
+                'PaginaLogin' => 'http://{{ .Values.app.host }}/sip/login.php',
                 'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
-              'ChaveAcesso' => getenv('APP_SEI_CHAVE_ACESSO'),
+              'ChaveAcesso' => '{{ .Values.app.sei_chave_acesso }}',
               'https' => false),
 
      	      'BancoSEI'  => array(
-     	          'Servidor' => getenv('APP_DB_HOST'),
-     	          'Porta' => getenv('APP_DB_PORTA'),
-     	          'Banco' => getenv('APP_DB_SEI_BASE'),
-     	          'Usuario' => getenv('APP_DB_SEI_USERNAME'),
-     	          'Senha' => getenv('APP_DB_SEI_PASSWORD'),
-     	          'UsuarioScript' => getenv('APP_DB_SEI_USERNAME'),
-     	          'SenhaScript' => getenv('APP_DB_SEI_PASSWORD'),
-     	          'Tipo' => getenv('APP_DB_TIPO')), //MySql, SqlServer, Oracle ou PostgreSql
+     	          'Servidor' => '{{ .Values.app.db_host }}',
+     	          'Porta' => '{{ .Values.app.db_porta }}',
+     	          'Banco' => '{{ printf "%ssei" .Values.app.install.idInstalacao | lower }}',
+     	          'Usuario' => '{{ printf "%susei" .Values.app.install.idInstalacao | lower }}',
+     	          'Senha' => '{{ printf "%susei" .Values.app.install.idInstalacao | lower }}',
+     	          'UsuarioScript' => '{{ .Values.app.db_root_username }}',
+     	          'SenhaScript' => '{{ .Values.app.db_root_password }}',
+     	          'Tipo' => '{{ .Values.app.db_tipo }}' ), //MySql, SqlServer, Oracle ou PostgreSql
 
           /*
          'BancoAuditoriaSEI'  => array(
@@ -87,11 +90,11 @@
               'Tipo' => ''), //MySql, SqlServer, Oracle ou PostgreSql
          */
 
-    	'CacheSEI' => array('Servidor' => getenv('APP_MEMCACHED_HOST'),
+    	'CacheSEI' => array('Servidor' => '{{ .Values.app.memcached_host }}',
     			                	'Porta' => '11211'),
 
                                     'Federacao' => array(
-                                      'Habilitado' => (getenv('APP_FEDERACAO_HABILITAR') == 'true')
+                                      'Habilitado' => {{ if .Values.app.federacao_habilitar }} true {{ else }} false {{ end }}
                                      ),
 
             'Manutencao' => array(
@@ -120,28 +123,28 @@
             'JODConverter' => array('Servidor' => 'http://jod:8080/conversion?format=pdf'),
 
             'Solr' => array(
-                'Servidor' => getenv('APP_SOLR_URL'),
+                'Servidor' => '{{ .Values.app.solr_url }}',
                 'Usuario' => 'sei',
                 'Senha' => 'SolrSei123$',
-                'CoreProtocolos' => getenv('APP_SOLR_CORE_PROTOCOLOS'),
-                'TempoCommitProtocolos' => getenv('APP_SOLR_TEMPO_COMMIT_PROTOCOLOS'),
-                'CoreBasesConhecimento' => getenv('APP_SOLR_CORE_BASECONHECIMENTO'),
-                'CorePublicacoes' => getenv('APP_SOLR_CORE_PUBLICACOES'),
-                'TempoCommitPublicacoes' => getenv('APP_SOLR_TEMPO_COMMIT_PUBLICACOES')
+                'CoreProtocolos' => '{{ .Values.app.install.idInstalacao | lower }}-sei-protocolos',
+                'TempoCommitProtocolos' => '{{ .Values.app.solr_tempo_commit_protocolos }}',
+                'CoreBasesConhecimento' => '{{ .Values.app.install.idInstalacao | lower }}-sei-bases-conhecimento',
+                'CorePublicacoes' => '{{ .Values.app.install.idInstalacao | lower }}-sei-publicacoes',
+                'TempoCommitPublicacoes' => '{{ .Values.app.solr_tempo_commit_publicacoes }}'
             ),
 
           'InfraMail' => array(
-    					'Tipo' => getenv('APP_MAIL_TIPO'), //1 = sendmail (neste caso nao e necessario configurar os atributos abaixo), 2 = SMTP
-    					'Servidor' => getenv('APP_MAIL_SERVIDOR'),
-    					'Porta' => getenv('APP_MAIL_PORTA'),
-    					'Codificacao' => getenv('APP_MAIL_CODIFICACAO'), //8bit, 7bit, binary, base64, quoted-printable
-    					'MaxDestinatarios' => getenv('APP_MAIL_MAXDESTINATARIOS'), //numero maximo de destinatarios por mensagem
-    					'MaxTamAnexosMb' => getenv('APP_MAIL_MAXTAMANHOANEXOSMB'), //tamanho maximo dos anexos em Mb por mensagem
-    					'Seguranca' => getenv('APP_MAIL_SEGURANCA'), //TLS, SSL ou vazio
-    					'Autenticar' => getenv('APP_MAIL_AUTENTICAR'), //se true entao informar Usuario e Senha
-    					'Usuario' => getenv('APP_MAIL_USUARIO'),
-    					'Senha' => getenv('APP_MAIL_SENHA'),
-    					'Protegido' => getenv('APP_MAIL_PROTEGIDO') //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substituido por este valor evitando envio incorreto de email
+    					'Tipo' => '{{ .Values.app.mail_tipo }}', //1 = sendmail (neste caso nao e necessario configurar os atributos abaixo), 2 = SMTP
+    					'Servidor' => '{{ .Values.app.mail_servidor }}',
+    					'Porta' => '{{ .Values.app.mail_porta }}',
+    					'Codificacao' => '{{ .Values.app.mail_codificacao }}', //8bit, 7bit, binary, base64, quoted-printable
+    					'MaxDestinatarios' => '{{ .Values.app.mail_maxdestinatarios }}', //numero maximo de destinatarios por mensagem
+    					'MaxTamAnexosMb' => '{{ .Values.app.mail_max_tamanho_anexos }}', //tamanho maximo dos anexos em Mb por mensagem
+    					'Seguranca' => '{{ .Values.app.mail_seguranca }}', //TLS, SSL ou vazio
+    					'Autenticar' => '{{ .Values.app.mail_autenticar }}', //se true entao informar Usuario e Senha
+    					'Usuario' => '{{ .Values.app.mail_usuario }}',
+    					'Senha' => '{{ .Values.app.mail_senha }}',
+    					'Protegido' => '{{ .Values.app.mail_protegido }}' //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substituido por este valor evitando envio incorreto de email
             )
         );
       }

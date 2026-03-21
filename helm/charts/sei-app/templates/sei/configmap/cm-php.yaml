@@ -58,18 +58,6 @@ data:
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL: {{ .Values.app.modulo_assinaturavancada_integra_icp_url | quote }}
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL_CLEARINGS: {{ .Values.app.modulo_assinaturavancada_integra_icp_url_clearings | quote }}
   MODULO_ASSINATURAVANCADA_INTEGRA_ICP_URL_ASSINAR: {{ .Values.app.modulo_assinaturavancada_integra_icp_url_assinar | quote }}
-  MODULO_PEN_VERSAO: {{ .Values.app.modulo_pen_versao | quote }}
-  MODULO_PEN_WEBSERVICE: {{ .Values.app.modulo_pen_webservice | quote }}
-  MODULO_PEN_CERTIFICADO_SENHA: {{ .Values.app.modulo_pen_certificado_senha | quote }}
-  MODULO_PEN_CERTIFICADO_BASE64: {{ .Values.app.modulo_pen_certificado_base64 | quote }}
-  MODULO_PEN_GEARMAN_IP: {{ .Values.app.modulo_pen_gearman_ip | quote }}
-  MODULO_PEN_GEARMAN_PORTA: {{ .Values.app.modulo_pen_gearman_porta | quote }}
-  MODULO_PEN_QTD_WORKER_PROC: {{ .Values.app.modulo_pen_qtd_worker_proc | quote }}
-  MODULO_PEN_REPOSITORIO_ORIGEM: {{ .Values.app.modulo_pen_repositorio_origem | quote }}
-  MODULO_PEN_TIPO_PROCESSO_EXTERNO: {{ .Values.app.modulo_pen_tipo_processo_externo | quote }}
-  MODULO_PEN_UNIDADE_GERADORA: {{ .Values.app.modulo_pen_unidade_geradora | quote }}
-  MODULO_PEN_UNIDADE_ASSOCIACAO_PEN: {{ .Values.app.modulo_pen_unidade_associacao_pen | quote }}
-  MODULO_PEN_UNIDADE_ASSOCIACAO_SEI: {{ .Values.app.modulo_pen_unidade_associacao_sei | quote }}
   MODULO_PETICIONAMENTO_INSTALAR: {{ .Values.app.modulo_peticionamento_instalar | quote }}
   MODULO_PETICIONAMENTO_VERSAO: {{ .Values.app.modulo_peticionamento_versao | quote }}
   MODULO_PETICIONAMENTO_URL: {{ .Values.app.modulo_peticionamento_url | quote }}

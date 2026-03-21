@@ -1,3 +1,28 @@
+{{- if include "prefix.isIpAddress" .Values.app.servicoExterno.mail }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  ports:
+    - protocol: TCP
+      port: {{ .Values.app.mail_porta }}
+      targetPort: {{ .Values.app.mail_porta }}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: mail
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+subsets:
+  - addresses:
+      - ip: {{ .Values.app.servicoExterno.mail }}
+    ports:
+      - port: {{ .Values.app.mail_porta }}
+{{- else }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,3 +33,4 @@ spec:
   externalName: {{ .Values.app.servicoExterno.mail }}
   sessionAffinity: None
   type: ExternalName
+{{- end }}

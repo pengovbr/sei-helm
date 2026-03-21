@@ -79,6 +79,7 @@ sed -i "s|if (\$this->isBolRequerHttps()|if (\$this->isBolRequerHttps() \&\& \
 
 \cp /assets/conf/sei/ConfiguracaoSEI.php /fontes/php/sei/config/
 \cp /assets/conf/sei/ConfiguracaoSip.php /fontes/php/sip/config/
+\cp /assets/conf/sei/modulos/ConfiguracaoModPEN.php /fontes/php/sei/config/mod-pen/
 #\cp /assets/conf/sei/modulos/ConfiguracaoModAssinaturaEletronica.php /fontes/php/sei/config/mod-assinatura-eletronica/
 
 rm -rf /fontes/php/sei/scripts/*

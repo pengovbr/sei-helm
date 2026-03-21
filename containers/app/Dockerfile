@@ -40,7 +40,7 @@ CMD ["httpd", "-DFOREGROUND"]
 # PHP *************************************************************
 # *****************************************************************
 
-FROM ${IMAGE_ALPINE}:${IMAGE_ALPINE_VERSION} AS php
+FROM ${IMAGE_ALPINE}:${IMAGE_ALPINE_VERSION} AS phpgeneric
 
 # Erro do iconv com musl ASCII//TRANSLIT
 # https://github.com/docker-library/php/issues/1495
@@ -127,11 +127,18 @@ RUN apk add --no-cache openjdk8
 # Geração de audio do captcha
 RUN apk add --no-cache ffmpeg;
 
-RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+RUN --mount=type=bind,source=assets/conf,target=/temp/,readonly \
     adduser -u 82 -D -S -G www-data www-data && \
-    cp /temp/conf/php/sei.ini /etc/php82/conf.d/zzz-sei.ini && \
-    cp /temp/conf/php/sei-fpm.conf /etc/php82/php-fpm.d/zzz-sei-fpm.conf && \
+    cp /temp/php/sei.ini /etc/php82/conf.d/zzz-sei.ini && \
+    cp /temp/php/sei-fpm.conf /etc/php82/php-fpm.d/zzz-sei-fpm.conf && \
     ln -s /usr/bin/php82 /usr/bin/php
+
+
+# *****************************************************************
+# PHP *************************************************************
+# *****************************************************************
+
+FROM phpgeneric AS php
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     cp -a /temp/fontes/php/sei /opt/ && \
@@ -153,6 +160,19 @@ EXPOSE 9000
 
 CMD ["php-fpm82"]
 
+
+# *****************************************************************
+# PHPMAKETOOLS*****************************************************
+# *****************************************************************
+
+FROM phpgeneric AS phpmaketools
+
+RUN apk add --no-cache \
+    bash \
+    git \
+    make \
+    zip \
+    unzip
 
 # *****************************************************************
 # APACHE PHP*******************************************************
@@ -200,17 +220,28 @@ CMD ["/bin/sh", "-c", "php-fpm82 -D && httpd -DFOREGROUND"]
 # *****************************************************************
 FROM php AS php-install
 
+ARG REPO=https://raw.githubusercontent.com/pengovbr
+ARG WAY=sei-db-ref-executivo/refs/heads/master/mysql/v5.0.0
+ARG URLSEIDMP=${REPO}/${WAY}/sei_5_0_0_BD_Ref_Exec.sql
+ARG URLSIPDMP=${REPO}/${WAY}/sip_5_0_0_BD_Ref_Exec.sql
+
 USER root
 
 RUN apk add --no-cache \
-    bash
+    bash \
+    curl \
+    mariadb-client
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
     \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
     mkdir -p /usr/share/sei/ && \
     cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
-    chmod +x /usr/share/sei/tmpdelete.sh
+    chmod +x /usr/share/sei/tmpdelete.sh && \
+    mkdir -p /dbref && \
+    cd /dbref && \
+    curl -LO ${URLSEIDMP} && \
+    curl -LO ${URLSIPDMP}
 
 
 # *****************************************************************
@@ -221,12 +252,19 @@ FROM php AS php-cron
 USER root
 
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    apk add --no-cache \
+    tini \
+    procps && \
     \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
     \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
     cp /temp/conf/cron.d/cron.conf /etc/crontabs/root && \
     mkdir -p /usr/share/sei/ && \
     cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
     chmod +x /usr/share/sei/tmpdelete.sh
+
+# bug no cron do alpine nao processa corretamente signal handling
+# vamos usar tini enquanto n for resolvido
+ENTRYPOINT ["/sbin/tini", "--"]
 
 #todo verificar forma de subir sem root
 CMD ["crond", "-f"]

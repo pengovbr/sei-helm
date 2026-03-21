@@ -2,41 +2,47 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-initial
+  name: job-modulo
   labels:
+    job-name: job-modulo
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  backoffLimit: 2
+  backoffLimit: 0
   completions: 1
   parallelism: 1
   template:
     metadata:
       labels:
-        job-name: job-initial
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
       - name: {{ .Values.app.imageInstall.secret }}
       containers:
       - command:
-        - /automationscripts/instalar.sh
+        - /automationscripts/modulos.sh
         envFrom:
         - configMapRef:
             name: cm-php
         - secretRef:
             name: se-php
-        image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
+        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
-        name: job-initial
+        name: job-modulo
         stdin: true
         tty: true
         volumeMounts:
-        - mountPath: /automationscripts/instalar.sh
-          name: sei-install
-          subPath: instalar.sh
-        - mountPath: /automationscripts/ldap/sip-config-openldap.php
-          name: sei-install
-          subPath: sip-config-openldap.php
+        - mountPath: /automationscripts/modulos.sh
+          name: se-php-install-files
+          subPath: modulos.sh
+        - mountPath: /automationscripts/mod-sei-pen.sh
+          name: se-php-install-files
+          subPath: mod-sei-pen.sh
+        - mountPath: /opt/sei/config/mod-pen/certificado.pem
+          name: se-php-files
+          subPath: certificado.pem
+        - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+          name: se-php-files
+          subPath: ConfiguracaoModPEN.php
         - mountPath: /opt/sei/config/ConfiguracaoSEI.php
           name: se-php-files
           subPath: ConfiguracaoSEI.php
@@ -52,15 +58,25 @@ spec:
         secret:
           secretName: se-php-files
           items:
+          - key: modPenCertificado.pem
+            path: certificado.pem
+          - key: modPenConfiguracaoModPen.php
+            path: ConfiguracaoModPEN.php
           - key: seiConfiguracao.php
             path: ConfiguracaoSEI.php
           - key: sipConfiguracao.php
             path: ConfiguracaoSip.php
           defaultMode: 0400
-      - name: sei-install
-        configMap:
-          name: cm-initial
-          defaultMode: 0755
+      - name: se-php-install-files
+        secret:
+          secretName: se-php-install-files
+          items:
+          - key: modPenModulos.sh
+            path: modulos.sh
+          - key: modPenModseipen.sh
+            path: mod-sei-pen.sh
+          defaultMode: 0500
+
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -43,6 +43,34 @@ git checkout ${GIT_MODULO_ESTATISTICAS_VERSION}
 
 mkdir -p /fontes/sei/web/modulos/mod-sei-estatisticas
 \cp -R * /fontes/sei/web/modulos/mod-sei-estatisticas/
+
+cd /
+rm -rf mod-sei-estatisticas
+
+
+echo "******************************"
+echo "****DOWNLOADING PEN***********"
+echo "******************************"
+
+git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_PEN_URL}
+cd mod-sei-pen
+git checkout ${GIT_MODULO_PEN_VERSION}
+
+make clean
+make dist
+cd dist
+files=( *.zip )
+f="${files[0]}"
+mkdir -p temp
+cp $f temp/
+cd temp/
+yes | unzip $f
+cp -Rf sei/* /fontes/sei/
+cp -Rf sip/* /fontes/sip/
+
+cd /
+rm -rf mod-sei-pen
+
 
 echo "******************************"
 echo "****DOWNLOADING ASSINATURA****"

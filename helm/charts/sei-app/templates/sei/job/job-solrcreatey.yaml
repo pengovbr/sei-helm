@@ -17,7 +17,7 @@ spec:
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      - name: {{ .Values.app.image.secret }}
+      - name: {{ .Values.app.imageInstall.secret }}
       containers:
       - command:
         - /seiscripts/solrcreate.sh
@@ -28,8 +28,8 @@ spec:
         env:
           - name: ID_INSTALACAO
             value: {{ .Values.app.install.idInstalacao | quote }}
-        image: ghcr.io/pengovbr/sei-helm/solr:0.5.0
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
         stdin: true
         tty: true

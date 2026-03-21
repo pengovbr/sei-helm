@@ -244,5 +244,4 @@ if [ ! -f /var/lib/sei/dbcontrol/openldap.ok ]; then
     fi
 {{- end }}
 
-
 touch /var/lib/sei/dbcontrol/install-initial.ok
