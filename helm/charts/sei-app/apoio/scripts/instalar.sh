@@ -2,38 +2,11 @@
 
 set -e
 
-if [ -z "$APP_HOST" ] || \
-   [ -z "$APP_ORGAO" ] || \
-   [ -z "$APP_ORGAO_DESCRICAO" ] || \
-   [ -z "$APP_NOMECOMPLEMENTO" ] || \
-   [ -z "$APP_DB_TIPO" ] || \
-   [ -z "$APP_DB_PORTA" ] || \
-   [ -z "$APP_DB_SEI_BASE" ] || \
-   [ -z "$APP_DB_SIP_BASE" ] || \
-   [ -z "$APP_DB_SIP_USERNAME" ] || \
-   [ -z "$APP_DB_SIP_PASSWORD" ] || \
-   [ -z "$APP_DB_SEI_USERNAME" ] || \
-   [ -z "$APP_DB_SEI_PASSWORD" ] || \
-   [ -z "$APP_DB_ROOT_USERNAME" ] || \
-   [ -z "$APP_DB_ROOT_PASSWORD" ]; then
-    echo "Informe as seguinte variáveis de ambiente no seu docker-compose ou no container:"
-    echo "APP_HOST=$APP_HOST"
-    echo "APP_ORGAO=$APP_ORGAO"
-    echo "APP_ORGAO_DESCRICAO=$APP_ORGAO_DESCRICAO"
-    echo "APP_NOMECOMPLEMENTO=$APP_NOMECOMPLEMENTO"
-    echo "APP_DB_TIPO=$APP_DB_TIPO"
-    echo "APP_DB_PORTA=$APP_DB_PORTA"
-    echo "APP_DB_SIP_BASE=$APP_DB_SIP_BASE"
-    echo "APP_DB_SEI_BASE=$APP_DB_SEI_BASE"
-    echo "APP_DB_SIP_USERNAME=$APP_DB_SIP_USERNAME"
-    echo "APP_DB_SIP_PASSWORD=$APP_DB_SIP_PASSWORD"
-    echo "APP_DB_SEI_USERNAME=$APP_DB_SEI_USERNAME"
-    echo "APP_DB_SEI_PASSWORD=$APP_DB_SEI_PASSWORD"
-    echo "APP_DB_ROOT_USERNAME=$APP_DB_ROOT_USERNAME"
-    echo "APP_DB_ROOT_PASSWORD=$APP_DB_ROOT_PASSWORD"
-
-    exit 1
-fi
+APP_HOST="{{ .Values.app.host }}"
+APP_ORGAO="{{ .Values.app.orgao }}"
+APP_ORGAO_DESCRICAO="{{ .Values.app.orgao_descricao }}"
+APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
 
 mkdir -p /var/lib/sei/dbcontrol
 mkdir -p /var/lib/sei/dbfiles

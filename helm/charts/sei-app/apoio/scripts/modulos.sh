@@ -1,5 +1,8 @@
 #!/bin/bash
 
+APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
+
 set +e
 RET=1
 while [ ! "$RET" == "0" ]
@@ -45,7 +48,7 @@ echo "***************************************************"
     else
 
         cd /opt
-        echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | \
+        echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | \
             php sip/scripts/mod-pen/sip_atualizar_versao_modulo_pen.php 2>&1 | \
             tee -a /var/lib/sei/dbcontrol/atualizacao-modulo-pen-${VERSAO_ENCONTRADA}.output
 
@@ -56,7 +59,7 @@ echo "***************************************************"
         fi
 
 
-        echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | \
+        echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | \
             php sei/scripts/mod-pen/sei_atualizar_versao_modulo_pen.php 2>&1 | \
             tee -a /var/lib/sei/dbcontrol/atualizacao-modulo-pen-${VERSAO_ENCONTRADA}.output
 

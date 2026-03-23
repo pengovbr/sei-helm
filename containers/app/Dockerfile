@@ -174,6 +174,11 @@ RUN apk add --no-cache \
     zip \
     unzip
 
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    mkdir /assets && \
+    cp -R /temp/phpmaketools/* /assets/
+
+
 # *****************************************************************
 # APACHE PHP*******************************************************
 # *****************************************************************
@@ -235,9 +240,6 @@ RUN apk add --no-cache \
 RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
     \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
-    mkdir -p /usr/share/sei/ && \
-    cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
-    chmod +x /usr/share/sei/tmpdelete.sh && \
     mkdir -p /dbref && \
     cd /dbref && \
     curl -LO ${URLSEIDMP} && \

@@ -2,9 +2,9 @@
 
 set -e
 
-SOLRUSER="${SOLRADMINUSER}"
-SOLRPASS="${SOLRADMINPASS}"
-SOLRID=$( echo -n "${ID_INSTALACAO}" | tr '[:upper:]' '[:lower:]' )
+SOLRUSER="{{ .Values.app.solrAdminUser }}"
+SOLRPASS="{{ .Values.app.solrAdminPass }}"
+SOLRID=$( echo -n "{{ .Values.app.install.idInstalacao }}" | tr '[:upper:]' '[:lower:]' )
 
 CORE_PROTOCOLOS=${SOLRID}-sei-protocolos
 CORE_PUBLICACOES=${SOLRID}-sei-publicacoes

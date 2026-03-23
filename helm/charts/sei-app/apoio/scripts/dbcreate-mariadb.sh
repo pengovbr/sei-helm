@@ -2,9 +2,11 @@
 
 set -e
 
-DBID=$( echo -n "${ID_INSTALACAO}" | tr '[:upper:]' '[:lower:]' )
-
+DBID=$( echo -n "{{ .Values.app.install.idInstalacao }}" | tr '[:upper:]' '[:lower:]' )
 DB_RECREATE="{{ .Values.app.install.db.recreate | ternary "true" "false" }}"
+APP_DB_HOST="{{ .Values.app.db_host }}"
+APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
 
 cd /dbref
 

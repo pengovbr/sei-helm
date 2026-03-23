@@ -113,7 +113,6 @@ getexample: ## traz o arquivo de exemplo caso o titular n exista
 fontesGet: ## baixa os fontes e modulos do GIT informado
 	@docker run -it --rm \
 	    -v "${PWD}"/app/assets/fontes:/fontes \
-		-v "${PWD}"/apoio/phpmaketools/assets:/assets \
 		--env-file envcontainers.env $(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) \
 		sh -c "/assets/scripts/down_sei.sh"
 
@@ -121,7 +120,6 @@ fontesGet: ## baixa os fontes e modulos do GIT informado
 fontesPrepare: verificar-fontes
 	@docker run -it --rm \
 	    -v "${PWD}"/app/assets/fontes:/fontes \
-		-v "${PWD}"/apoio/phpmaketools/assets:/assets \
 		--env-file envcontainers.env $(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) \
 		sh -c "/assets/scripts/prepare.sh"
 
