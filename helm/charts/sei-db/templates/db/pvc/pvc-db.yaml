@@ -8,6 +8,10 @@ spec:
   resources:
     requests:
       storage: 50Gi
+  {{- with .Values.db.pvc.selector }}
+  selector:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- with .Values.db.storage.storageClass }}
   storageClassName: {{ . }}
   {{- end }}

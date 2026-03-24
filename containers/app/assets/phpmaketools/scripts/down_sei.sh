@@ -76,14 +76,22 @@ echo "******************************"
 echo "****DOWNLOADING ASSINATURA****"
 echo "******************************"
 
-# todo baixar a release do zip
+git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ASSINATURA_URL}
+cd mod-sei-assinatura-eletronica
+git checkout ${GIT_MODULO_ASSINATURA_VERSION}
 
-#git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ASSINATURA_URL}
-#cd mod-sei-assinatura-eletronica
-#git checkout ${GIT_MODULO_ASSINATURA_VERSION}
+touch docs/changelogs/CHANGELOG-1.3.0.md
+make dist
+cd dist
+files=( *.zip )
+f="${files[0]}"
+mkdir -p temp
+cp $f temp/
+cd temp/
+yes | unzip $f
 
-#touch docs/changelogs/CHANGELOG-1.3.0.md
-#make dist
+cp -Rf sei/* /fontes/sei/
+cp -Rf sip/* /fontes/sip/
 
-#cd dist
-#yes | unzip mod-sei-assinatura-eletronica-*.zip
+cd /
+rm -rf mod-sei-assinatura-eletronica

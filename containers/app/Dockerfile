@@ -92,7 +92,7 @@ RUN apk add --no-cache \
     php82-zip \
     php82-zlib \
     php82-pecl-uploadprogress \
-    # Suporte para módulo de assinatura avançada
+    # Suporte para módulo de assinatura
     php82-tokenizer \
     php82-xmlwriter \
     # Pacotes para o wkhtmltopdf

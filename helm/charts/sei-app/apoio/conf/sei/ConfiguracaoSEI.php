@@ -29,6 +29,10 @@
                   {{- if .Values.app.modulo_pen_instalar }}
                   'PENIntegracao' => 'pen',
                   {{- end }}
+                  {{- if .Values.app.modulo_assinatura_instalar }}
+                  'AssinaturaEletronicaIntegracao' => 'assinatura-eletronica',
+                  {{- end }}
+
                 ),
             ),
 

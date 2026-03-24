@@ -23,8 +23,6 @@ spec:
         envFrom:
         - configMapRef:
             name: cm-php
-        - secretRef:
-            name: se-php
         image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-modulo
@@ -43,6 +41,9 @@ spec:
         - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
           name: se-php-files
           subPath: ConfiguracaoModPEN.php
+        - mountPath: /opt/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinaturaEletronica.php
+          name: se-php-files
+          subPath: ConfiguracaoModAssinaturaEletronica.php
         - mountPath: /opt/sei/config/ConfiguracaoSEI.php
           name: se-php-files
           subPath: ConfiguracaoSEI.php
@@ -62,6 +63,8 @@ spec:
             path: certificado.pem
           - key: modPenConfiguracaoModPen.php
             path: ConfiguracaoModPEN.php
+          - key: modAssinatura.php
+            path: ConfiguracaoModAssinaturaEletronica.php
           - key: seiConfiguracao.php
             path: ConfiguracaoSEI.php
           - key: sipConfiguracao.php

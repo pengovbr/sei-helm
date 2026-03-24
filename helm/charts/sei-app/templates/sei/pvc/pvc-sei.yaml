@@ -9,7 +9,11 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 21Gi
+      storage: 52Gi
+  {{- with .Values.app.pvc.selector }}
+  selector:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- with .Values.app.storage.storageClass }}
   storageClassName: {{ . }}
   {{- end }}

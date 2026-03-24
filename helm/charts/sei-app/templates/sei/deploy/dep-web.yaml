@@ -31,9 +31,6 @@ spec:
         - configMapRef:
             name: cm-php
             optional: false
-        - secretRef:
-            name: se-php
-            optional: false
         image: {{ .Values.app.imageWeb.repository }}:{{ .Values.app.imageWeb.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageWeb.pullPolicy }}
         name: web

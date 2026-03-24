@@ -26,8 +26,6 @@ spec:
         envFrom:
         - configMapRef:
             name: cm-php
-        - secretRef:
-            name: se-php
         image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-dbcreate

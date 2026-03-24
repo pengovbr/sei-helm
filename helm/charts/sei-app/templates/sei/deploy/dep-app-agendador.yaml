@@ -29,9 +29,6 @@ spec:
         - configMapRef:
             name: cm-php
             optional: false
-        - secretRef:
-            name: se-php
-            optional: false
         image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageCron.pullPolicy }}
         name: sei-app
@@ -67,6 +64,9 @@ spec:
         - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
           name: se-php-files
           subPath: ConfiguracaoModPEN.php
+        - mountPath: /opt/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinaturaEletronica.php
+          name: se-php-files
+          subPath: ConfiguracaoModAssinaturaEletronica.php
         - mountPath: /var/lib/sei
           name: vol-sei
       restartPolicy: Always
@@ -80,6 +80,8 @@ spec:
             path: certificado.pem
           - key: modPenConfiguracaoModPen.php
             path: ConfiguracaoModPEN.php
+          - key: modAssinatura.php
+            path: ConfiguracaoModAssinaturaEletronica.php
           - key: seiConfiguracao.php
             path: ConfiguracaoSEI.php
           - key: sipConfiguracao.php

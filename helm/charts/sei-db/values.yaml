@@ -33,6 +33,17 @@ db:
     #         cpu: 12000m
     #         memory: 16384Mi
 
+    pvc:
+      # caso queira usar um seletor no pvc
+      # para fazer o bind no PV, use como ex abaixo
+      # seletor atual desabilidado
+      selector: {}
+      # para habilitar seque exemplo abaixo
+      # Ex:
+      # selector:
+      #   matchLabels:
+      #     purpose: db
+
 
     # passe aqui o seu arquivo my.cnf com suas configs de prd
     # o dba devera informar

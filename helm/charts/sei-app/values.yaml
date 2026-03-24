@@ -39,8 +39,16 @@ app:
         secret: secregistry
 
 
-
-
+    pvc:
+      # caso queira usar um seletor no pvc
+      # para fazer o bind no PV, use como ex abaixo
+      # seletor atual desabilidado
+      selector: {}
+      # para habilitar seque exemplo abaixo
+      # Ex:
+      # selector:
+      #   matchLabels:
+      #     purpose: app
 
 
 
@@ -191,16 +199,21 @@ app:
     modulo_loginunico_secretvalidacao: "xxx"
     modulo_loginunico_orgao: "0"
 
-    modulo_assinaturavancada_instalar: "false"
-    modulo_assinaturavancada_versao: "master"
-    modulo_assinaturavancada_clientid: "assinaturaavancadaxxx"
-    modulo_assinaturavancada_secret: "xxx"
-    modulo_assinaturavancada_urlprovider: "https://cas.staging.iti.br/oauth2.0"
-    modulo_assinaturavancada_url_servicos: "assinatura-api.staging.iti.br/externo/v2"
-    modulo_assinaturavancada_validar_api_url: "https://informarurl"
-    modulo_assinaturavancada_integra_icp_url: "https://informar"
-    modulo_assinaturavancada_integra_icp_url_clearings: "/get-clearings"
-    modulo_assinaturavancada_integra_icp_url_assinar: "/sign"
+    modulo_assinatura_instalar: false
+    modulo_assinatura_urlprovider: "https://cas.staging.iti.br/oauth2.0"
+    modulo_assinatura_clientid: "assinaturaavancadaxxx"
+    modulo_assinatura_secret: "xxx"
+    modulo_assinatura_validar_api_url: "https://h-api.iti.gov.br/validar/v3/validar"
+    modulo_assinatura_validar_api_key: "xxxx"
+    modulo_assinatura_token_url: "xxxx"
+    modulo_assinatura_token_url_assinar: "xxxx"
+    modulo_assinatura_integra_icp_url: "https://assinagov.staging.iti.br/assinador/v2/signer/integraICP"
+    modulo_assinatura_integra_icp_url_clearings: "/get-clearings"
+    modulo_assinatura_integra_icp_url_assinar: "/sign"
+    modulo_assinatura_cloud_psc_url: "https://assinagov.staging.iti.br/assinador/v2/signer/cloud"
+    modulo_assinatura_cloud_psc_url_start: "/start"
+    modulo_assinatura_cloud_psc_url_assinar: "/sign"
+    modulo_assinatura_api_key_ithy: "xxxx"
 
     modulo_pen_instalar: false
     modulo_pen_versao: "master"

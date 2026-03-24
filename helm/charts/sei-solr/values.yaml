@@ -44,6 +44,17 @@ solr:
     #     cpu: 500m
     #     memory: 2048Mi
 
+    pvc:
+      # caso queira usar um seletor no pvc
+      # para fazer o bind no PV, use como ex abaixo
+      # seletor atual desabilidado
+      selector: {}
+      # para habilitar seque exemplo abaixo
+      # Ex:
+      # selector:
+      #   matchLabels:
+      #     purpose: solr
+
 
     # memoria para a jvm do solr
     # A qtde de memoria que vc fornecer ao solr sera decisiva
