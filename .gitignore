@@ -4,7 +4,6 @@
 **/.pytest_cache
 
 containers/envcontainers.env
-containers/app/assets/fontes/*
 
 helm/charts/**/charts/*
 helm/tests/values.yaml
