@@ -2,96 +2,103 @@
 
 set -e
 
-mkdir /opt2
-cd /opt2
+if [ "${SEI_DOWNLOAD}" == "true" ]; then
 
-rm -rf /fontes/*
-mkdir -p /fontes/sei \
-         /fontes/sip \
-         /fontes/infra
+    mkdir /opt2
+    cd /opt2
 
-echo "******************************"
-echo "******DOWNLOADING SEI*********"
-echo "******************************"
+    rm -rf /fontes/*
+    mkdir -p /fontes/sei \
+        /fontes/sip \
+        /fontes/infra
 
-git clone https://dummy:${GIT_SEI_PAT}@${GIT_SEI_URL}
-cd sei
-git checkout ${GIT_SEI_VERSION}
+    echo "******************************"
+    echo "******DOWNLOADING SEI*********"
+    echo "******************************"
 
-cd src
+    git clone https://dummy:${GIT_SEI_PAT}@${GIT_SEI_URL}
+    cd sei
+    git checkout ${GIT_SEI_VERSION}
 
-cp -R sei/* /fontes/sei/
-cp -R sip/* /fontes/sip/
-cp -R infra/* /fontes/infra/
+    cd src
 
+    cp -R sei/* /fontes/sei/
+    cp -R sip/* /fontes/sip/
+    cp -R infra/* /fontes/infra/
 
-cd /
-rm -rf /opt2
-mkdir /opt2
+fi
 
 echo "******************************"
 echo "****DOWNLOADING MODULOS*******"
 echo "******************************"
 
-echo "******************************"
-echo "****DOWNLOADING ESTATISTICAS**"
-echo "******************************"
+if [ "${MODULO_ESTATISTICAS_DOWNLOAD}" == "true" ]; then
 
-git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ESTATISTICAS_URL}
-cd mod-sei-estatisticas
-git checkout ${GIT_MODULO_ESTATISTICAS_VERSION}
+    echo "******************************"
+    echo "****DOWNLOADING ESTATISTICAS**"
+    echo "******************************"
 
-mkdir -p /fontes/sei/web/modulos/mod-sei-estatisticas
-\cp -R * /fontes/sei/web/modulos/mod-sei-estatisticas/
+    cd /
+    git clone https://dummy:${GIT_SEI_PAT}@${MODULO_ESTATISTICAS_GIT_URL}
+    cd mod-sei-estatisticas
+    git checkout ${MODULO_ESTATISTICAS_GIT_VERSION}
 
-cd /
-rm -rf mod-sei-estatisticas
+    mkdir -p /fontes/sei/web/modulos/mod-sei-estatisticas
+    \cp -R * /fontes/sei/web/modulos/mod-sei-estatisticas/
 
+    cd /
+    rm -rf mod-sei-estatisticas
 
-echo "******************************"
-echo "****DOWNLOADING PEN***********"
-echo "******************************"
+fi
 
-git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_PEN_URL}
-cd mod-sei-pen
-git checkout ${GIT_MODULO_PEN_VERSION}
+if [ "${MODULO_PEN_DOWNLOAD}" == "true" ]; then
+    echo "******************************"
+    echo "****DOWNLOADING PEN***********"
+    echo "******************************"
 
-make clean
-make dist
-cd dist
-files=( *.zip )
-f="${files[0]}"
-mkdir -p temp
-cp $f temp/
-cd temp/
-yes | unzip $f
-cp -Rf sei/* /fontes/sei/
-cp -Rf sip/* /fontes/sip/
+    git clone https://dummy:${GIT_SEI_PAT}@${MODULO_PEN_GIT_URL}
+    cd mod-sei-pen
+    git checkout ${MODULO_PEN_GIT_VERSION}
 
-cd /
-rm -rf mod-sei-pen
+    make clean
+    make dist
+    cd dist
+    files=( *.zip )
+    f="${files[0]}"
+    mkdir -p temp
+    cp $f temp/
+    cd temp/
+    yes | unzip $f
+    cp -Rf sei/* /fontes/sei/
+    cp -Rf sip/* /fontes/sip/
 
+    cd /
+    rm -rf mod-sei-pen
+fi
 
-echo "******************************"
-echo "****DOWNLOADING ASSINATURA****"
-echo "******************************"
+if [ "${MODULO_ASSINATURA_DOWNLOAD}" == "true" ]; then
 
-git clone https://dummy:${GIT_SEI_PAT}@${GIT_MODULO_ASSINATURA_URL}
-cd mod-sei-assinatura-eletronica
-git checkout ${GIT_MODULO_ASSINATURA_VERSION}
+    echo "******************************"
+    echo "****DOWNLOADING ASSINATURA****"
+    echo "******************************"
 
-touch docs/changelogs/CHANGELOG-1.3.0.md
-make dist
-cd dist
-files=( *.zip )
-f="${files[0]}"
-mkdir -p temp
-cp $f temp/
-cd temp/
-yes | unzip $f
+    git clone https://dummy:${GIT_SEI_PAT}@${MODULO_ASSINATURA_GIT_URL}
+    cd mod-sei-assinatura-eletronica
+    git checkout ${MODULO_ASSINATURA_GIT_VERSION}
 
-cp -Rf sei/* /fontes/sei/
-cp -Rf sip/* /fontes/sip/
+    touch docs/changelogs/CHANGELOG-1.3.0.md
+    make dist
+    cd dist
+    files=( *.zip )
+    f="${files[0]}"
+    mkdir -p temp
+    cp $f temp/
+    cd temp/
+    yes | unzip $f
 
-cd /
-rm -rf mod-sei-assinatura-eletronica
+    cp -Rf sei/* /fontes/sei/
+    cp -Rf sip/* /fontes/sip/
+
+    cd /
+    rm -rf mod-sei-assinatura-eletronica
+fi

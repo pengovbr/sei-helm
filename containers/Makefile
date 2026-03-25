@@ -88,9 +88,9 @@ verificar-app-params: ## target de apoio para verificar se token git foi passado
 	@if [ -z "$(GIT_SEI_VERSION)" ]; then echo "Informe GIT_SEI_VERSION"; exit 1; fi
 
 verificar-fontes: ## verifica se os fontes originais estao posicionados
-	@if [ ! -f "app/assets/fontes/sei/web/SEI.php" ]; then echo "Fonte do SEI nao encontrado"; exit 1; fi
-	@if [ ! -f "app/assets/fontes/sip/web/Sip.php" ]; then echo "Fonte do SIP nao encontrado"; exit 1; fi
-	@if [ ! -f "app/assets/fontes/infra/infra_php/InfraSip.php" ]; then echo "Fonte do Infra nao encontrado"; exit 1; fi
+	@if [ ! -f "app/assets/fontes/fontes-sei/sei/web/SEI.php" ]; then echo "Fonte do SEI nao encontrado"; exit 1; fi
+	@if [ ! -f "app/assets/fontes/fontes-sei/sip/web/Sip.php" ]; then echo "Fonte do SIP nao encontrado"; exit 1; fi
+	@if [ ! -f "app/assets/fontes/fontes-sei/infra/infra_php/InfraSip.php" ]; then echo "Fonte do Infra nao encontrado"; exit 1; fi
 
 getenv: ## target de apoio para copiar o arquivo envcontainers.env baseado no modelo envcontaners.example.env
 		@cp -f envcontainers.example.env envcontainers.env
@@ -112,7 +112,7 @@ getexample: ## traz o arquivo de exemplo caso o titular n exista
 
 fontesGet: ## baixa os fontes e modulos do GIT informado
 	@docker run -it --rm \
-	    -v "${PWD}"/app/assets/fontes:/fontes \
+	    -v "${PWD}"/app/assets/fontes/fontes-sei:/fontes \
 		-v "${PWD}"/app/assets/phpmaketools:/assets \
 		--env-file envcontainers.env $(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) \
 		sh -c "/assets/scripts/down_sei.sh"
@@ -120,7 +120,8 @@ fontesGet: ## baixa os fontes e modulos do GIT informado
 ## fontesPrepare: prepara os fontes antes de subirem para os containeres de app
 fontesPrepare: verificar-fontes
 	@docker run -it --rm \
-	    -v "${PWD}"/app/assets/fontes:/fontes \
+	    -v "${PWD}"/app/assets/fontes/fontes-sei:/fontes-sei \
+		-v "${PWD}"/app/assets/fontes/fontes-prepared:/fontes-prepared \
 		-v "${PWD}"/app/assets/phpmaketools:/assets \
 		--env-file envcontainers.env $(IMAGE_APOIO_PHP):$(IMAGE_APOIO_PHP_VERSION) \
 		sh -c "/assets/scripts/prepare.sh"

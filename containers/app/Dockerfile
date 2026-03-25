@@ -20,10 +20,10 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     sed -i 's|#LoadModule mpm_event_module modules/mod_mpm_event.so|LoadModule mpm_event_module modules/mod_mpm_event.so|' /etc/apache2/httpd.conf && \
     sed -i 's|LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|' /etc/apache2/httpd.conf
 
-RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    cp -R /temp/fontes/apache/sei /opt/ && \
-    cp -R /temp/fontes/apache/sip /opt/ && \
-    cp -R /temp/fontes/apache/infra /opt/ && \
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    cp -R /temp/apache/sei /opt/ && \
+    cp -R /temp/apache/sip /opt/ && \
+    cp -R /temp/apache/infra /opt/ && \
     chown -R apache:apache \
         /opt/sei \
         /opt/sip \
@@ -68,13 +68,10 @@ RUN apk add --no-cache \
     php82-intl \
     php82-ldap \
     php82-mbstring \
-    php82-mysqli \
     php82-odbc \
     php82-opcache \
     php82-openssl \
     php82-pcntl \
-    php82-pdo \
-    php82-pdo_mysql \
     php82-pear \
     php82-pecl-apcu \
     php82-pecl-igbinary \
@@ -133,17 +130,38 @@ RUN --mount=type=bind,source=assets/conf,target=/temp/,readonly \
     cp /temp/php/sei-fpm.conf /etc/php82/php-fpm.d/zzz-sei-fpm.conf && \
     ln -s /usr/bin/php82 /usr/bin/php
 
-
 # *****************************************************************
 # PHP *************************************************************
 # *****************************************************************
 
 FROM phpgeneric AS php
 
-RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    cp -a /temp/fontes/php/sei /opt/ && \
-    cp -a /temp/fontes/php/sip /opt/ && \
-    cp -a /temp/fontes/php/infra /opt/ && \
+ARG IMAGE_PHP_BUILD_MYSQL=rodepelomakefile
+ARG IMAGE_PHP_BUILD_POSTGRES=rodepelomakefile
+ARG IMAGE_PHP_BUILD_ORACLE=rodepelomakefile
+ARG IMAGE_PHP_BUILD_SQLSERVER=rodepelomakefile
+
+# database(s)
+RUN if [ "${IMAGE_PHP_BUILD_MYSQL}" == "true" ]; then \
+        apk add --no-cache \
+        php82-mysqli; \
+        #php82-pdo \
+        #php82-pdo_mysql \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_POSTGRES}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_ORACLE}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_SQLSERVER}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi;
+
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    cp -a /temp/php/sei /opt/ && \
+    cp -a /temp/php/sip /opt/ && \
+    cp -a /temp/php/infra /opt/ && \
     mkdir -p /var/lib/sei/dbfiles && \
     mkdir -p /var/lib/sei/dbcontrol && \
     mkdir -p /var/lib/sei/tmpfiles && \
@@ -237,9 +255,9 @@ RUN apk add --no-cache \
     curl \
     mariadb-client
 
-RUN --mount=type=bind,source=assets,target=/temp/,readonly \
-    \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
-    \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    \cp -R /temp/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/scripts/sip/scripts /opt/sip/scripts/ && \
     mkdir -p /dbref && \
     cd /dbref && \
     curl -LO ${URLSEIDMP} && \
@@ -257,8 +275,8 @@ RUN --mount=type=bind,source=assets,target=/temp/,readonly \
     apk add --no-cache \
     tini \
     procps && \
-    \cp -R /temp/fontes/scripts/sei/scripts /opt/sei/scripts/ && \
-    \cp -R /temp/fontes/scripts/sip/scripts /opt/sip/scripts/ && \
+    \cp -R /temp/fontes/fontes-prepared/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/fontes/fontes-prepared/scripts/sip/scripts /opt/sip/scripts/ && \
     cp /temp/conf/cron.d/cron.conf /etc/crontabs/root && \
     mkdir -p /usr/share/sei/ && \
     cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
