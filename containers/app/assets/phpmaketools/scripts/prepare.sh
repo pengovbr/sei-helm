@@ -2,6 +2,7 @@
 
 set -e
 
+echo "Apagar arquivos desnecessarios"
 rm -rf /fontes-sei/sei/config/ConfiguracaoSEI.exemplo.php
 rm -rf /fontes-sei/sei/config/ConfiguracaoSEI.testes.php
 rm -rf /fontes-sei/sip/config/ConfiguracaoSip.exemplo.php
@@ -13,6 +14,7 @@ rm -rf /fontes-sei/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinatur
 mkdir -p /fontes-prepared/apache
 rm -rf /fontes-prepared/apache/*
 
+echo "Copiando fontes originais para tratamento..."
 cp -R /fontes-sei/sei /fontes-prepared/apache/
 cp -R /fontes-sei/sip /fontes-prepared/apache/
 cp -R /fontes-sei/infra /fontes-prepared/apache/
@@ -80,10 +82,10 @@ sed -i "s|\$strServidor = ConfiguracaoSip::getInstance()->getValor('Sip', 'URL')
 sed -i "s|if (\$this->isBolRequerHttps()|if (\$this->isBolRequerHttps() \&\& \
       !isset(\$_SERVER['HTTP_X_FORWARDED_FOR'])|" /fontes-prepared/php/infra/infra_php/InfraPagina.php
 
-\cp /assets/conf/sei/ConfiguracaoSEI.php /fontes-prepared/php/sei/config/
-\cp /assets/conf/sei/ConfiguracaoSip.php /fontes-prepared/php/sip/config/
-\cp /assets/conf/sei/modulos/ConfiguracaoModPEN.php /fontes-prepared/php/sei/config/mod-pen/
-\cp /assets/conf/sei/modulos/ConfiguracaoModAssinaturaEletronica.php /fontes-prepared/php/sei/config/mod-assinatura-eletronica/
+\cp /assets/conf/sistema/sei/config/ConfiguracaoSEI.php /fontes-prepared/php/sei/config/
+\cp /assets/conf/sistema/sip/config/ConfiguracaoSip.php /fontes-prepared/php/sip/config/
+\cp /assets/conf/sistema/sei/config/mod-pen/ConfiguracaoModPEN.php /fontes-prepared/php/sei/config/mod-pen/
+\cp /assets/conf/sistema/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinaturaEletronica.php /fontes-prepared/php/sei/config/mod-assinatura-eletronica/
 
 rm -rf /fontes-prepared/php/sei/scripts/*
 rm -rf /fontes-prepared/php/sip/scripts/*

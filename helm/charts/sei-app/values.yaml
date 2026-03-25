@@ -170,34 +170,7 @@ app:
     modulo_estatisticas_sigla: "SEIPUBLICO"
     modulo_estatisticas_chave: "seipublico"
 
-    modulo_rest_instalar: "false"
-    modulo_rest_versao: "master"
-    modulo_rest_url_notificacao: ""
-    modulo_rest_id_app: ""
-    modulo_rest_chave: ""
-    modulo_rest_token_secret: ""
-
-    modulo_resposta_instalar: "false"
-    modulo_resposta_versao: "master"
-    modulo_resposta_sistema_id: ""
-    modulo_resposta_documento_id: ""
-
-    modulo_gestaodocumental_instalar: "false"
-    modulo_gestaodocumental_versao: "master"
-
-    modulo_loginunico_instalar: "false"
-    modulo_loginunico_versao: "master"
-    modulo_loginunico_clientid: "sistemas/homologacao/sei/controlador_externo"
-    modulo_loginunico_secret: "xxxx"
-    modulo_loginunico_urlprovider: "https://sso.staging.acesso.gov.br/"
-    modulo_loginunico_redirecturl: "http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/controlador_loginunico.php"
-    modulo_loginunico_urllogout: "http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/logout.php"
-    modulo_loginunico_scope: "openid+email+phone+profile+govbr_empresa+govbr_confiabilidades"
-    modulo_loginunico_urlservicos: "https://api.staging.acesso.gov.br/"
-    modulo_loginunico_urlrevalidacao: "https://oauth.staging.acesso.gov.br/v1/"
-    modulo_loginunico_cientidvalidacao: "sei.xxx.nuvem.gov.br/validacaosenha"
-    modulo_loginunico_secretvalidacao: "xxx"
-    modulo_loginunico_orgao: "0"
+    modulo_resposta_instalar: false
 
     modulo_assinatura_instalar: false
     modulo_assinatura_urlprovider: "https://cas.staging.iti.br/oauth2.0"
@@ -226,26 +199,6 @@ app:
     modulo_pen_unidade_associacao_pen: ""
     modulo_pen_unidade_associacao_sei: ""
 
-    modulo_peticionamento_instalar: "false"
-    modulo_peticionamento_versao: "master"
-    modulo_peticionamento_url: "https://github.com/anatelgovbr/mod-sei-peticionamento"
-
-    modulo_pi_instalar: "false"
-    modulo_pi_versao: "master"
-    modulo_pi_url: "https://protocolointegrado.preprod.nuvem.gov.br/protocolows/integradorservice?wsdl"
-    modulo_pi_usuario: "usuariodeconexaopi"
-    modulo_pi_senha: "senhadeconexaoaopi"
-    modulo_pi_email: "email@example.com"
-
-    modulo_incom_instalar: "false"
-    modulo_incom_versao: "v1.0.4"
-    modulo_incom_veiculoid: "2"
-    modulo_incom_serieid: "10"
-    modulo_incom_siorg: "235876"
-    modulo_incom_urlws: "https://seiwsincom2.in.gov.br/seiwsincom/services/servicoin?wsdl"
-    modulo_incom_userws: "xxx"
-    modulo_incom_passws: "xxx"
-    modulo_incom_inclusaopublicacao: "S"
 
     # secrets
     db_porta: "3306"

@@ -32,6 +32,9 @@
                   {{- if .Values.app.modulo_assinatura_instalar }}
                   'AssinaturaEletronicaIntegracao' => 'assinatura-eletronica',
                   {{- end }}
+                  {{- if .Values.app.modulo_resposta_instalar }}
+                  'MdRespostaIntegracao' => 'mod-sei-resposta',
+                  {{- end }}
 
                 ),
             ),

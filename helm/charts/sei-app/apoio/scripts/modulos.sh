@@ -5,6 +5,12 @@ APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
 
 rm -rf /var/lib/sei/dbcontrol/modulos-install.ok
 
+while [ ! -f /var/lib/sei/dbcontrol/install-initial.ok ]; do
+    echo 'Aguardando Instalacao Inicial...'
+    sleep 3
+done
+
+
 set +e
 RET=1
 while [ ! "$RET" == "0" ]
@@ -20,17 +26,11 @@ do
 
     RET=$?
 
-    sleep 3
+    sleep 2
 
 done
 
 set -e
-
-
-while [ ! -f /var/lib/sei/dbcontrol/install-initial.ok ]; do
-    echo 'Aguardando Instalacao Inicial...'
-    sleep 2
-done
 
 
 echo "***************************************************"
@@ -135,5 +135,56 @@ echo "***************************************************"
 
 {{- end }}
 
+
+echo "***************************************************"
+echo "***************************************************"
+echo "*INICIANDO CONFIGURACOES DO MODULO RESPOSTA********"
+echo "***************************************************"
+echo "***************************************************"
+
+{{- if .Values.app.modulo_resposta_instalar }}
+
+    VERSAO_ENCONTRADA=$(php -r "require_once '/opt/sei/web/SEI.php'; require_once '/opt/sei/web/modulos/mod-sei-resposta/MdRespostaIntegracao.php'; echo MdRespostaIntegracao::VERSAO_MODULO;")
+
+    if [ -f /var/lib/sei/dbcontrol/modulo-resposta-instalado-${VERSAO_ENCONTRADA}.ok ]; then
+
+        echo "Arquivo de controle do Modulo Assinatura encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    else
+
+        cd /opt
+        echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | \
+            php sip/scripts/mod-sei-resposta/sip_atualizar_versao_modulo_resposta.php 2>&1 | \
+            tee -a /var/lib/sei/dbcontrol/atualizacao-modulo-resposta-${VERSAO_ENCONTRADA}.output
+
+        erro=${PIPESTATUS[1]}
+        if [ ! "$erro" == "0" ]; then
+            echo "Erro ao executar script de atualizacao no sip. Abandonando..."
+            exit 1
+        fi
+
+
+        echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | \
+            php sei/scripts/mod-sei-resposta/sei_atualizar_versao_modulo_resposta.php 2>&1 | \
+            tee -a /var/lib/sei/dbcontrol/atualizacao-modulo-resposta-${VERSAO_ENCONTRADA}.output
+
+        erro=${PIPESTATUS[1]}
+        if [ ! "$erro" == "0" ]; then
+            echo "Erro ao executar script de atualizacao no sei. Abandonando..."
+            exit 1
+        fi
+
+        #echo "Iniciar Configuracao automatica do modulo"
+        #/automationscripts//mod-sei-pen.sh
+
+        touch /var/lib/sei/dbcontrol/modulo-resposta-instalado-${VERSAO_ENCONTRADA}.ok
+
+    fi
+
+{{- else }}
+
+    echo "Variavel modulo_resposta_instalar nao setada para true, pulando configuracao..."
+
+{{- end }}
 
 touch /var/lib/sei/dbcontrol/modulos-install.ok

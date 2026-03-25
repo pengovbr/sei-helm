@@ -102,3 +102,30 @@ if [ "${MODULO_ASSINATURA_DOWNLOAD}" == "true" ]; then
     cd /
     rm -rf mod-sei-assinatura-eletronica
 fi
+
+
+if [ "${MODULO_RESPOSTA_DOWNLOAD}" == "true" ]; then
+
+    echo "******************************"
+    echo "****DOWNLOADING RESPOSTA******"
+    echo "******************************"
+
+    git clone https://dummy:${GIT_SEI_PAT}@${MODULO_RESPOSTA_GIT_URL}
+    cd mod-sei-resposta
+    git checkout ${MODULO_RESPOSTA_GIT_VERSION}
+
+    make dist
+    cd dist
+    files=( *.zip )
+    f="${files[0]}"
+    mkdir -p temp
+    cp $f temp/
+    cd temp/
+    yes | unzip $f
+
+    cp -Rf sei/* /fontes/sei/
+    cp -Rf sip/* /fontes/sip/
+
+    cd /
+    rm -rf mod-sei-resposta
+fi
