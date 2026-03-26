@@ -2,13 +2,18 @@
 
 set -e
 
+{{- if not .Values.app.install.solr.enable }}
+echo "Chave para instalacao inicial dos indices solr = false."
+echo "Nao vamos criar os indices. Crie-os manualmente..."
+exit 0
+{{ end }}
+
 SOLRUSER="{{ .Values.app.solrAdminUser }}"
 SOLRPASS="{{ .Values.app.solrAdminPass }}"
-SOLRID=$( echo -n "{{ .Values.app.install.idInstalacao }}" | tr '[:upper:]' '[:lower:]' )
 
-CORE_PROTOCOLOS=${SOLRID}-sei-protocolos
-CORE_PUBLICACOES=${SOLRID}-sei-publicacoes
-CORE_CONHECIMENTO=${SOLRID}-sei-bases-conhecimento
+CORE_PROTOCOLOS="{{ .Values.app.install.solr.idxProtocolo }}"
+CORE_PUBLICACOES="{{ .Values.app.install.solr.idxPublicacoes }}"
+CORE_CONHECIMENTO="{{ .Values.app.install.solr.idxBaseConhecimento }}"
 
 e=1
 while [ ! "$e" == "0" ]
@@ -22,8 +27,8 @@ do
 
 done
 
-echo "Criando indices do Solr"
-
+echo "Criando indices do Solr e na sequencia usuario do solr"
+echo "Criando indice de protocolos"
 if [ ! -d /var/solr/data/${CORE_PROTOCOLOS} ]; then
 
     cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_PROTOCOLOS}/
@@ -38,6 +43,7 @@ else
 
 fi
 
+echo "Criando indice de publicacoes"
 if [ ! -d /var/solr/data/${CORE_PUBLICACOES} ]; then
 
     cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_PUBLICACOES}/
@@ -52,6 +58,7 @@ else
 
 fi
 
+echo "Criando indice de bases de conhecimento"
 if [ ! -d /var/solr/data/${CORE_CONHECIMENTO} ]; then
 
     cp -R /var/solr/data/sei-protocolos /var/solr/data/${CORE_CONHECIMENTO}/
@@ -66,14 +73,14 @@ else
 
 fi
 
-echo "Apagando Documentos do Solr para o ${ID_INSTALACAO}"
+echo "Criando usuario"
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_PROTOCOLOS}/update?commit=true -H "Content-Type: text/xml" \
-    --data-binary '<delete><query>*:*</query></delete>'
+curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr/admin/authentication \
+    -H 'Content-type:application/json' \
+    -d '{ "set-user": {"{{ .Values.app.install.solr.username }}": "{{ .Values.app.install.solr.password }}"} }'
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_CONHECIMENTO}/update?commit=true -H "Content-Type: text/xml" \
-    --data-binary '<delete><query>*:*</query></delete>'
+curl --user "${SOLRUSER}:${SOLRPASS}" http://solr:8983/solr/admin/authorization \
+    -H 'Content-type:application/json' \
+    -d '{"set-user-role": {"{{ .Values.app.install.solr.username }}":["basic"]}}'
 
-curl --user ${SOLRUSER}:${SOLRPASS} http://solr:8983/solr/${CORE_PUBLICACOES}/update?commit=true -H "Content-Type: text/xml" \
-    --data-binary '<delete><query>*:*</query></delete>'
-
+echo "Usuario criado"

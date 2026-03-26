@@ -1,4 +1,3 @@
-{{- if .Values.app.install.sei.enable }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -83,4 +82,3 @@ spec:
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei
-{{- end }}

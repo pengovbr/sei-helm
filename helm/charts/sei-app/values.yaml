@@ -88,19 +88,31 @@ app:
 
     install:
 
-        # id identificador do ambiente numero unico para diferenciar as bases solr e banco
+        # id identificador do ambiente
+        # Numero unico para diferenciar as bases solr e banco
         # ATENCAO PRESTAR ATENCAO NESTA STRING
-        # o as bases de dados sei e solr terao esse id no nome
+        # as bases de dados sei e solr terao esse id no nome
         # caso instale o mesmo id com a opcao de reconstruir o banco, a automacao ira apagar os dados
         idInstalacao: "orgao1"
 
         db:
+
+            sipDbName: "siporg1"
+            seiDbName: "seiorg1"
+            sipUser: "usiporg1"
+            sipPassword: "usiporg1"
+            seiUser: "useiorg1"
+            seiPassword: "useiorg1"
+
+
             # se enable vai criar um database para o sei e sip no banco
             # se disable crie manualmente seguindo a nomenclatura do instalador
-            enable: true
+            criarDatabases: true
+
             # indica se a automacao irah dropar e criar a base de dados
             # que foi informada para essa instancia
-            recreate: true
+            apagarDatabases: true
+
 
         solr:
             # enable: true vai montar um job no namespace do solr informado
@@ -110,11 +122,28 @@ app:
             # Necessario para o instalador criar indice no solr para esta instancia
             namespace: solrnamespace
 
-        sei:
-            # se enable roda o instalador do sei a primeira vez q o ambiente subir
-            # para instalar o sei e modulos
-            # se desabilitado vc tera q rodar manualmente os instaladores
-            enable: true
+            # obrigatorio aqui informar os nomes dos indices, mesmo que
+            # vc marque enable: false, acima
+            idxProtocolo: org1sei-protocolos
+            idxBaseConhecimento: org1sei-base-conhecimento
+            idxPublicacoes: org1sei-publicacoes
+
+            # tempos de commit dos indices
+            # obrigatorio mesmo que enable: false, acima
+            idxProtocoloTime: 150
+            idxBaseConhecimentoTime: 300
+            idxPublicacoesTime: 300
+
+            # usuario e senha que o sei vai usar para acesar o solr
+            # obrigatorio mesmo que enable: false, acima
+            username: org1solr
+            password: org1solrp
+
+
+        # se enable roda o instalador do sei a primeira vez q o ambiente subir
+        # para instalar o sei
+        # se desabilitado vc tera q rodar manualmente os instaladores
+        seiInstaladorInicial: true
 
         ldap:
             # se true vai habilitar o orgao 0 no ldap
@@ -204,12 +233,6 @@ app:
     db_porta: "3306"
     db_root_password: P@ssword
     db_root_username: root
-
-    db_sei_username: "c2VpX3VzZXI="
-    db_sei_password: "c2VpX3VzZXI="
-
-    db_sip_password: "c2lwX3VzZXI="
-    db_sip_username: "c2lwX3VzZXI="
 
     solrAdminUser: "admin"
     solrAdminPass: "SolrAdmin123$"

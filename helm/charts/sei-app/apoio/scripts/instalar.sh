@@ -2,6 +2,12 @@
 
 set -e
 
+{{- if not .Values.app.install.seiInstaladorInicial }}
+echo "Chave para instalacao do sei e sip = false."
+echo "Nao vamos instalar o sei e sip. Instale-os manualmente..."
+exit 0
+{{ end }}
+
 APP_HOST="{{ .Values.app.host }}"
 APP_ORGAO="{{ .Values.app.orgao }}"
 APP_ORGAO_DESCRICAO="{{ .Values.app.orgao_descricao }}"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
 APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
 

@@ -70,11 +70,9 @@
      	      'BancoSEI'  => array(
      	          'Servidor' => '{{ .Values.app.db_host }}',
      	          'Porta' => '{{ .Values.app.db_porta }}',
-     	          'Banco' => '{{ printf "%ssei" .Values.app.install.idInstalacao | lower }}',
-     	          'Usuario' => '{{ printf "%susei" .Values.app.install.idInstalacao | lower }}',
-     	          'Senha' => '{{ printf "%susei" .Values.app.install.idInstalacao | lower }}',
-     	          'UsuarioScript' => '{{ .Values.app.db_root_username }}',
-     	          'SenhaScript' => '{{ .Values.app.db_root_password }}',
+     	          'Banco' => '{{ .Values.app.install.db.seiDbName }}',
+     	          'Usuario' => '{{ .Values.app.install.db.seiUser }}',
+     	          'Senha' => '{{ .Values.app.install.db.seiPassword }}',
      	          'Tipo' => '{{ .Values.app.db_tipo }}' ), //MySql, SqlServer, Oracle ou PostgreSql
 
           /*
@@ -131,13 +129,16 @@
 
             'Solr' => array(
                 'Servidor' => '{{ .Values.app.solr_url }}',
-                'Usuario' => 'sei',
-                'Senha' => 'SolrSei123$',
-                'CoreProtocolos' => '{{ .Values.app.install.idInstalacao | lower }}-sei-protocolos',
-                'TempoCommitProtocolos' => '{{ .Values.app.solr_tempo_commit_protocolos }}',
-                'CoreBasesConhecimento' => '{{ .Values.app.install.idInstalacao | lower }}-sei-bases-conhecimento',
-                'CorePublicacoes' => '{{ .Values.app.install.idInstalacao | lower }}-sei-publicacoes',
-                'TempoCommitPublicacoes' => '{{ .Values.app.solr_tempo_commit_publicacoes }}'
+                'Usuario' => '{{ .Values.app.install.solr.username }}',
+                'Senha' => '{{ .Values.app.install.solr.password }}',
+                //'Usuario' => 'neo',
+                //'Senha' => 'neop',
+                'CoreProtocolos' => '{{ .Values.app.install.solr.idxProtocolo }}',
+                'TempoCommitProtocolos' => {{ .Values.app.install.solr.idxProtocoloTime }},
+                'CoreBasesConhecimento' => '{{ .Values.app.install.solr.idxBaseConhecimento }}',
+                'TempoCommitBasesConhecimento' => {{ .Values.app.install.solr.idxBaseConhecimentoTime }},
+                'CorePublicacoes' => '{{ .Values.app.install.solr.idxPublicacoes }}',
+                'TempoCommitPublicacoes' => {{ .Values.app.install.solr.idxPublicacoesTime }}
             ),
 
           'InfraMail' => array(

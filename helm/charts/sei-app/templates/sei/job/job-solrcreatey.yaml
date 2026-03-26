@@ -1,4 +1,3 @@
-{{- if .Values.app.install.solr.enable }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -21,13 +20,6 @@ spec:
       containers:
       - command:
         - /seiscripts/solrcreate.sh
-        envFrom:
-        - secretRef:
-            name: sei-solr-secret1-{{ .Values.app.install.idInstalacao | lower }}
-            optional: false
-        env:
-          - name: ID_INSTALACAO
-            value: {{ .Values.app.install.idInstalacao | quote }}
         image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: sei-solrcreate-{{ .Values.app.install.idInstalacao | lower }}
@@ -48,4 +40,3 @@ spec:
       - name: vol3
         persistentVolumeClaim:
           claimName: vol-sei-solr
-{{- end }}

@@ -2,8 +2,35 @@
 
 set -e
 
-DBID=$( echo -n "{{ .Values.app.install.idInstalacao }}" | tr '[:upper:]' '[:lower:]' )
-DB_RECREATE="{{ .Values.app.install.db.recreate | ternary "true" "false" }}"
+{{ if not .Values.app.install.db.criarDatabases }}
+echo "Chave para criacao de banco criarDatabases=false."
+echo "Nao vamos criar os databases. Provisione-os manualmente"
+exit 0
+{{ end }}
+
+{{ with .Values.app.install.db.seiDbName }}
+    DBSEI={{ . }}
+{{ end }}
+{{ with .Values.app.install.db.sipDbName }}
+    DBSIP={{ . }}
+{{ end }}
+
+{{ with .Values.app.install.db.seiUser }}
+    SEIUSERNAME={{ . }}
+{{ end }}
+{{ with .Values.app.install.db.sipUser }}
+    SIPUSERNAME={{ . }}
+{{ end }}
+
+{{ with .Values.app.install.db.seiPassword }}
+    SEIPASSWORD={{ . }}
+{{ end }}
+{{ with .Values.app.install.db.sipPassword }}
+    SIPPASSWORD={{ . }}
+{{ end }}
+
+
+DB_RECREATE="{{ .Values.app.install.db.apagarDatabases | ternary "true" "false" }}"
 APP_DB_HOST="{{ .Values.app.db_host }}"
 APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
 APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
@@ -26,46 +53,48 @@ done
 if [ "$DB_RECREATE" == "true" ]; then
     echo "Apagando bases caso existam"
     set +e
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "drop database ${DBID}sei;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "drop database ${DBSEI};"
     sleep 2
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "drop database ${DBID}sip;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "drop database ${DBSIP};"
     sleep 2
     set -e
 fi
 
 set +e
-mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "show databases;" | grep "${DBID}sei"
+mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "show databases;" | grep "${DBSEI}"
 e=$?
 set -e
 
 if [ "$e" == "0" ]; then
-    echo "Database ${DBID}sei já existe. Pulando criação."
+    echo "Database ${DBSEI} já existe. Pulando criação."
 else
-    echo "Aguardando criacao dos databases para o orgao ${DBID}"
+    echo "Aguardando criacao dos databases para o orgao"
 
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create database ${DBID}sei;"
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl ${DBID}sei < sei_5_0_0_BD_Ref_Exec.sql
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create database ${DBSEI};"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl ${DBSEI} < sei_5_0_0_BD_Ref_Exec.sql
     sleep 2
 
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create database ${DBID}sip;"
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl ${DBID}sip < sip_5_0_0_BD_Ref_Exec.sql
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create database ${DBSIP};"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl ${DBSIP} < sip_5_0_0_BD_Ref_Exec.sql
     sleep 2
 
     mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "show databases;"
 
-    echo "Databases criados, criando usuarios..."
+    echo "Databases criados. Aguardando provisionamento dos usuarios..."
 
     set +e
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create user ${DBID}usei@'%' identified by '${DBID}usei' ;"
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create user ${DBID}usip@'%' identified by '${DBID}usip' ;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create user ${SEIUSERNAME}@'%' identified by '${SEIPASSWORD}' ;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "create user ${SIPUSERNAME}@'%' identified by '${SIPPASSWORD}' ;"
     set -e
 
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "GRANT ALL PRIVILEGES ON ${DBID}sei.* TO ${DBID}usei@'%' ;"
-    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "GRANT ALL PRIVILEGES ON ${DBID}sip.* TO ${DBID}usip@'%' ;"
+    echo "Liberando permissoes aos usuarios do sei e sip."
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "GRANT ALL PRIVILEGES ON ${DBSEI}.* TO ${SEIUSERNAME}@'%' ;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "GRANT ALL PRIVILEGES ON ${DBSIP}.* TO ${SIPUSERNAME}@'%' ;"
+    mariadb -h ${APP_DB_HOST} -u ${APP_DB_ROOT_USERNAME} -p${APP_DB_ROOT_PASSWORD} --skip-ssl -e "FLUSH PRIVILEGES;"
+
+    echo "Done!"
 
 fi
-
-cd -
 
 mkdir -p /var/lib/sei/dbcontrol
 touch /var/lib/sei/dbcontrol/bancoinstalado.ok

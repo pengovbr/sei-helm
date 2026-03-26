@@ -34,11 +34,9 @@ class ConfiguracaoSip extends InfraConfiguracao
       'BancoSip'  => array(
           'Servidor' => '{{ .Values.app.db_host }}',
           'Porta' => '{{ .Values.app.db_porta }}',
-          'Banco' => '{{ printf "%ssip" .Values.app.install.idInstalacao | lower }}',
-          'Usuario' => '{{ printf "%susip" .Values.app.install.idInstalacao | lower }}',
-          'Senha' => '{{ printf "%susip" .Values.app.install.idInstalacao | lower }}',
-          'UsuarioScript' => '{{ .Values.app.db_root_username }}',
-          'SenhaScript' => '{{ .Values.app.db_root_password }}',
+          'Banco' => '{{ .Values.app.install.db.sipDbName }}',
+          'Usuario' => '{{ .Values.app.install.db.sipUser }}',
+          'Senha' => '{{ .Values.app.install.db.sipPassword }}',
           'Tipo' => '{{ .Values.app.db_tipo }}'), //MySql, SqlServer, Oracle ou PostgreSql
 
       /*
