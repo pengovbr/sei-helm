@@ -114,9 +114,11 @@ app:
         # se disable crie manualmente seguindo a nomenclatura do instalador
         criarDatabases: true
 
-        # indica se a automacao irah dropar e criar a base de dados
+        # indica se a automacao do job dbcreate irah dropar antes de criar a base de dados
         # que foi informada para essa instancia
-        apagarDatabases: true
+        # ATENCAO PERIGOSISSIMO TOME O CUIDADO DE DESATIVAR APOS RODAR
+        # para ativar basta tirar o ZZZ e deixe apagarDatabases
+        ZZZapagarDatabasesZZZ: true
 
         sei_chave_acesso: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
         sip_chave_acesso: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"

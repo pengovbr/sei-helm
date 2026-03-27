@@ -29,8 +29,10 @@ exit 0
     SIPPASSWORD={{ . }}
 {{ end }}
 
-
-DB_RECREATE="{{ .Values.app.db.apagarDatabases | ternary "true" "false" }}"
+DB_RECREATE=false
+{{ with .Values.app.db.apagarDatabases }}
+DB_RECREATE="{{ . | ternary "true" "false" }}"
+{{ end }}
 APP_DB_HOST="{{ .Values.app.db.db_host }}"
 APP_DB_ROOT_USERNAME="{{ .Values.app.db.db_root_username }}"
 APP_DB_ROOT_PASSWORD="{{ .Values.app.db.db_root_password }}"
