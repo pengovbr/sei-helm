@@ -1,7 +1,6 @@
 apiVersion: v1
-binaryData:
-  99-sei.cnf: |-
-    {{ tpl (.Files.Get "apoio/my.cnf") . | b64enc }}
+data:
+  TZ: {{ .Values.db.tz | quote }}
 kind: ConfigMap
 metadata:
   name: cm-db

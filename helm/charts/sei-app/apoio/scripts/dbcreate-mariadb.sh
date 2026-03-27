@@ -2,38 +2,38 @@
 
 set -e
 
-{{ if not .Values.app.install.db.criarDatabases }}
+{{ if not .Values.app.db.criarDatabases }}
 echo "Chave para criacao de banco criarDatabases=false."
 echo "Nao vamos criar os databases. Provisione-os manualmente"
 exit 0
 {{ end }}
 
-{{ with .Values.app.install.db.seiDbName }}
+{{ with .Values.app.db.seiDbName }}
     DBSEI={{ . }}
 {{ end }}
-{{ with .Values.app.install.db.sipDbName }}
+{{ with .Values.app.db.sipDbName }}
     DBSIP={{ . }}
 {{ end }}
 
-{{ with .Values.app.install.db.seiUser }}
+{{ with .Values.app.db.seiUser }}
     SEIUSERNAME={{ . }}
 {{ end }}
-{{ with .Values.app.install.db.sipUser }}
+{{ with .Values.app.db.sipUser }}
     SIPUSERNAME={{ . }}
 {{ end }}
 
-{{ with .Values.app.install.db.seiPassword }}
+{{ with .Values.app.db.seiPassword }}
     SEIPASSWORD={{ . }}
 {{ end }}
-{{ with .Values.app.install.db.sipPassword }}
+{{ with .Values.app.db.sipPassword }}
     SIPPASSWORD={{ . }}
 {{ end }}
 
 
-DB_RECREATE="{{ .Values.app.install.db.apagarDatabases | ternary "true" "false" }}"
-APP_DB_HOST="{{ .Values.app.db_host }}"
-APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
-APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
+DB_RECREATE="{{ .Values.app.db.apagarDatabases | ternary "true" "false" }}"
+APP_DB_HOST="{{ .Values.app.db.db_host }}"
+APP_DB_ROOT_USERNAME="{{ .Values.app.db.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db.db_root_password }}"
 
 cd /dbref
 

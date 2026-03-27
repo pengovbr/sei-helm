@@ -12,27 +12,23 @@ cacheassets:
     nameOverride: ""
     fullnameOverride: ""
 
+    tz: America/Sao_Paulo
+
     # ========================
     # IMPORTANTE
     # ========================
     # informe aqui o backend de cada instalacao
     # o cache dos assets sera feito de forma independente para cada instancia
-    # o mesmo nginx podera fazer o cache para todas as instancias do mesmo cluster
-    # no array abaixo de backends informe o namespace e o host de cada instancia
-    # caso o nginx n encontre um backend ele vai conectar no primeiro da lista abaixo
-    # para tentar fazer o cache do asset
+    # o mesmo nginx podera fazer o cache para todas as instancias do mesmo cluster.
+    # No array abaixo de backends informe o namespace e o host de cada instancia
 
     backends:
-        - namespace: default
-          host: localhost
+        - namespace: app1
+          host: meusei.br
         #- namespace: app2
         #  host: sei2.teste
         #- namespace: nsorgao1
         #  host: orgao1.gov.br
-
-app:
-
-    host: meusei.br
 
     ingress:
 
@@ -41,3 +37,14 @@ app:
         # nao possua uma ferramenta emissora.
         # Adicione no formato crt e key padrao para ingress do kube
         tls_secret_name: "mysecret"
+
+        # anotacoes opcionais, renomeie de zopcionais para opcionais,
+        # apos isso, todos as anotacoes listadas serao publicadas no ingress
+        # alem dos exemplos abaixo, vc pode informar as suas especificas
+        zopcionais:
+            #cert-manager.io/cluster-issuer: letsencrypt-dth
+            #kubernetes.io/ingress.class: nginx
+            #kubernetes.io/tls-acme: "true"
+            #nginx.ingress.kubernetes.io/affinity: cookie1
+            #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+

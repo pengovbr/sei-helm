@@ -9,7 +9,7 @@ $objServidorAutenticacaoDTO = new ServidorAutenticacaoDTO();
 $objServidorAutenticacaoBD = new ServidorAutenticacaoBD(BancoSip::getInstance());
 
 $objServidorAutenticacaoDTO = new ServidorAutenticacaoDTO();
-$objServidorAutenticacaoDTO->setStrNome('{{ .Values.app.install.ldap.nome }}');
+$objServidorAutenticacaoDTO->setStrNome('{{ .Values.app.ldap.nome }}');
 $qtd = $objServidorAutenticacaoBD->contar($objServidorAutenticacaoDTO);
 
 if($qtd){
@@ -20,20 +20,20 @@ if($qtd){
     $objServidorAutenticacaoBD = new ServidorAutenticacaoBD(BancoSip::getInstance());
     $objServidorAutenticacaoDTO = new ServidorAutenticacaoDTO();
     $objServidorAutenticacaoDTO->setNumIdServidorAutenticacao(null);
-    $objServidorAutenticacaoDTO->setStrNome("{{ .Values.app.install.ldap.nome }}");
-    $objServidorAutenticacaoDTO->setStrStaTipo('{{ .Values.app.install.ldap.tipo }}');
-    $objServidorAutenticacaoDTO->setStrEndereco('{{ .Values.app.install.ldap.endereco }}');
-    $objServidorAutenticacaoDTO->setNumPorta({{ .Values.app.install.ldap.porta }});
-    $objServidorAutenticacaoDTO->setStrSufixo('{{ .Values.app.install.ldap.sufixo }}');
-    $objServidorAutenticacaoDTO->setStrUsuarioPesquisa('{{ .Values.app.install.ldap.usuarioPesquisa }}');
-    $objServidorAutenticacaoDTO->setStrSenhaPesquisa('{{ .Values.app.install.ldap.senhaPesquisa }}');
-    $objServidorAutenticacaoDTO->setStrContextoPesquisa('{{ .Values.app.install.ldap.contextoPesquisa }}');
-    $objServidorAutenticacaoDTO->setStrAtributoFiltroPesquisa('{{ .Values.app.install.ldap.filtroPesquisa }}');
-    $objServidorAutenticacaoDTO->setStrAtributoRetornoPesquisa('{{ .Values.app.install.ldap.retornoPesquisa }}');
-    $objServidorAutenticacaoDTO->setNumVersao({{ .Values.app.install.ldap.numeroVersao }});
+    $objServidorAutenticacaoDTO->setStrNome("{{ .Values.app.ldap.nome }}");
+    $objServidorAutenticacaoDTO->setStrStaTipo('{{ .Values.app.ldap.tipo }}');
+    $objServidorAutenticacaoDTO->setStrEndereco('{{ .Values.app.ldap.endereco }}');
+    $objServidorAutenticacaoDTO->setNumPorta({{ .Values.app.ldap.porta }});
+    $objServidorAutenticacaoDTO->setStrSufixo('{{ .Values.app.ldap.sufixo }}');
+    $objServidorAutenticacaoDTO->setStrUsuarioPesquisa('{{ .Values.app.ldap.usuarioPesquisa }}');
+    $objServidorAutenticacaoDTO->setStrSenhaPesquisa('{{ .Values.app.ldap.senhaPesquisa }}');
+    $objServidorAutenticacaoDTO->setStrContextoPesquisa('{{ .Values.app.ldap.contextoPesquisa }}');
+    $objServidorAutenticacaoDTO->setStrAtributoFiltroPesquisa('{{ .Values.app.ldap.filtroPesquisa }}');
+    $objServidorAutenticacaoDTO->setStrAtributoRetornoPesquisa('{{ .Values.app.ldap.retornoPesquisa }}');
+    $objServidorAutenticacaoDTO->setNumVersao({{ .Values.app.ldap.numeroVersao }});
     $ret = $objServidorAutenticacaoBD->cadastrar($objServidorAutenticacaoDTO);
 
-    echo "Servidor {{ .Values.app.install.ldap.nome }} Cadastrado no SIP com sucesso!!!\n";
+    echo "Servidor {{ .Values.app.ldap.nome }} Cadastrado no SIP com sucesso!!!\n";
 
     echo "Vamos agora associar o servidor ao Orgao 0\n";
 
@@ -56,7 +56,7 @@ if($qtd){
 
     $objServidorAutenticacaoDTO = new ServidorAutenticacaoDTO();
     $objServidorAutenticacaoDTO->retNumIdServidorAutenticacao();
-    $objServidorAutenticacaoDTO->setStrNome('{{ .Values.app.install.ldap.nome }}');
+    $objServidorAutenticacaoDTO->setStrNome('{{ .Values.app.ldap.nome }}');
 
     $objServidorAutenticacaoBD = new ServidorAutenticacaoBD(BancoSip::getInstance());
     $ret = $objServidorAutenticacaoBD->consultar($objServidorAutenticacaoDTO);

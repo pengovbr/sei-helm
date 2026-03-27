@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
-  backoffLimit: 2
+  backoffLimit: 0
   completions: 1
   parallelism: 1
   template:
@@ -22,7 +22,7 @@ spec:
         envFrom:
         - configMapRef:
             name: cm-php
-        image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
+        image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-initial
         stdin: true

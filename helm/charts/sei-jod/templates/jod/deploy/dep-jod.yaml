@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.jod.image.secret }}
       containers:
-      - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag | default .Chart.AppVersion }}"
+      - image: "{{ .Values.jod.image.repository }}:{{ .Values.jod.image.tag }}"
         imagePullPolicy: {{ .Values.jod.image.pullPolicy }}
         {{- with .Values.jod.resources }}
         resources:

@@ -1,0 +1,51 @@
+{{- range .Values.solr.jobInstall.orgaos }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sei-solrcreate-{{ .orgao | lower }}
+  labels:
+    {{- include "sei-solr.labels" $ | nindent 4 }}
+spec:
+  backoffLimit: 0
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        job-name: sei-solrcreate-{{ .orgao | lower }}
+        {{- include "sei-solr.labels" $ | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ $.Values.solr.jobInstall.imageInstall.secret }}
+      containers:
+      - command:
+        - /seiscripts/solrcreate-{{ .orgao }}.sh
+        image: {{ $.Values.solr.jobInstall.imageInstall.repository }}:{{ $.Values.solr.jobInstall.imageInstall.tag }}
+        imagePullPolicy: {{ $.Values.solr.jobInstall.imageInstall.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: cm-solr
+        name: sei-solrcreate-{{ .orgao | lower }}
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /seiscripts/solrcreate-{{ .orgao }}.sh
+          name: se-solr-install-files
+          subPath: solrcreate-{{ .orgao }}.sh
+        - mountPath: /var/solr/data
+          name: vol3
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: se-solr-install-files
+        secret:
+          secretName: se-solr-install-files
+          items:
+          - key: solrcreate-{{ .orgao }}.sh
+            path: solrcreate-{{ .orgao }}.sh
+          defaultMode: 0500
+      - name: vol3
+        persistentVolumeClaim:
+          claimName: vol-sei-solr
+---
+{{- end }}

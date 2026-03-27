@@ -21,8 +21,11 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.db.image.secret }}
       containers:
-      - image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag | default .Chart.AppVersion }}"
+      - image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
         imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-db
         name: db
         stdin: true
         tty: true
@@ -48,8 +51,11 @@ spec:
           "Nao vamos alterar nada. " ;   echo "Caso o banco nao suba, verifique se
           nesse dir existe um banco e que as permissoes do arquivo estejam com o mysql
           (id 999)" ; fi;  exit 0
-        image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
         imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-db
         name: db-init
         stdin: true
         tty: true
@@ -61,7 +67,7 @@ spec:
       volumes:
       - name: mycnf
         configMap:
-          name: cm-db
+          name: cm-db-config
       - name: vol1
         persistentVolumeClaim:
           claimName: vol-sei-db

@@ -2,8 +2,8 @@
 
 set -e
 
-APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
-APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
+APP_DB_ROOT_USERNAME="{{ .Values.app.db.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db.db_root_password }}"
 
 rm -rf /var/lib/sei/dbcontrol/modulos-install.ok
 
@@ -41,7 +41,7 @@ echo "*INICIANDO CONFIGURACOES DO MODULO PEN BARRAMENTO**"
 echo "***************************************************"
 echo "***************************************************"
 
-{{- if .Values.app.modulo_pen_instalar }}
+{{- if .Values.app.mod_pen.instalar }}
 
     VERSAO_ENCONTRADA=$(php -r "require_once '/opt/sei/web/SEI.php'; require_once '/opt/sei/web/modulos/pen/PENIntegracao.php'; echo VERSAO_MODULO_PEN;")
 
@@ -82,7 +82,7 @@ echo "***************************************************"
 
 {{- else }}
 
-    echo "Variavel modulo_pen_instalar nao setada para true, pulando configuracao..."
+    echo "Variavel mod_pen.instalar nao setada para true, pulando configuracao..."
 
 {{- end }}
 
@@ -92,7 +92,7 @@ echo "*INICIANDO CONFIGURACOES DO MODULO ASSINATURA####**"
 echo "***************************************************"
 echo "***************************************************"
 
-{{- if .Values.app.modulo_assinatura_instalar }}
+{{- if .Values.app.mod_assinatura.instalar }}
 
     VERSAO_ENCONTRADA=$(php -r "require_once '/opt/sei/web/SEI.php'; require_once '/opt/sei/web/modulos/assinatura-eletronica/AssinaturaEletronicaIntegracao.php'; echo AssinaturaEletronicaIntegracao::VERSAO_MODULO;")
 
@@ -133,7 +133,7 @@ echo "***************************************************"
 
 {{- else }}
 
-    echo "Variavel modulo_assinatura_instalar nao setada para true, pulando configuracao..."
+    echo "Variavel mod_assinatura.instalar nao setada para true, pulando configuracao..."
 
 {{- end }}
 
@@ -144,7 +144,7 @@ echo "*INICIANDO CONFIGURACOES DO MODULO RESPOSTA********"
 echo "***************************************************"
 echo "***************************************************"
 
-{{- if .Values.app.modulo_resposta_instalar }}
+{{- if .Values.app.mod_resposta.instalar }}
 
     VERSAO_ENCONTRADA=$(php -r "require_once '/opt/sei/web/SEI.php'; require_once '/opt/sei/web/modulos/mod-sei-resposta/MdRespostaIntegracao.php'; echo MdRespostaIntegracao::VERSAO_MODULO;")
 
@@ -185,7 +185,7 @@ echo "***************************************************"
 
 {{- else }}
 
-    echo "Variavel modulo_resposta_instalar nao setada para true, pulando configuracao..."
+    echo "Variavel mod_resposta.instalar nao setada para true, pulando configuracao..."
 
 {{- end }}
 

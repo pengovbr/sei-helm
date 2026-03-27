@@ -7,6 +7,9 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 510m
+    {{- with .opcionais }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   name: ing-solr
   labels:
     {{- include "sei-solr.labels" $ | nindent 4 }}

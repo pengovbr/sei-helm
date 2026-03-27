@@ -8,8 +8,8 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      port: {{ .Values.app.mail_porta }}
-      targetPort: {{ .Values.app.mail_porta }}
+      port: {{ .Values.app.mail.porta }}
+      targetPort: {{ .Values.app.mail.porta }}
 ---
 apiVersion: v1
 kind: Endpoints
@@ -21,7 +21,7 @@ subsets:
   - addresses:
       - ip: {{ .Values.app.servicoExterno.mail }}
     ports:
-      - port: {{ .Values.app.mail_porta }}
+      - port: {{ .Values.app.mail.porta }}
 {{- else }}
 apiVersion: v1
 kind: Service

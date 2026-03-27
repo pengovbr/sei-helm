@@ -12,6 +12,8 @@ memcached:
     nameOverride: ""
     fullnameOverride: ""
 
+    tz: America/Sao_Paulo
+
     config:
         verbose: true
         maxRequestsEvent: 4096

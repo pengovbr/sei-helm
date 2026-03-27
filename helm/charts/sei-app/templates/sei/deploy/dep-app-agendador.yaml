@@ -29,7 +29,7 @@ spec:
         - configMapRef:
             name: cm-php
             optional: false
-        image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag | default .Chart.AppVersion }}
+        image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag }}
         imagePullPolicy: {{ .Values.app.imageCron.pullPolicy }}
         name: sei-app
         startupProbe:

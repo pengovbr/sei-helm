@@ -24,8 +24,11 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.memcached.image.secret }}
       containers:
-      - image: "{{ .Values.memcached.image.repository }}:{{ .Values.memcached.image.tag | default .Chart.AppVersion }}"
+      - image: "{{ .Values.memcached.image.repository }}:{{ .Values.memcached.image.tag }}"
         imagePullPolicy: {{ .Values.memcached.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-memcached
         name: memcached
         args:
         {{- with .Values.memcached.config.verbose }}

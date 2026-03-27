@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  TZ: {{ .Values.memcached.tz | quote }}
+kind: ConfigMap
+metadata:
+  name: cm-memcached
+  labels:
+    {{- include "sei-memcached.labels" . | nindent 4 }}

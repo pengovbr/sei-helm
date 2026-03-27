@@ -10,6 +10,7 @@ app:
         #storageClass: nfs-client
         storageClass: ""
 
+    # imagem para o php
     imagePhp:
         repository: ghcr.io/pengovbr/sei-helm/php
         pullPolicy: IfNotPresent
@@ -17,6 +18,7 @@ app:
         # secret cadastrado no kube para o registry
         secret: secregistry
 
+    # imagem para o agendador
     imageCron:
         repository: ghcr.io/pengovbr/sei-helm/php-cron
         pullPolicy: IfNotPresent
@@ -24,6 +26,7 @@ app:
         # secret cadastrado no kube para o registry
         secret: secregistry
 
+    # imagem para o servidor web (atualmente apache)
     imageWeb:
         repository: ghcr.io/pengovbr/sei-helm/apache
         pullPolicy: IfNotPresent
@@ -31,6 +34,7 @@ app:
         # secret cadastrado no kube para o registry
         secret: secregistry
 
+    # imagem para rodar os jobs de instalacao / atualizacao
     imageInstall:
         repository: ghcr.io/pengovbr/sei-helm/php-install
         pullPolicy: IfNotPresent
@@ -86,84 +90,81 @@ app:
 
     tz: America/Sao_Paulo
 
-    install:
+    db:
+        # nome pass das bases a conectar
+        sipDbName: "siporg1"
+        seiDbName: "seiorg1"
+        sipUser: "usiporg1"
+        sipPassword: "usiporg1"
+        seiUser: "useiorg1"
+        seiPassword: "useiorg1"
 
-        # id identificador do ambiente
-        # Numero unico para diferenciar as bases solr e banco
-        # ATENCAO PRESTAR ATENCAO NESTA STRING
-        # as bases de dados sei e solr terao esse id no nome
-        # caso instale o mesmo id com a opcao de reconstruir o banco, a automacao ira apagar os dados
-        idInstalacao: "orgao1"
+        db_porta: "3306"
+        db_tipo: MySql
+        # preferencia usar a chave servicoExterno acima
+        db_host: db
 
-        db:
+        # user do banco com permissao para criar / alterar databases
+        # usado pelos jobs de instalacao e atualizacao
+        # apos os jobs rodarem vc podera desabilita-los no banco
+        db_root_password: P@ssword
+        db_root_username: root
 
-            sipDbName: "siporg1"
-            seiDbName: "seiorg1"
-            sipUser: "usiporg1"
-            sipPassword: "usiporg1"
-            seiUser: "useiorg1"
-            seiPassword: "useiorg1"
+        # se enable vai criar um database para o sei e sip no banco
+        # se disable crie manualmente seguindo a nomenclatura do instalador
+        criarDatabases: true
 
+        # indica se a automacao irah dropar e criar a base de dados
+        # que foi informada para essa instancia
+        apagarDatabases: true
 
-            # se enable vai criar um database para o sei e sip no banco
-            # se disable crie manualmente seguindo a nomenclatura do instalador
-            criarDatabases: true
+        sei_chave_acesso: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
+        sip_chave_acesso: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"
 
-            # indica se a automacao irah dropar e criar a base de dados
-            # que foi informada para essa instancia
-            apagarDatabases: true
+    solr:
+        # nomes dos indices solr q a instancia vai usar
+        idxProtocolo: org1sei-protocolos
+        idxBaseConhecimento: org1sei-base-conhecimento
+        idxPublicacoes: org1sei-publicacoes
 
+        # tempos de commit dos indices
+        # obrigatorio mesmo que enable: false, acima
+        idxProtocoloTime: 150
+        idxBaseConhecimentoTime: 300
+        idxPublicacoesTime: 300
 
-        solr:
-            # enable: true vai montar um job no namespace do solr informado
-            # e criar os indices para esta instancia
-            # caso nao deseje essa automacao coloque false e provisione os indices manualmente
-            enable: true
-            # Necessario para o instalador criar indice no solr para esta instancia
-            namespace: solrnamespace
+        # usuario e senha que o sei vai usar para acesar o solr
+        username: org1solr
+        password: org1solrp
 
-            # obrigatorio aqui informar os nomes dos indices, mesmo que
-            # vc marque enable: false, acima
-            idxProtocolo: org1sei-protocolos
-            idxBaseConhecimento: org1sei-base-conhecimento
-            idxPublicacoes: org1sei-publicacoes
-
-            # tempos de commit dos indices
-            # obrigatorio mesmo que enable: false, acima
-            idxProtocoloTime: 150
-            idxBaseConhecimentoTime: 300
-            idxPublicacoesTime: 300
-
-            # usuario e senha que o sei vai usar para acesar o solr
-            # obrigatorio mesmo que enable: false, acima
-            username: org1solr
-            password: org1solrp
+        # preferencia usar a chave servicoExterno acima
+        solr_url: http://solr:8983/solr
 
 
-        # se enable roda o instalador do sei a primeira vez q o ambiente subir
-        # para instalar o sei
-        # se desabilitado vc tera q rodar manualmente os instaladores
-        seiInstaladorInicial: true
+    # se enable roda o instalador do sei a primeira vez q o ambiente subir
+    # para instalar o sei
+    # se desabilitado vc tera q rodar manualmente os instaladores
+    seiInstaladorInicial: true
 
-        ldap:
-            # se true vai habilitar o orgao 0 no ldap
-            enable: false
-            # nome descritivo para o servidor (tela de cadastro de servidor ldap)
-            nome: meuLdap
-            # LDAP ou AD
-            tipo: LDAP
-            # nao altere, vai usar o servico ldap, o nome ou ip vai buscar do app.servicoExterno
-            # definido mais acima
-            endereco: ldap
-            porta: 389
-            sufixo:
-            usuarioPesquisa: "cn=admin,dc=pen,dc=gov,dc=br"
-            senhaPesquisa: "entrecomsenhadoldap"
-            contextoPesquisa: "dc=pen,dc=gov,dc=br"
-            filtroPesquisa: uid
-            retornoPesquisa: distinguishedName
-            # versao do AD ou ldap
-            numeroVersao: 3
+    ldap:
+        # se true vai habilitar o orgao 0 no ldap
+        enable: false
+        # nome descritivo para o servidor (tela de cadastro de servidor ldap)
+        nome: meuLdap
+        # LDAP ou AD
+        tipo: LDAP
+        # nao altere, vai usar o servico ldap, o nome ou ip vai buscar do app.servicoExterno
+        # definido mais acima
+        endereco: ldap
+        porta: 389
+        sufixo:
+        usuarioPesquisa: "cn=admin,dc=pen,dc=gov,dc=br"
+        senhaPesquisa: "entrecomsenhadoldap"
+        contextoPesquisa: "dc=pen,dc=gov,dc=br"
+        filtroPesquisa: uid
+        retornoPesquisa: distinguishedName
+        # versao do AD ou ldap
+        numeroVersao: 3
 
 
     host: meusei.br
@@ -173,75 +174,61 @@ app:
     memcached_host: memcached
     # indica se o memcached armazena a sessao do php, dispensando o sticky session
     memcached_session: "true"
-    db_tipo: MySql
-    db_host: db
-    solr_url: http://solr:8983/solr
-    solr_tempo_commit_protocolos: 30
-    solr_tempo_commit_base_conhecimento: 300
-    solr_tempo_commit_publicacoes: 300
-    mail_tipo: 2
-    mail_servidor: mail
-    mail_codificacao: 8bit
-    mail_maxdestinatarios: 999
-    mail_max_tamanho_anexos: 999
-    mail_protegido: ""
 
-    federacao_habilitar: false
+    mail:
+        tipo: 2
+        # preferencia usar a chave servicoExterno acima
+        servidor: mail
+        codificacao: 8bit
+        maxdestinatarios: 999
+        max_tamanho_anexos: 999
+        protegido: ""
+        autenticar: "false"
+        porta: "25"
+        seguranca: ""
+        usuario: ""
+        senha: ""
 
-    servico_pd_instalar: false
-    servico_pd_sigla: GOV.BR
-    servico_pd_nome: protocolo.gov.br
-    servico_pd_operacoes: 3,2,15,0,1
+    mod_estatistica:
+        instalar: true
+        url: "https://estatistica.dev.processoeletronico.gov.br"
+        sigla: "SEIPUBLICO"
+        chave: "seipublico"
 
-    modulo_estatisticas_instalar: true
-    modulo_estatisticas_versao: "master"
-    modulo_estatisticas_url: "https://estatistica.dev.processoeletronico.gov.br"
-    modulo_estatisticas_sigla: "SEIPUBLICO"
-    modulo_estatisticas_chave: "seipublico"
+    mod_resposta:
+        instalar: false
 
-    modulo_resposta_instalar: false
+    mod_assinatura:
+        instalar: false
+        urlprovider: "https://cas.staging.iti.br/oauth2.0"
+        clientid: "assinaturaavancadaxxx"
+        secret: "xxx"
+        validar_api_url: "https://h-api.iti.gov.br/validar/v3/validar"
+        validar_api_key: "xxxx"
+        token_url: "xxxx"
+        token_url_assinar: "xxxx"
+        integra_icp_url: "https://assinagov.staging.iti.br/assinador/v2/signer/integraICP"
+        integra_icp_url_clearings: "/get-clearings"
+        integra_icp_url_assinar: "/sign"
+        cloud_psc_url: "https://assinagov.staging.iti.br/assinador/v2/signer/cloud"
+        cloud_psc_url_start: "/start"
+        cloud_psc_url_assinar: "/sign"
+        api_key_ithy: "xxxx"
 
-    modulo_assinatura_instalar: false
-    modulo_assinatura_urlprovider: "https://cas.staging.iti.br/oauth2.0"
-    modulo_assinatura_clientid: "assinaturaavancadaxxx"
-    modulo_assinatura_secret: "xxx"
-    modulo_assinatura_validar_api_url: "https://h-api.iti.gov.br/validar/v3/validar"
-    modulo_assinatura_validar_api_key: "xxxx"
-    modulo_assinatura_token_url: "xxxx"
-    modulo_assinatura_token_url_assinar: "xxxx"
-    modulo_assinatura_integra_icp_url: "https://assinagov.staging.iti.br/assinador/v2/signer/integraICP"
-    modulo_assinatura_integra_icp_url_clearings: "/get-clearings"
-    modulo_assinatura_integra_icp_url_assinar: "/sign"
-    modulo_assinatura_cloud_psc_url: "https://assinagov.staging.iti.br/assinador/v2/signer/cloud"
-    modulo_assinatura_cloud_psc_url_start: "/start"
-    modulo_assinatura_cloud_psc_url_assinar: "/sign"
-    modulo_assinatura_api_key_ithy: "xxxx"
-
-    modulo_pen_instalar: false
-    modulo_pen_versao: "master"
-    modulo_pen_webservice: "https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/"
-    modulo_pen_certificado_senha: "1234"
-    modulo_pen_certificado_base64: "YXNkZgo="
-    modulo_pen_repositorio_origem: ""
-    modulo_pen_tipo_processo_externo: ""
-    modulo_pen_unidade_geradora: ""
-    modulo_pen_unidade_associacao_pen: ""
-    modulo_pen_unidade_associacao_sei: ""
-
-
-    # secrets
-    db_porta: "3306"
-    db_root_password: P@ssword
-    db_root_username: root
-
-    solrAdminUser: "admin"
-    solrAdminPass: "SolrAdmin123$"
-
-    mail_autenticar: "false"
-    mail_porta: "25"
-
-    mail_seguranca: ""
-    mail_usuario: ""
-    mail_senha: ""
-    sei_chave_acesso: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
-    sip_chave_acesso: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"
+    mod_pen:
+        instalar: false
+        versao: "master"
+        webservice: "https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/"
+        certificado_senha: "1234"
+        # passe aqui o cert do tramita em base64
+        certificado_base64: "YXNkZgo="
+        # num do repo origem
+        repositorio_origem: ""
+        # id do tipo de  processo no sei
+        tipo_processo_externo: ""
+        # id da unidade do sei q vai receber inicialmente os processos
+        unidade_geradora: ""
+        # id da unidade no Tramita
+        unidade_associacao_pen: ""
+        # id da unidade do sei para enviar procs
+        unidade_associacao_sei: ""

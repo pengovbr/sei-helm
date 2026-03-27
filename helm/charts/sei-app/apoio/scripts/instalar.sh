@@ -2,7 +2,7 @@
 
 set -e
 
-{{- if not .Values.app.install.seiInstaladorInicial }}
+{{- if not .Values.app.seiInstaladorInicial }}
 echo "Chave para instalacao do sei e sip = false."
 echo "Nao vamos instalar o sei e sip. Instale-os manualmente..."
 exit 0
@@ -11,8 +11,8 @@ exit 0
 APP_HOST="{{ .Values.app.host }}"
 APP_ORGAO="{{ .Values.app.orgao }}"
 APP_ORGAO_DESCRICAO="{{ .Values.app.orgao_descricao }}"
-APP_DB_ROOT_USERNAME="{{ .Values.app.db_root_username }}"
-APP_DB_ROOT_PASSWORD="{{ .Values.app.db_root_password }}"
+APP_DB_ROOT_USERNAME="{{ .Values.app.db.db_root_username }}"
+APP_DB_ROOT_PASSWORD="{{ .Values.app.db.db_root_password }}"
 
 mkdir -p /var/lib/sei/dbcontrol
 mkdir -p /var/lib/sei/dbfiles
@@ -199,7 +199,7 @@ else
     touch /var/lib/sei/dbcontrol/atualizacao-sip-${VERSAO_ENCONTRADA}-recurso.ok
 fi
 
-{{- if .Values.app.install.ldap.enable }}
+{{- if .Values.app.ldap.enable }}
 
 echo "***************************************************"
 echo "***************************************************"

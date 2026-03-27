@@ -1,10 +1,10 @@
 #!/bin/bash
 
-MODULO_PEN_REPOSITORIO_ORIGEM={{ .Values.app.modulo_pen_repositorio_origem }}
-MODULO_PEN_TIPO_PROCESSO_EXTERNO={{ .Values.app.modulo_pen_tipo_processo_externo }}
-MODULO_PEN_UNIDADE_GERADORA={{ .Values.app.modulo_pen_unidade_geradora }}
-MODULO_PEN_UNIDADE_ASSOCIACAO_SEI={{ .Values.app.modulo_pen_unidade_associacao_sei }}
-MODULO_PEN_UNIDADE_ASSOCIACAO_PEN={{ .Values.app.modulo_pen_unidade_associacao_pen }}
+MODULO_PEN_REPOSITORIO_ORIGEM={{ .Values.app.mod_pen.repositorio_origem }}
+MODULO_PEN_TIPO_PROCESSO_EXTERNO={{ .Values.app.mod_pen.tipo_processo_externo }}
+MODULO_PEN_UNIDADE_GERADORA={{ .Values.app.mod_pen.unidade_geradora }}
+MODULO_PEN_UNIDADE_ASSOCIACAO_SEI={{ .Values.app.mod_pen.unidade_associacao_sei }}
+MODULO_PEN_UNIDADE_ASSOCIACAO_PEN={{ .Values.app.mod_pen.unidade_associacao_pen }}
 
 if [ -z "$MODULO_PEN_REPOSITORIO_ORIGEM" ]; then
     echo "Nenhum valor informado para MODULO_PEN_REPOSITORIO_ORIGEM, n sera feita a configuracao automatica para esse parametro"

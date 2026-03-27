@@ -33,32 +33,32 @@ class ConfiguracaoModAssinaturaEletronica extends InfraConfiguracao
     {
       return array(
           'AssinaturaAvancada' => array(
-              'url_provider' => '{{ .Values.app.modulo_assinatura_urlprovider }}',
-              'client_id' => '{{ .Values.app.modulo_assinatura_clientid }}',
-              'secret' => '{{ .Values.app.modulo_assinatura_secret }}',
+              'url_provider' => '{{ .Values.app.mod_assinatura.urlprovider }}',
+              'client_id' => '{{ .Values.app.mod_assinatura.clientid }}',
+              'secret' => '{{ .Values.app.mod_assinatura.secret }}',
           ),
           'ValidarAPI' => array(
-            'url' => '{{ .Values.app.modulo_assinatura_validar_api_url }}',
-            'key' => '{{ .Values.app.modulo_assinatura_validar_api_key }}',
+            'url' => '{{ .Values.app.mod_assinatura.validar_api_url }}',
+            'key' => '{{ .Values.app.mod_assinatura.validar_api_key }}',
           ),
           'Assinador' => array(
             'Token' => array(
-                'url' => '{{ .Values.app.modulo_assinatura_token_url }}',
-                'sign_url' => '{{ .Values.app.modulo_assinatura_token_url_assinar }}',
+                'url' => '{{ .Values.app.mod_assinatura.token_url }}',
+                'sign_url' => '{{ .Values.app.mod_assinatura.token_url_assinar }}',
             ),
             'IntegraICP' => array(
-                'url' => '{{ .Values.app.modulo_assinatura_integra_icp_url }}',
-                'clearings_url' => '{{ .Values.app.modulo_assinatura_integra_icp_url_clearings }}',
-                'sign_url' => '{{ .Values.app.modulo_assinatura_integra_icp_url_assinar }}',
+                'url' => '{{ .Values.app.mod_assinatura.integra_icp_url }}',
+                'clearings_url' => '{{ .Values.app.mod_assinatura.integra_icp_url_clearings }}',
+                'sign_url' => '{{ .Values.app.mod_assinatura.integra_icp_url_assinar }}',
             ),
             'CloudPSC' => array(
-              'url' => '{{ .Values.app.modulo_assinatura_cloud_psc_url }}',
-              'start_url' => '{{ .Values.app.modulo_assinatura_cloud_psc_url_start }}',
-              'sign_url' => '{{ .Values.app.modulo_assinatura_cloud_psc_url_assinar }}',
+              'url' => '{{ .Values.app.mod_assinatura.cloud_psc_url }}',
+              'start_url' => '{{ .Values.app.mod_assinatura.cloud_psc_url_start }}',
+              'sign_url' => '{{ .Values.app.mod_assinatura.cloud_psc_url_assinar }}',
               'options' =>  ['govbr', 'serpro'],
               // 'options' =>  ['safeweb', 'soluti', 'govbr', 'serpro'],
             ),
-            'apikey' => '{{ .Values.app.modulo_assinatura_api_key_ithy }}',
+            'apikey' => '{{ .Values.app.mod_assinatura.api_key_ithy }}',
           )
       );
   }

@@ -20,15 +20,64 @@ solr:
         # secret cadastrado no kube para o registry
         secret: secregistry
 
-
     nameOverride: ""
     fullnameOverride: ""
+
+    # controla os idices q serao criados no solr
+    jobInstall:
+
+        # cada instancia do sei precisa do seus proprios indices no solr
+        # informe-os como abaixo
+        orgaos:
+            - orgao: orgao1
+
+              idxProtocolo: org1sei-protocolos
+              idxBaseConhecimento: org1sei-base-conhecimento
+              idxPublicacoes: org1sei-publicacoes
+
+              # usuario e senha que o sei vai usar para acesar o solr
+              # o job vai criar esse user no solr com perfil basic
+              # caso deseje alterar/restringir permissoes proceda
+              # fazendo isso usando a interface de admin do solr
+              username: org1solr
+              password: org1solrp
+            #- orgao: orgao2
+            #  idxProtocolo: org2sei-protocolos
+            #  idxBaseConhecimento: org2sei-base-conhecimento
+            #  idxPublicacoes: org2sei-publicacoes
+
+            #  # usuario e senha que o sei vai usar para acesar o solr
+            #  # obrigatorio mesmo que enable: false, acima
+            #  username: org2solr
+            #  password: org2solrp
+
+        solrAdminUser: "admin"
+        solrAdminPass: "SolrAdmin123$"
+
+        imageInstall:
+            repository: ghcr.io/pengovbr/sei-helm/php-install
+            pullPolicy: IfNotPresent
+            tag: 0.5.0
+            # secret cadastrado no kube para o registry
+            secret: secregistry
+
 
     # caso deseje desabilitar ingress para o solr passe assim:
     # ingress: {}
     ingress:
         tls_secret_name: mysecret
         host: meusolr.br
+
+        # anotacoes opcionais, renomeie de zopcionais para opcionais,
+        # apos isso, todos as anotacoes listadas serao publicadas no ingress
+        # alem dos exemplos abaixo, vc pode informar as suas especificas
+        zopcionais:
+            #cert-manager.io/cluster-issuer: letsencrypt-dth
+            #kubernetes.io/ingress.class: nginx
+            #kubernetes.io/tls-acme: "true"
+            #nginx.ingress.kubernetes.io/affinity: cookie1
+            #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+
 
     # tune os resources e tb o memory abaixo
     # Em prd eh bom o Solr ficar sozinho em um node.

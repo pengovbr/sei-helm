@@ -31,7 +31,7 @@ spec:
         - configMapRef:
             name: cm-php
             optional: false
-        image: {{ .Values.app.imagePhp.repository }}:{{ .Values.app.imagePhp.tag | default .Chart.AppVersion }}
+        image: {{ .Values.app.imagePhp.repository }}:{{ .Values.app.imagePhp.tag }}
         imagePullPolicy: {{ .Values.app.imagePhp.pullPolicy }}
         name: php
         resources:

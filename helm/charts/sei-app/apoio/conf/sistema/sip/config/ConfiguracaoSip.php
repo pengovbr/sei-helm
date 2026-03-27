@@ -28,16 +28,16 @@ class ConfiguracaoSip extends InfraConfiguracao
         'SiglaSistema' => 'SIP',
         'PaginaLogin' => 'http://{{ .Values.app.host }}/sip/login.php',
         'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
-        'ChaveAcesso' => '{{ .Values.app.sip_chave_acesso }}',
+        'ChaveAcesso' => '{{ .Values.app.db.sip_chave_acesso }}',
         'https' => false),
 
       'BancoSip'  => array(
-          'Servidor' => '{{ .Values.app.db_host }}',
-          'Porta' => '{{ .Values.app.db_porta }}',
-          'Banco' => '{{ .Values.app.install.db.sipDbName }}',
-          'Usuario' => '{{ .Values.app.install.db.sipUser }}',
-          'Senha' => '{{ .Values.app.install.db.sipPassword }}',
-          'Tipo' => '{{ .Values.app.db_tipo }}'), //MySql, SqlServer, Oracle ou PostgreSql
+          'Servidor' => '{{ .Values.app.db.db_host }}',
+          'Porta' => '{{ .Values.app.db.db_porta }}',
+          'Banco' => '{{ .Values.app.db.sipDbName }}',
+          'Usuario' => '{{ .Values.app.db.sipUser }}',
+          'Senha' => '{{ .Values.app.db.sipPassword }}',
+          'Tipo' => '{{ .Values.app.db.db_tipo }}'), //MySql, SqlServer, Oracle ou PostgreSql
 
       /*
       'BancoAuditoriaSip'  => array(
@@ -69,17 +69,17 @@ class ConfiguracaoSip extends InfraConfiguracao
       ),
 
 		'InfraMail' => array(
-				'Tipo' => '{{ .Values.app.mail_tipo }}', //1 = sendmail (neste caso nao e necessario configurar os atributos abaixo), 2 = SMTP
-				'Servidor' => '{{ .Values.app.mail_servidor }}',
-				'Porta' => '{{ .Values.app.mail_porta }}',
-				'Codificacao' => '{{ .Values.app.mail_codificacao }}', //8bit, 7bit, binary, base64, quoted-printable
-				'MaxDestinatarios' => '{{ .Values.app.mail_maxdestinatarios }}', //numero maximo de destinatarios por mensagem
-				'MaxTamAnexosMb' => '{{ .Values.app.mail_max_tamanho_anexos }}', //tamanho maximo dos anexos em Mb por mensagem
-				'Seguranca' => '{{ .Values.app.mail_seguranca }}', //TLS, SSL ou vazio
-				'Autenticar' => '{{ .Values.app.mail_autenticar }}', //se true entao informar Usuario e Senha
-				'Usuario' => '{{ .Values.app.mail_usuario }}',
-				'Senha' => '{{ .Values.app.mail_senha }}',
-				'Protegido' => '{{ .Values.app.mail_protegido }}' //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substituido por este valor (evita envio incorreto de email)
+				'Tipo' => '{{ .Values.app.mail.tipo }}', //1 = sendmail (neste caso nao e necessario configurar os atributos abaixo), 2 = SMTP
+				'Servidor' => '{{ .Values.app.mail.servidor }}',
+				'Porta' => '{{ .Values.app.mail.porta }}',
+				'Codificacao' => '{{ .Values.app.mail.codificacao }}', //8bit, 7bit, binary, base64, quoted-printable
+				'MaxDestinatarios' => '{{ .Values.app.mail.maxdestinatarios }}', //numero maximo de destinatarios por mensagem
+				'MaxTamAnexosMb' => '{{ .Values.app.mail.max_tamanho_anexos }}', //tamanho maximo dos anexos em Mb por mensagem
+				'Seguranca' => '{{ .Values.app.mail.seguranca }}', //TLS, SSL ou vazio
+				'Autenticar' => '{{ .Values.app.mail.autenticar }}', //se true entao informar Usuario e Senha
+				'Usuario' => '{{ .Values.app.mail.usuario }}',
+				'Senha' => '{{ .Values.app.mail.senha }}',
+				'Protegido' => '{{ .Values.app.mail.protegido }}' //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substituido por este valor (evita envio incorreto de email)
 		    )
         );
   }

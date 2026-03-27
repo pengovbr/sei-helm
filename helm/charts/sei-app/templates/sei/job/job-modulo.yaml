@@ -22,7 +22,7 @@ spec:
         envFrom:
         - configMapRef:
             name: cm-php
-        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag | default .Chart.AppVersion }}
+        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-modulo
         stdin: true

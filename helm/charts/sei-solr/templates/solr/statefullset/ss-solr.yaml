@@ -21,7 +21,7 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.solr.image.secret }}
       containers:
-      - image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag | default .Chart.AppVersion }}"
+      - image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag }}"
         imagePullPolicy: {{ .Values.solr.image.pullPolicy }}
         envFrom:
         - configMapRef:
@@ -64,7 +64,7 @@ spec:
           echo "Arquivos encontrados"; echo $(ls -lha /t); echo "Nao vamos alterar
           nada. " ; echo "Caso o solr nao suba, verifique se nesse dir existe um
           solr e que as permissoes do arquivo estejam com o Solr" ; fi;  exit 0
-        image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag }}"
         imagePullPolicy: {{ .Values.solr.image.pullPolicy }}
         name: solr-init
         envFrom:

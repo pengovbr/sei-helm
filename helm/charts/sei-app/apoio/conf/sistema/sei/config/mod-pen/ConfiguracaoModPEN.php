@@ -38,7 +38,7 @@ class ConfiguracaoModPEN extends InfraConfiguracao  {
               // Os endere�os dispon�veis s�o os seguintes (verifique se houve atualiza��es durante o procedimento de instala��o):
               //    - Homologa��o: https://homolog.api.processoeletronico.gov.br/interoperabilidade/rest/v3/
               //    - Produ��o: https://api.conectagov.processoeletronico.gov.br/interoperabilidade/rest/v3/
-              "WebService" => "{{ .Values.app.modulo_pen_webservice }}",
+              "WebService" => "{{ .Values.app.mod_pen.webservice }}",
 
               // Endere�o do Web Service de monitoramente de pend�ncias de tr�mite no Barramento de Servi�os do PEN
               // Configura��o necess�ria para que o envio e recebimento de processos sejam feitas de forma din�mica pelo sistema
@@ -54,7 +54,7 @@ class ConfiguracaoModPEN extends InfraConfiguracao  {
               "LocalizacaoCertificado" => "/opt/sei/config/mod-pen/certificado.pem",
 
               // Senha do certificado digital necess�rio para a aplica��o descriptografar a chave privada
-              "SenhaCertificado" => "{{ .Values.app.modulo_pen_certificado_senha }}",
+              "SenhaCertificado" => "{{ .Values.app.mod_pen.certificado_senha }}",
 
               // Quantidade de tentativas de requis��o dos servi�os do Barramento PEN antes que um erro possa ser lan�ado pela aplica��o
               // Necess�rio para aumentar a resili�ncia da integra��o em contextos de instabilidade de rede.

@@ -20,6 +20,8 @@ db:
     nameOverride: ""
     fullnameOverride: ""
 
+    tz: America/Sao_Paulo
+
     # atencao aos resources
     # seu dba devera orientar se liga ou desliga o mesmo
     # resources desabilitados por default

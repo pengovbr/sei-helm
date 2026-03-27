@@ -23,8 +23,11 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.cacheassets.image.secret }}
       containers:
-      - image: "{{ .Values.cacheassets.image.repository }}:{{ .Values.cacheassets.image.tag | default .Chart.AppVersion }}"
+      - image: "{{ .Values.cacheassets.image.repository }}:{{ .Values.cacheassets.image.tag }}"
         imagePullPolicy: {{ .Values.cacheassets.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-cacheassets
         name: cacheassets
         stdin: true
         tty: true
@@ -35,5 +38,5 @@ spec:
       volumes:
       - name: nginxconf
         configMap:
-          name: cm-cacheassets
+          name: cm-cacheassets-config
           defaultMode: 0644

@@ -2,18 +2,12 @@
 
 set -e
 
-{{- if not .Values.app.install.solr.enable }}
-echo "Chave para instalacao inicial dos indices solr = false."
-echo "Nao vamos criar os indices. Crie-os manualmente..."
-exit 0
-{{ end }}
+SOLRUSER={{ .user }}
+SOLRPASS={{ .pass }}
 
-SOLRUSER="{{ .Values.app.solrAdminUser }}"
-SOLRPASS="{{ .Values.app.solrAdminPass }}"
-
-CORE_PROTOCOLOS="{{ .Values.app.install.solr.idxProtocolo }}"
-CORE_PUBLICACOES="{{ .Values.app.install.solr.idxPublicacoes }}"
-CORE_CONHECIMENTO="{{ .Values.app.install.solr.idxBaseConhecimento }}"
+CORE_PROTOCOLOS="{{ .idxProtocolo }}"
+CORE_PUBLICACOES="{{ .idxPublicacoes }}"
+CORE_CONHECIMENTO="{{ .idxBaseConhecimento }}"
 
 e=1
 while [ ! "$e" == "0" ]
@@ -77,10 +71,10 @@ echo "Criando usuario"
 
 curl http://${SOLRUSER}:${SOLRPASS}@solr:8983/solr/admin/authentication \
     -H 'Content-type:application/json' \
-    -d '{ "set-user": {"{{ .Values.app.install.solr.username }}": "{{ .Values.app.install.solr.password }}"} }'
+    -d '{ "set-user": {"{{ .username }}": "{{ .password }}"} }'
 
 curl --user "${SOLRUSER}:${SOLRPASS}" http://solr:8983/solr/admin/authorization \
     -H 'Content-type:application/json' \
-    -d '{"set-user-role": {"{{ .Values.app.install.solr.username }}":["basic"]}}'
+    -d '{"set-user-role": {"{{ .username }}":["basic"]}}'
 
 echo "Usuario criado"
