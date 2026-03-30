@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-dbcreate
+  name: job-ini-dbcreate
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: job-dbcreate
+        job-name: job-ini-dbcreate
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
@@ -24,21 +24,25 @@ spec:
             name: cm-php
         image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
-        name: job-dbcreate
+        name: job-ini-dbcreate
         stdin: true
         tty: true
         volumeMounts:
-        - mountPath: /automationscripts
-          name: dbcreate
+        - mountPath: /automationscripts/dbcreate.sh
+          name: se-php-install-files
+          subPath: dbcreate.sh
         - mountPath: /var/lib/sei
           name: vol-sei
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: dbcreate
-        configMap:
-          name: cm-dbcreate
-          defaultMode: 0755
+      - name: se-php-install-files
+        secret:
+          secretName: se-php-install-files
+          items:
+          - key: dbcreate.sh
+            path: dbcreate.sh
+          defaultMode: 0500
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei

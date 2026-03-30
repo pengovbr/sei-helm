@@ -21,8 +21,8 @@ mkdir -p /var/lib/sei/tmpfiles
 chown www-data /var/lib/sei/dbfiles
 chown www-data /var/lib/sei/tmpfiles
 
-while [ ! -f /var/lib/sei/dbcontrol/bancoinstalado.ok ]; do
-    echo 'Aguardando Job dbcreate Finalizar...'
+while [ ! -f /var/lib/sei/dbcontrol/gerarChaves.ok ]; do
+    echo 'Aguardando Job gerarChaves Finalizar...'
     sleep 2
 done
 

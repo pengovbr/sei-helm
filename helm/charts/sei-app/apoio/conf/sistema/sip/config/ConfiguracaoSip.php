@@ -28,7 +28,9 @@ class ConfiguracaoSip extends InfraConfiguracao
         'SiglaSistema' => 'SIP',
         'PaginaLogin' => 'http://{{ .Values.app.host }}/sip/login.php',
         'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
-        'ChaveAcesso' => '{{ .Values.app.db.sip_chave_acesso }}',
+        {{- with .Values.app.db.chave_acesso }}
+        'ChaveAcesso' => '{{ or .sip_custom ( printf "%s%s" .sip_prefixo .sip ) }}',
+        {{- end }}
         'https' => false),
 
       'BancoSip'  => array(

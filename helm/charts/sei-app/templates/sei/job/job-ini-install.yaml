@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-ini-install
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 0
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        job-name: job-ini-install
+        {{- include "sei-app.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.app.imageInstall.secret }}
+      containers:
+      - command:
+        - /automationscripts/instalar.sh
+        envFrom:
+        - configMapRef:
+            name: cm-php
+        image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
+        imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
+        name: job-ini-install
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /automationscripts/instalar.sh
+          name: se-php-install-files
+          subPath: instalar.sh
+        - mountPath: /automationscripts/ldap/sip-config-openldap.php
+          name: se-php-install-files
+          subPath: sip-config-openldap.php
+        - mountPath: /opt/sei/config/ConfiguracaoSEI.php
+          name: se-php-files
+          subPath: ConfiguracaoSEI.php
+        - mountPath: /opt/sip/config/ConfiguracaoSip.php
+          name: se-php-files
+          subPath: ConfiguracaoSip.php
+        - mountPath: /var/lib/sei
+          name: vol-sei
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: se-php-install-files
+        secret:
+          secretName: se-php-install-files
+          items:
+          - key: instalar.sh
+            path: instalar.sh
+          - key: sip-config-openldap.php
+            path: sip-config-openldap.php
+          defaultMode: 0500
+      - name: se-php-files
+        secret:
+          secretName: se-php-files
+          items:
+          - key: seiConfiguracao.php
+            path: ConfiguracaoSEI.php
+          - key: sipConfiguracao.php
+            path: ConfiguracaoSip.php
+          defaultMode: 0400
+      - name: vol-sei
+        persistentVolumeClaim:
+          claimName: vol-sei

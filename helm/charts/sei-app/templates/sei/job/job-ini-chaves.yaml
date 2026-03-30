@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-initial
+  name: job-ini-chaves
   labels:
     {{- include "sei-app.labels" . | nindent 4 }}
 spec:
@@ -11,29 +11,29 @@ spec:
   template:
     metadata:
       labels:
-        job-name: job-initial
+        job-name: job-ini-chaves
         {{- include "sei-app.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
       - name: {{ .Values.app.imageInstall.secret }}
       containers:
       - command:
-        - /automationscripts/instalar.sh
+        - /automationscripts/gerarchaves.sh
         envFrom:
         - configMapRef:
             name: cm-php
         image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
-        name: job-initial
+        name: job-ini-chaves
         stdin: true
         tty: true
         volumeMounts:
-        - mountPath: /automationscripts/instalar.sh
-          name: sei-install
-          subPath: instalar.sh
-        - mountPath: /automationscripts/ldap/sip-config-openldap.php
-          name: sei-install
-          subPath: sip-config-openldap.php
+        - mountPath: /automationscripts/gerarchaves.sh
+          name: se-php-install-files
+          subPath: gerarchaves.sh
+        - mountPath: /automationscripts/gerarchaves.php
+          name: se-php-install-files
+          subPath: gerarchaves.php
         - mountPath: /opt/sei/config/ConfiguracaoSEI.php
           name: se-php-files
           subPath: ConfiguracaoSEI.php
@@ -45,6 +45,15 @@ spec:
       restartPolicy: Never
       terminationGracePeriodSeconds: 30
       volumes:
+      - name: se-php-install-files
+        secret:
+          secretName: se-php-install-files
+          items:
+          - key: gerarchaves.sh
+            path: gerarchaves.sh
+          - key: gerarchaves.php
+            path: gerarchaves.php
+          defaultMode: 0500
       - name: se-php-files
         secret:
           secretName: se-php-files
@@ -54,10 +63,6 @@ spec:
           - key: sipConfiguracao.php
             path: ConfiguracaoSip.php
           defaultMode: 0400
-      - name: sei-install
-        configMap:
-          name: cm-initial
-          defaultMode: 0755
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei

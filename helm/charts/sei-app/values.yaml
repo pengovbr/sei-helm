@@ -117,11 +117,46 @@ app:
         # indica se a automacao do job dbcreate irah dropar antes de criar a base de dados
         # que foi informada para essa instancia
         # ATENCAO PERIGOSISSIMO TOME O CUIDADO DE DESATIVAR APOS RODAR
-        # para ativar basta tirar o ZZZ e deixe apagarDatabases
-        ZZZapagarDatabasesZZZ: true
+        # para ativar basta tirar o ZZZ e deixe apagarDatabases: true
+        ZZZapagarDatabasesZZZ: false
 
-        sei_chave_acesso: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
-        sip_chave_acesso: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"
+        # ATENCAO vc deve obrigatoriamente informar as chaves abaixo (exceto prefixo)
+        # O sei precisa de uma chave para o SEI e outra para o Sip
+        # os valores informados sao apenas para referencia/exemplo do tamanho das respectivas chaves
+        # Dependendo dos valores que forem informados a automacao inicial ira cadastar as chaves pra vc
+        # Leia abaixo para maior entendimento
+        chave_acesso:
+            # nao altere os prefixos abaixo
+            sei_prefixo: "7babf862"
+            sip_prefixo: "d27791b8"
+
+            # A chave eh composta pelo prefixo acima, mais a sequencia abaixo de 64 chars q vc informar.
+            # Apenas numeros e letras minusculas
+            # Ex:
+            # sei: "sei0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+            # sip: "sip0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+            # No exemplo acima, a chave completa para o sei serah o prefixo mais a chave:
+            # 7babf862sei0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123
+            # esse valor vc deverah tomar nota pois sera necessario caso utilize conexoes a
+            # webservices do SEI
+
+            # informe aqui a sequencia de 64char apenas numeros e letras minusculas
+            # Ex:
+            #sei: "sei0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+            #sip: "sip0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+
+            sei: "sei0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+            sip: "sip0aqui0vai0meu0has0de0tamanho0variavel012345678901234567890123"
+
+            # caso vc venha de uma migracao e nao deseja que a automacao cadastre uma nova chave
+            # basta informar as chaves completas ai em sei_custom e sip_custom
+            # ex:
+            # sei_custom: "7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc"
+            # sip_custom: "d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933"
+            # nesse caso vc devera informar o prefixo mais a chave
+            sei_custom: ""
+            sip_custom: ""
+
 
     solr:
         # nomes dos indices solr q a instancia vai usar

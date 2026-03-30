@@ -64,8 +64,10 @@
                 'SiglaSistema' => 'SEI',
                 'PaginaLogin' => 'http://{{ .Values.app.host }}/sip/login.php',
                 'SipWsdl' => 'http://web/sip/controlador_ws.php?servico=sip',
-              'ChaveAcesso' => '{{ .Values.app.db.sei_chave_acesso }}',
-              'https' => false),
+                {{- with .Values.app.db.chave_acesso }}
+                'ChaveAcesso' => '{{ or .sei_custom ( printf "%s%s" .sei_prefixo .sei ) }}',
+                {{- end }}
+                'https' => false),
 
      	      'BancoSEI'  => array(
      	          'Servidor' => '{{ .Values.app.db.db_host }}',

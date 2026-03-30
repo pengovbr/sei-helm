@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-modulo
+  name: job-ini-modulo
   labels:
     job-name: job-modulo
     {{- include "sei-app.labels" . | nindent 4 }}
@@ -24,7 +24,7 @@ spec:
             name: cm-php
         image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
-        name: job-modulo
+        name: job-ini-modulo
         stdin: true
         tty: true
         volumeMounts:
@@ -78,7 +78,6 @@ spec:
           - key: modPenModseipen.sh
             path: mod-sei-pen.sh
           defaultMode: 0500
-
       - name: vol-sei
         persistentVolumeClaim:
           claimName: vol-sei
