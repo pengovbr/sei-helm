@@ -1,11 +1,3 @@
-# onde vai gerar os pacotes helm
-# optamos por gerar em repositorio separado para economizar espaco neste repo
-# no seu ambiente aponte para o local desejado
-package_location=../sei-helm-repo/docs
-
-# repositorio a ser indexado
-repositorio=https://pengovbr.github.io/sei-helm-repo
-
 
 ifneq ($(shell helm version 2>/dev/null),)
 else
