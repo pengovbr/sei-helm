@@ -91,3 +91,7 @@ make buildx-conteiner-all
 Quando o build é feito para multiplataforma não precisa fazer o push/publish. O push é feito automaticamente.
 Obviamente seu docker deverá estar configurado para fazer multibuild platform.
 
+
+# Vídeo Tutoriais
+
+Para conveniência, acompanhe, via vídeo tutorial, a construção dos conteineres. [Clique Aqui](../docs/videotutoriais.md)

@@ -50,7 +50,7 @@ Verifique em cada um deles as orientações para preenchimento.
 
 Depois de tudo preparado publique os charts individualmente usando os comandos helm para tal.
 
-Ex:
+Ex para publicação do Solr usando um Values customizado:
 ```
 cd helm
 helm install solr charts/sei-solr -n mysolr --create-namespace -f ~/Desktop/clustervalues/meusei.br/solr.yaml
@@ -69,3 +69,8 @@ Esse upgrade vai escalonar um novo job kubernetes no solr para criar o novo índ
 ## Cache Assets - Adicionar Novos Orgãos
 
 Situação análoga a do Solr acima
+
+
+# Vídeo Tutoriais
+
+Para conveniência, acompanhe, via vídeo tutorial, a subida de alguns ambientes de teste. [Clique Aqui](../docs/videotutoriais.md)
