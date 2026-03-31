@@ -24,8 +24,7 @@ Uma vez as imagens publicadas em seu registry privado, para subir o helm proceda
 
 - Você pode, por exemplo criar um db2 e uma ou mais instâncias futuras compartilharem ele.
 
-- É obrigatório que esteja separados em namespace.
-- Namespace default é proibido. Esqueçam o mesmo para prd. Uma url diferente de localhost também é obrigatório. Caso esteja local pode usar o recurso do /etc/hosts para testes, mas sempre com uma url diferente de localhost.
+- Namespace default não deverá ser usado. Uma url diferente de localhost também é obrigatório. Caso esteja local, pode usar o recurso do /etc/hosts para testes, mas sempre com uma url diferente de localhost.
 
 - Ingress nginx habilitado
 
@@ -51,10 +50,11 @@ Verifique em cada um deles as orientações para preenchimento.
 
 Depois de tudo preparado publique os charts individualmente usando os comandos helm para tal.
 
+```
 Ex:
 cd helm
 helm install solr charts/sei-solr -n mysolr --create-namespace -f ~/Desktop/clustervalues/meusei.br/solr.yaml
-
+```
 
 
 

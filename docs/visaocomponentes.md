@@ -9,7 +9,7 @@ Abaixo os serviços de mais alto nível do Helm.
 Nesse chart encontra-se:
 
 ### ingress
-Nginx para receber as requisições do Cluster e rotear para o cacheassets ou servidor web
+Configuração Nginx para receber as requisições do Cluster e rotear para o cacheassets ou servidor web
 
 
 ### servidor web apache
