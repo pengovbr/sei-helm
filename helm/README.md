@@ -50,8 +50,8 @@ Verifique em cada um deles as orientações para preenchimento.
 
 Depois de tudo preparado publique os charts individualmente usando os comandos helm para tal.
 
-```
 Ex:
+```
 cd helm
 helm install solr charts/sei-solr -n mysolr --create-namespace -f ~/Desktop/clustervalues/meusei.br/solr.yaml
 ```
