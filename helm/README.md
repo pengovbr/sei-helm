@@ -1,67 +1,71 @@
-# SEI-Helm
+# Helm
 
-Caso possua um gerenciador de pacotes helm instalado no seu cluster adicione o seguinte repositório:
-https://pengovbr.github.io/sei-helm-repo
+## Visão Macro dos Componentes
 
+Aqui uma visão macro da arquitetura:
 
+![enter image description here](https://raw.githubusercontent.com/pengovbr/sei-helm-repo/refs/heads/main/prd/visaoGeral01.png)
 
-## O que é
-
-O SEI-Helm disponibiliza pacotes para instalar o SEI e seus componentes em cluster kubernetes usando o https://helm.sh/
-
-Roda de forma portátil no seu cluster permitindo gerenciar a instalação e compartilhando recursos, como por exemplo a possibilidade de subir várias instâncias do SEI compartilhando um único banco de dados, Jod e Solr. Atualmente usa o sei-docker como background portanto **essa versão não é recomendada em produção**.
-
-## Para quem
-
-Permite a profissionais de infra subirem no kubernetes rapidamente uma ou várias instâncias do SEI apenas rodando o comando "helm install" ou usando a interface GUI Helm package instalado em seu cluster.
-
-## Para que
-
-Ambientes do SEI no kubernetes:
-- teste
-- treinamento
-- homologação
-
-Está também no roadmap a implementação de algo mais próximo de produção, vamos aguardar o  andamento dos trabalhos, em breve publicaremos resultados
-
-# Organização
-
-Como é a primeira versão ainda podem ocorrer muitas alterações no projeto, portanto vamos explicar aqui apenas a organização dos pacotes (charts).
-
-Charts:
-
-- SEI-DB: banco mariadb, pode ser compartilhado entre várias instâncias
-- SEI-Solr: serviço de indexação do SEI, pode ser compartilhado entre várias instâncias
-- SEI-Jod: exportador de pdf para documentos do Office, LibreOffice, pode ser compartilhado entre várias instâncias
-- SEI-Memcached: serviço de cache, com possibilidade de guardar a sessão do apache permitindo eliminar o uso do sticky session
-- SEI-App: sobe o php8 para o SEI auto escalável bem como prover jobs para instalar o SEI e módulos; sobe ingress
-- Chart-Generico-dev: SEI-Umbrella. Esse é um chart único que engloba todos os outros, adicionamos por conveniência, mas não recomendamos o seu uso a não ser para algum teste específico. Sempre opte por subir os componentes separados, desta forma o helm vai controlar a instalação e atualização dos ambientes separadamente. Caso suba o pacote umbrella, ao desinstalá-lo o helm irá destruir todo o ecossistema inclusive o banco de dados minando o compartilhamento entre várias instâncias.
-
-Outros pacotes serão adicionados ao longo do tempo como:
-- serviço varnish para cache de assets (jpg, css, js, etc)
-- possibilidade de uso do ingress traefik
-- serviços para gerenciamento dos recursos
-- backup automatizado para atualizações
-- e outros
-
-# Pré-requisitos
-
-- kubernetes (testado em v1.23.16 no rancher 1.2.6 e 1.32.2 no docker-desktop)
-- ingress nginx instalado
-- service metrics instalado caso deseje hpa
-- helm (testado no 3.17)
-- código fonte do SEI desejável em repositório git
-- necessário conhecimento básico do helm e kubernetes
+[Clique Aqui](../docs/visaocomponentes.md) para uma descrição mais completa de todos os componentes.
 
 
-# Como subir
+## Publicação:
 
-Uma orientação básica de como subir [está aqui](documentation/exemplo1.md)
+Uma vez as imagens publicadas em seu registry privado, para subir o helm proceda da sequinte forma:
+
+### Preparação do Kube:
+
+- Planeje os namespaces separadamente: cada componente ou grupo de componentes deverá obrigatoriamente estar em seu namespace separado. Você pode informar o namespace no comando de criação do helm chart. Na figura acima temos os seguintes namespaces:
+	- app1, app2 e app3 - contendo apache, php memcached, agendador e os jobs de instalacao para cada instância
+	- cacheassets1 - contendo o serviço de cache de assets compartilhado entre as instancias
+	- db1 - contendo um database compartilhado entre as instâncias
+	- solr1 - contendo um solr compartilhado entre as instâncias
+	- jod1 - contendo um jod compartilhado entre as instâncias
+
+- Você pode, por exemplo criar um db2 e uma ou mais instâncias futuras compartilharem ele.
+
+- É obrigatório que esteja separados em namespace.
+- Namespace default é proibido. Esqueçam o mesmo para prd. Uma url diferente de localhost também é obrigatório. Caso esteja local pode usar o recurso do /etc/hosts para testes, mas sempre com uma url diferente de localhost.
+
+- Ingress nginx habilitado
+
+- Métricas habilitado (para os hpas)
+
+- StorageClass NFS ou outro compartilhador de Volumes
+
+- Prover um secret para o seu registry. É ele que o kube usará para baixar as imagens. Deverá estar disponível em cada namespace. O nome default é secregistry, mas você poderá usar outro nome, basta informá-lo no arquivo Values de cada chart
+- Prover um secret com o certificado para cada namespace de aplicação e informá-lo no Values de cada chart. O nome default é mysecret, mas vc pode usar outro. Vc também poderá usar o letsencrypt; basta usar as anotações opcionais no Values do helm chart equivalente
+
+- Nesta primeira versão as afinidades deverão ser inseridas a nível de namespace. Cada componente respeitará a afinidade que foi definida
 
 
-  
-# Dúvidas Sugestões Bugs ou Contribuição
+## Preparar Arquivos Values para Charts
 
-Dúvidas, sugestões ou reporte de bugs usar a parte de issues: https://github.com/pengovbr/sei-helm/issues
+Seguindo o padrão helm chart de publicação, você deverá prover um arquivo Values para cada chart que quiser publicar.
 
-Para contribuir basta fazer o pull request. Aconselhável antes alinhar os requisitos com algum project owner.
+Cada chart tem um arquivo Values com informações do que você pode alterar de acordo com o seu ambiente.
+
+Verifique em cada um deles as orientações para preenchimento.
+
+## Publicar cada Chart Individualmente
+
+Depois de tudo preparado publique os charts individualmente usando os comandos helm para tal.
+
+Ex:
+cd helm
+helm install solr charts/sei-solr -n mysolr --create-namespace -f ~/Desktop/clustervalues/meusei.br/solr.yaml
+
+
+
+
+## Solr - Adicionar Novos Orgãos
+
+Caso deseje inserir novas instâncias de SEI no Cluster, você precisará fazer um upgrade no Solr contendo os índices e usuários para as novas instâncias. Ajuste o arquivo Values com os dados do novo índice (nome, usuário e senha a serem usados pela instancia) e rode o comando, por ex:
+
+helm upgrade solr charts/sei-solr -n mysolr -f ~/Desktop/clustervalues/meusei.br/solr.yaml
+
+Esse upgrade vai escalonar um novo job kubernetes no solr para criar o novo índice e provisionar o user/senha desejado.
+
+## Cache Assets - Adicionar Novos Orgãos
+
+Situação análoga a do Solr acima
