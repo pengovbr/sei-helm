@@ -24,15 +24,14 @@ Aqui no SEI-Helm temos:
 - charts helm para o provisionamento do SEI
 
 **Importante**
-Esta é uma primeira versão com o que a equipe considera o pontapé inicial para instalações em prd.
-Ela ainda é release candidate, pois não a testamos em ambiente real. Diversos aspectos precisam ser amadurecidos e implementados. Para maiores informações veja a seção **Limitações** abaixo.
+Esta é uma versão release candidate. Para maiores informações veja a seção **Limitações** abaixo.
 
 
 ## Para quem
 
 Permite a profissionais de infra subirem no kubernetes, rapidamente, uma ou várias instâncias do SEI usando a abordagem do Helm.
 
-Embora possa perfeitamente ser utilizada isoladamente, esta solução será melhor aproveitada quando dermos andamento a segunda parte do projeto que terá o ArgoCd / Jenkins participando da orquestração e usando o modelo gitops de provisionamento.
+Embora possa perfeitamente ser utilizada isoladamente, esta solução será melhor aproveitada quando disponibilizarmos a segunda parte do projeto que terá o ArgoCd / Jenkins participando da orquestração e usando o modelo gitops de provisionamento.
 
 
 
@@ -51,7 +50,7 @@ Ambientes do SEI no kubernetes:
 
 # Limitações
 
-Esta é uma primeira versão com o que a equipe considera o pontapé inicial para instalações em prd.
+Esta é uma primeira versão que a equipe considera o pontapé inicial para instalações em prd.
 Ela ainda é release candidate, pois, por falta de recurso e tempo ainda nos faltam diversos aspectos a serem melhor desenvolvidos como:
 - testar em ambiente real (nós ainda não temos infra análoga a prd para testes)
 - testes de carga
