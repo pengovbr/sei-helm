@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  TZ: {{ .Values.app.tz | quote }}
+kind: ConfigMap
+metadata:
+  name: cm-php
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}

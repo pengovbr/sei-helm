@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  TZ: {{ .Values.db.tz | quote }}
+kind: ConfigMap
+metadata:
+  name: cm-db
+  labels:
+    {{- include "sei-db.labels" . | nindent 4 }}

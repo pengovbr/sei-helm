@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  TZ: {{ .Values.jod.tz | quote }}
+kind: ConfigMap
+metadata:
+  name: cm-jod
+  labels:
+    {{- include "sei-jod.labels" . | nindent 4 }}

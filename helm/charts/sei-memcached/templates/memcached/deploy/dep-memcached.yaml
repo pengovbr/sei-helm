@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcached
+  labels:
+    {{- include "sei-memcached.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: memcached
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: memcached
+        {{- include "sei-memcached.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.memcached.image.secret }}
+      containers:
+      - image: "{{ .Values.memcached.image.repository }}:{{ .Values.memcached.image.tag }}"
+        imagePullPolicy: {{ .Values.memcached.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-memcached
+        name: memcached
+        args:
+        {{- with .Values.memcached.config.verbose }}
+        - "-v"
+        {{- end }}
+        {{- with .Values.memcached.config.maxRequestsEvent }}
+        - "-R {{ . }}"
+        {{- end }}
+        {{- if not .Values.memcached.config.compareSwap }}
+        - "-C"
+        {{- end }}
+        {{- with .Values.memcached.config.maxConnections }}
+        - "-c {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.config.threads }}
+        - "-t {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.config.memory }}
+        - "-m {{ . }}"
+        {{- end }}
+        {{- with .Values.memcached.resources }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.startupProbe }}
+        startupProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.livenessProbe }}
+        livenessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{- with .Values.memcached.readinessProbe }}
+        readinessProbe:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+
+        stdin: true
+        tty: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

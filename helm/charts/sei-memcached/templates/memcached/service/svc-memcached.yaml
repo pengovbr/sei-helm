@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached
+  labels:
+    {{- include "sei-memcached.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+  - name: tcp
+    port: 11211
+    protocol: TCP
+    targetPort: 11211
+  selector:
+    servico: memcached

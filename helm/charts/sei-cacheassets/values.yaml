@@ -1,0 +1,50 @@
+#orgao: orgaon
+cacheassets:
+
+    image:
+        repository: ghcr.io/pengovbr/sei-helm/nginx
+        pullPolicy: IfNotPresent
+        tag: "1.0.0-rc1"
+
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    tz: America/Sao_Paulo
+
+    # ========================
+    # IMPORTANTE
+    # ========================
+    # informe aqui o backend de cada instalacao
+    # o cache dos assets sera feito de forma independente para cada instancia
+    # o mesmo nginx podera fazer o cache para todas as instancias do mesmo cluster.
+    # No array abaixo de backends informe o namespace e o host de cada instancia
+
+    backends:
+        - namespace: app1
+          host: meusei.br
+        #- namespace: app2
+        #  host: sei2.teste
+        #- namespace: nsorgao1
+        #  host: orgao1.gov.br
+
+    ingress:
+
+        # Nome do secret com o certificado TLS para o ingress.
+        # Crie esse secret com antecedencia para o ingress caso
+        # nao possua uma ferramenta emissora.
+        # Adicione no formato crt e key padrao para ingress do kube
+        tls_secret_name: "mysecret"
+
+        # anotacoes opcionais, renomeie de zopcionais para opcionais,
+        # apos isso, todos as anotacoes listadas serao publicadas no ingress
+        # alem dos exemplos abaixo, vc pode informar as suas especificas
+        zopcionais:
+            #cert-manager.io/cluster-issuer: letsencrypt-dth
+            #kubernetes.io/ingress.class: nginx
+            #kubernetes.io/tls-acme: "true"
+            #nginx.ingress.kubernetes.io/affinity: cookie1
+            #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+

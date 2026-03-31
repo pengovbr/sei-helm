@@ -1,0 +1,20 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-jod
+  labels:
+    {{- include "sei-jod.labels" . | nindent 4 }}
+spec:
+  maxReplicas: {{ .Values.jod.max_replicas }}
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 50
+        type: Utilization
+    type: Resource
+  minReplicas: {{ .Values.jod.initial_replicas }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: jod

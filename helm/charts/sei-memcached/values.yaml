@@ -1,0 +1,71 @@
+#orgao: orgaon
+memcached:
+
+    image:
+        repository: ghcr.io/pengovbr/sei-helm/memcached
+        pullPolicy: IfNotPresent
+        tag: "1.0.0-rc1"
+
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    tz: America/Sao_Paulo
+
+    config:
+        verbose: true
+        maxRequestsEvent: 4096
+        maxConnections: 2048
+        compareSwap: false
+        threads: 4
+        memory: 256
+
+    # tune os resources
+    # Resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo
+    # Ex:
+    # resources:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+
+    # os probes abaixo sao todos dinamicos
+    # serao integralmente enviados para o pod
+    # caso deseje desabilitar algum probe basta:
+    # startupProbe: {}
+    startupProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - echo 'stats' | nc 127.0.0.1 11211 | grep uptime
+      initialDelaySeconds: 2
+      periodSeconds: 2
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 300
+
+    livenessProbe:
+      tcpSocket:
+        port: 11211
+      initialDelaySeconds: 5
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 2
+      successThreshold: 1
+
+    readinessProbe:
+      tcpSocket:
+        port: 11211
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5

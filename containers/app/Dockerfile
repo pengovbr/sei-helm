@@ -1,0 +1,290 @@
+
+ARG IMAGE_ALPINE=rodepelomakefile
+ARG IMAGE_ALPINE_VERSION=rodepelomakefile
+
+# *****************************************************************
+# APACHE **********************************************************
+# *****************************************************************
+
+FROM ${IMAGE_ALPINE}:${IMAGE_ALPINE_VERSION} AS apache
+
+RUN apk add --no-cache \
+    apache2 \
+    apache2-http2 \
+    apache2-proxy
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    cp /temp/conf/apache/sei.conf /etc/apache2/conf.d/zzz-sei.conf && \
+    chown apache:apache /var/www/logs/ && \
+    chown -R apache:apache /var/run/apache2 && \
+    sed -i 's|#LoadModule mpm_event_module modules/mod_mpm_event.so|LoadModule mpm_event_module modules/mod_mpm_event.so|' /etc/apache2/httpd.conf && \
+    sed -i 's|LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|' /etc/apache2/httpd.conf
+
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    cp -R /temp/apache/sei /opt/ && \
+    cp -R /temp/apache/sip /opt/ && \
+    cp -R /temp/apache/infra /opt/ && \
+    chown -R apache:apache \
+        /opt/sei \
+        /opt/sip \
+        /opt/infra
+
+USER apache
+
+EXPOSE 80
+
+CMD ["httpd", "-DFOREGROUND"]
+
+
+# *****************************************************************
+# PHP *************************************************************
+# *****************************************************************
+
+FROM ${IMAGE_ALPINE}:${IMAGE_ALPINE_VERSION} AS phpgeneric
+
+# Erro do iconv com musl ASCII//TRANSLIT
+# https://github.com/docker-library/php/issues/1495
+RUN apk add --no-cache \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/community/ \
+    gnu-libiconv=1.15-r2;
+
+ENV LD_PRELOAD=/usr/lib/preloadable_libiconv.so
+
+RUN apk add --no-cache \
+    php82-bcmath \
+    php82-bz2 \
+    php82-calendar \
+    php82-ctype \
+    php82-curl \
+    php82-dom \
+    php82-exif \
+    php82-fileinfo \
+    php82-fpm \
+    php82-gd \
+    php82-gettext \
+    php82-gmp \
+    php82-iconv \
+    php82-imap \
+    php82-intl \
+    php82-ldap \
+    php82-mbstring \
+    php82-odbc \
+    php82-opcache \
+    php82-openssl \
+    php82-pcntl \
+    php82-pear \
+    php82-pecl-apcu \
+    php82-pecl-igbinary \
+    php82-pecl-mcrypt \
+    php82-pecl-memcache \
+    #php82-pecl-xdebug \
+    php82-phar \
+    php82-pspell \
+    php82-simplexml \
+    php82-sodium \
+    php82-shmop \
+    php82-snmp \
+    php82-soap \
+    php82-xml \
+    php82-zip \
+    php82-zlib \
+    php82-pecl-uploadprogress \
+    # Suporte para módulo de assinatura
+    php82-tokenizer \
+    php82-xmlwriter \
+    # Pacotes para o wkhtmltopdf
+    libstdc++ \
+    libx11 \
+    libxrender \
+    libxext \
+    libssl3 \
+    ca-certificates \
+    fontconfig \
+    freetype \
+    ttf-dejavu \
+    ttf-droid \
+    ttf-freefont \
+    ttf-liberation && \
+    # more fonts
+    apk add --no-cache --virtual .build-deps \
+    msttcorefonts-installer && \
+    # Install microsoft fonts
+    update-ms-fonts && \
+    fc-cache -f && \
+    # Clean up when done
+    rm -rf /tmp/* && \
+    apk del .build-deps
+
+# wkhtmltopdf #
+COPY --from=surnet/alpine-wkhtmltopdf:3.22.0-0.12.6-small \
+    /bin/wkhtmltopdf /bin/wkhtmltopdf
+
+RUN apk add --no-cache openjdk8
+
+# Geração de audio do captcha
+RUN apk add --no-cache ffmpeg;
+
+RUN --mount=type=bind,source=assets/conf,target=/temp/,readonly \
+    adduser -u 82 -D -S -G www-data www-data && \
+    cp /temp/php/sei.ini /etc/php82/conf.d/zzz-sei.ini && \
+    cp /temp/php/sei-fpm.conf /etc/php82/php-fpm.d/zzz-sei-fpm.conf && \
+    ln -s /usr/bin/php82 /usr/bin/php
+
+# *****************************************************************
+# PHP *************************************************************
+# *****************************************************************
+
+FROM phpgeneric AS php
+
+ARG IMAGE_PHP_BUILD_MYSQL=rodepelomakefile
+ARG IMAGE_PHP_BUILD_POSTGRES=rodepelomakefile
+ARG IMAGE_PHP_BUILD_ORACLE=rodepelomakefile
+ARG IMAGE_PHP_BUILD_SQLSERVER=rodepelomakefile
+
+# database(s)
+RUN if [ "${IMAGE_PHP_BUILD_MYSQL}" == "true" ]; then \
+        apk add --no-cache \
+        php82-mysqli; \
+        #php82-pdo \
+        #php82-pdo_mysql \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_POSTGRES}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_ORACLE}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi; \
+    if [ "${IMAGE_PHP_BUILD_SQLSERVER}" == "true" ]; then \
+        echo "Informe/configure aqui os pacotes"; \
+    fi;
+
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    cp -a /temp/php/sei /opt/ && \
+    cp -a /temp/php/sip /opt/ && \
+    cp -a /temp/php/infra /opt/ && \
+    mkdir -p /var/lib/sei/dbfiles && \
+    mkdir -p /var/lib/sei/dbcontrol && \
+    mkdir -p /var/lib/sei/tmpfiles && \
+    chown www-data /var/lib/sei/dbfiles && \
+    chown www-data /var/lib/sei/tmpfiles && \
+    ln -s /var/lib/sei/tmpfiles /opt/sei/temp && \
+    ln -s /var/lib/sei/tmpfiles /opt/sip/temp
+
+USER www-data
+
+STOPSIGNAL SIGQUIT
+
+EXPOSE 9000
+
+CMD ["php-fpm82"]
+
+
+# *****************************************************************
+# PHPMAKETOOLS*****************************************************
+# *****************************************************************
+
+FROM phpgeneric AS phpmaketools
+
+RUN apk add --no-cache \
+    bash \
+    git \
+    make \
+    zip \
+    unzip
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    mkdir /assets && \
+    cp -R /temp/phpmaketools/* /assets/
+
+
+# *****************************************************************
+# APACHE PHP*******************************************************
+# *****************************************************************
+
+# Esta imagem esta incompleta (seria a juncao da imagem web e php acima)
+# No momento estamos priorizando o modelo de php isolado do servidor web
+# Use as demais imagens presentes nesse multibuild enquanto essa nao fica pronta
+
+FROM php AS apachephp
+
+USER root
+
+RUN apk add --no-cache \
+    apache2 \
+    apache2-http2 \
+    apache2-proxy
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    cp /temp/conf/apache/sei.conf /etc/apache2/conf.d/sei.conf && \
+    chown apache:apache /var/www/logs/ && \
+    chown -R apache:apache /var/run/apache2 && \
+    sed -i 's|#LoadModule mpm_event_module modules/mod_mpm_event.so|LoadModule mpm_event_module modules/mod_mpm_event.so|' /etc/apache2/httpd.conf && \
+    sed -i 's|LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|' /etc/apache2/httpd.conf && \
+    sed -i 's|SetHandler "proxy:fcgi://php:9000"|SetHandler "proxy:fcgi://127.0.0.1:9000"|' /etc/apache2/conf.d/sei.conf
+
+RUN --mount=type=bind,from=apache,source=/opt,target=/temp/,readonly \
+    \cp -R /temp/sei /opt/ && \
+    \cp -R /temp/sip /opt/ && \
+    \cp -R /temp/infra /opt/ && \
+    chown -R apache:apache \
+        /opt/sei \
+        /opt/sip \
+        /opt/infra
+
+USER apache
+
+EXPOSE 80
+
+CMD ["/bin/sh", "-c", "php-fpm82 -D && httpd -DFOREGROUND"]
+
+
+# *****************************************************************
+# PHP INSTALL******************************************************
+# *****************************************************************
+FROM php AS php-install
+
+ARG REPO=https://raw.githubusercontent.com/pengovbr
+ARG WAY=sei-db-ref-executivo/refs/heads/master/mysql/v5.0.0
+ARG URLSEIDMP=${REPO}/${WAY}/sei_5_0_0_BD_Ref_Exec.sql
+ARG URLSIPDMP=${REPO}/${WAY}/sip_5_0_0_BD_Ref_Exec.sql
+
+USER root
+
+RUN apk add --no-cache \
+    bash \
+    curl \
+    mariadb-client
+
+RUN --mount=type=bind,source=assets/fontes/fontes-prepared,target=/temp/,readonly \
+    \cp -R /temp/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/scripts/sip/scripts /opt/sip/scripts/ && \
+    mkdir -p /dbref && \
+    cd /dbref && \
+    curl -LO ${URLSEIDMP} && \
+    curl -LO ${URLSIPDMP}
+
+
+# *****************************************************************
+# PHP CRON*********************************************************
+# *****************************************************************
+FROM php AS php-cron
+
+USER root
+
+RUN --mount=type=bind,source=assets,target=/temp/,readonly \
+    apk add --no-cache \
+    tini \
+    procps && \
+    \cp -R /temp/fontes/fontes-prepared/scripts/sei/scripts /opt/sei/scripts/ && \
+    \cp -R /temp/fontes/fontes-prepared/scripts/sip/scripts /opt/sip/scripts/ && \
+    cp /temp/conf/cron.d/cron.conf /etc/crontabs/root && \
+    mkdir -p /usr/share/sei/ && \
+    cp /temp/scripts/tmpdelete.sh /usr/share/sei/ && \
+    chmod +x /usr/share/sei/tmpdelete.sh
+
+# bug no cron do alpine nao processa corretamente signal handling
+# vamos usar tini enquanto n for resolvido
+ENTRYPOINT ["/sbin/tini", "--"]
+
+#todo verificar forma de subir sem root
+CMD ["crond", "-f"]

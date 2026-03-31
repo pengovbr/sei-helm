@@ -1,0 +1,10 @@
+apiVersion: v2
+name: sei-app
+description: Helm chart para subir o nó de aplicação do SEI-5 / Agendador / Ingress
+
+type: application
+
+version: 1.0.0
+
+appVersion: "5.1.0"
+icon: https://raw.githubusercontent.com/pengovbr/sei-helm/refs/heads/main/apoio/imagens/phplogo.png

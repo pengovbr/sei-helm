@@ -1,0 +1,149 @@
+solr:
+
+    # informe a classe do pvc onde sera criado o volume do solr
+    # deve estar pre-instalado no seu kubernetes um provisionador nfs
+    # gluster ou outro. No caso do docker-desktop ja existe um provisionador
+    # automatico que cria uma pasta na vm do host ou do linux wsl. Para isso deixe
+    # o storageclass vazio
+    # caso contrario tera q criar o pv manualmente
+    storage:
+        #storageClass: nfs-client
+        storageClass: ""
+
+    tz: America/Sao_Paulo
+
+    image:
+        repository: ghcr.io/pengovbr/sei-helm/solr
+        pullPolicy: IfNotPresent
+        tag: "1.0.0-rc1"
+
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    # controla os idices q serao criados no solr
+    jobInstall:
+
+        # cada instancia do sei precisa do seus proprios indices no solr
+        # informe-os como abaixo
+        orgaos:
+            - orgao: orgao1
+
+              idxProtocolo: org1sei-protocolos
+              idxBaseConhecimento: org1sei-base-conhecimento
+              idxPublicacoes: org1sei-publicacoes
+
+              # usuario e senha que o sei vai usar para acesar o solr
+              # o job vai criar esse user no solr com perfil basic
+              # caso deseje alterar/restringir permissoes proceda
+              # fazendo isso usando a interface de admin do solr
+              username: org1solr
+              password: org1solrp
+            #- orgao: orgao2
+            #  idxProtocolo: org2sei-protocolos
+            #  idxBaseConhecimento: org2sei-base-conhecimento
+            #  idxPublicacoes: org2sei-publicacoes
+
+            #  # usuario e senha que o sei vai usar para acesar o solr
+            #  # obrigatorio mesmo que enable: false, acima
+            #  username: org2solr
+            #  password: org2solrp
+
+        solrAdminUser: "admin"
+        solrAdminPass: "SolrAdmin123$"
+
+        imageInstall:
+            repository: ghcr.io/pengovbr/sei-helm/php-install
+            pullPolicy: IfNotPresent
+            tag: 1.0.0-rc1
+            # secret cadastrado no kube para o registry
+            secret: secregistry
+
+
+    # caso deseje desabilitar ingress para o solr passe assim:
+    # ingress: {}
+    ingress:
+        tls_secret_name: mysecret
+        host: meusolr.br
+
+        # anotacoes opcionais, renomeie de zopcionais para opcionais,
+        # apos isso, todos as anotacoes listadas serao publicadas no ingress
+        # alem dos exemplos abaixo, vc pode informar as suas especificas
+        zopcionais:
+            #cert-manager.io/cluster-issuer: letsencrypt-dth
+            #kubernetes.io/ingress.class: nginx
+            #kubernetes.io/tls-acme: "true"
+            #nginx.ingress.kubernetes.io/affinity: cookie1
+            #nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+
+
+    # tune os resources e tb o memory abaixo
+    # Em prd eh bom o Solr ficar sozinho em um node.
+    # Resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo
+    # Ex:
+    # resources:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+    pvc:
+      # caso queira usar um seletor no pvc
+      # para fazer o bind no PV, use como ex abaixo
+      # seletor atual desabilidado
+      selector: {}
+      # para habilitar seque exemplo abaixo
+      # Ex:
+      # selector:
+      #   matchLabels:
+      #     purpose: solr
+
+
+    # memoria para a jvm do solr
+    # A qtde de memoria que vc fornecer ao solr sera decisiva
+    # para o seu correto funcionamento
+    memory: 512m
+
+    # os probes abaixo sao todos dinamicos
+    # serao integralmente enviados para o pod
+    # caso deseje desabilitar algum probe basta:
+    # startupProbe: {}
+    startupProbe:
+      exec:
+        command:
+        - /probes/startup.sh
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 15
+      successThreshold: 1
+      failureThreshold: 300
+
+    livenessProbe:
+      exec:
+        command:
+        - /probes/liveness.sh
+      initialDelaySeconds: 30
+      periodSeconds: 60
+      timeoutSeconds: 15
+      failureThreshold: 3
+      successThreshold: 1
+
+    readinessProbe:
+      exec:
+        command:
+        - /probes/readiness.sh
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 10
+      successThreshold: 1
+      failureThreshold: 6
+
+    # usuario para os probes
+    solrProbeUser: admin
+    solrProbePass: SolrAdmin123$

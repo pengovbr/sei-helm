@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    {{- include "sei-db.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        servico: db
+        {{- include "sei-db.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.db.image.secret }}
+      containers:
+      - image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
+        imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-db
+        name: db
+        stdin: true
+        tty: true
+        {{- with .Values.db.resources }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - mountPath: /etc/mysql/mariadb.conf.d/99-sei.cnf
+          name: mycnf
+          subPath: 99-sei.cnf
+        - mountPath: /var/lib/mysql
+          name: vol1
+      initContainers:
+      - command:
+        - bash
+        - -c
+        - echo "Vamos verificar se existe uma pasta com os dados do mysql."; echo
+          "Caso nao exista vamos criar..."; i=$(ls -A /t);  if [[ "$(ls -A /t)" = "" ]]; then     echo
+          "Diretorio vazio, vamos copiar os dados do banco...";     cp -a /var/lib/mysql/*
+          /t/ &&     echo "Dados copiados!"; else   echo "Diretorio nao esta vazio.
+          " ;   echo "Arquivos encontrados";    i=$(ls -lha /t);   echo $(ls -A /t);   echo
+          "Nao vamos alterar nada. " ;   echo "Caso o banco nao suba, verifique se
+          nesse dir existe um banco e que as permissoes do arquivo estejam com o mysql
+          (id 999)" ; fi;  exit 0
+        image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
+        imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+        envFrom:
+          - configMapRef:
+              name: cm-db
+        name: db-init
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /t
+          name: vol1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: mycnf
+        configMap:
+          name: cm-db-config
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-db

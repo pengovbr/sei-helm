@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 510m
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    {{- with .Values.cacheassets.ingress.opcionais }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  name: ing-cacheassets
+  labels:
+    {{- include "sei-cacheassets.labels" . | nindent 4 }}
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    {{- range .Values.cacheassets.backends }}
+    - {{ .host }}
+    {{- end }}
+    secretName: {{ .Values.cacheassets.ingress.tls_secret_name }}
+  rules:
+  {{- range .Values.cacheassets.backends }}
+  - host: {{ .host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: cacheassets
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  {{- end }}
+
+

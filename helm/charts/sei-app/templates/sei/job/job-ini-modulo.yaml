@@ -1,0 +1,83 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-ini-modulo
+  labels:
+    job-name: job-modulo
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 0
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        {{- include "sei-app.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.app.imageInstall.secret }}
+      containers:
+      - command:
+        - /automationscripts/modulos.sh
+        envFrom:
+        - configMapRef:
+            name: cm-php
+        image: {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
+        imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
+        name: job-ini-modulo
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /automationscripts/modulos.sh
+          name: se-php-install-files
+          subPath: modulos.sh
+        - mountPath: /automationscripts/mod-sei-pen.sh
+          name: se-php-install-files
+          subPath: mod-sei-pen.sh
+        - mountPath: /opt/sei/config/mod-pen/certificado.pem
+          name: se-php-files
+          subPath: certificado.pem
+        - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+          name: se-php-files
+          subPath: ConfiguracaoModPEN.php
+        - mountPath: /opt/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinaturaEletronica.php
+          name: se-php-files
+          subPath: ConfiguracaoModAssinaturaEletronica.php
+        - mountPath: /opt/sei/config/ConfiguracaoSEI.php
+          name: se-php-files
+          subPath: ConfiguracaoSEI.php
+        - mountPath: /opt/sip/config/ConfiguracaoSip.php
+          name: se-php-files
+          subPath: ConfiguracaoSip.php
+        - mountPath: /var/lib/sei
+          name: vol-sei
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: se-php-files
+        secret:
+          secretName: se-php-files
+          items:
+          - key: modPenCertificado.pem
+            path: certificado.pem
+          - key: modPenConfiguracaoModPen.php
+            path: ConfiguracaoModPEN.php
+          - key: modAssinatura.php
+            path: ConfiguracaoModAssinaturaEletronica.php
+          - key: seiConfiguracao.php
+            path: ConfiguracaoSEI.php
+          - key: sipConfiguracao.php
+            path: ConfiguracaoSip.php
+          defaultMode: 0400
+      - name: se-php-install-files
+        secret:
+          secretName: se-php-install-files
+          items:
+          - key: modPenModulos.sh
+            path: modulos.sh
+          - key: modPenModseipen.sh
+            path: mod-sei-pen.sh
+          defaultMode: 0500
+      - name: vol-sei
+        persistentVolumeClaim:
+          claimName: vol-sei

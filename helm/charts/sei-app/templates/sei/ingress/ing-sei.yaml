@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/app-root: /sei/
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.app.ingress.proxyBodySize }}
+    nginx.ingress.kubernetes.io/lb-method: least_conn
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    {{- with .Values.app.ingress.opcionais }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  name: ing-sei
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ .Values.app.host }}
+    secretName: {{ .Values.app.ingress.tls_secret_name }}
+  rules:
+  - host: {{ .Values.app.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: web
+            port:
+              number: 80
+        path: /(.*\.php|sip$|sip\/$|sei$|sei\/$)
+        #path: /
+        pathType: ImplementationSpecific

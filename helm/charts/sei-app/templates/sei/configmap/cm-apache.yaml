@@ -1,0 +1,9 @@
+apiVersion: v1
+binaryData:
+  zzz-sei.conf: |-
+    {{ tpl (.Files.Get "apoio/userTemplates/apache/sei.conf") . | b64enc }}
+kind: ConfigMap
+metadata:
+  name: cm-apache
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}

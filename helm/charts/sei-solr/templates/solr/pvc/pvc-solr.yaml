@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-solr
+  labels:
+    {{- include "sei-solr.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 51Gi
+  {{- with .Values.solr.pvc.selector }}
+  selector:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+  {{- with .Values.solr.storage.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}

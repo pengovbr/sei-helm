@@ -1,0 +1,47 @@
+jod:
+
+    image:
+        repository: ghcr.io/pengovbr/sei-helm/jod
+        pullPolicy: IfNotPresent
+        tag: "1.0.0-rc1"
+
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    tz: "America/Sao_Paulo"
+
+    initial_replicas: 1
+    max_replicas: 3
+
+
+    # tune os resources e tb o servico portnumbers abaixo
+    # resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo:
+    # resources:
+    #     limits:
+    #         cpu: 500m
+    #         memory: 2048Mi
+    #     requests:
+    #         cpu: 500m
+    #         memory: 2048Mi
+
+    # port numbers sao as portas internas que o libreoffice deixarah disponivel
+    # para processamento dentro de cada conteiner q for instanciado.
+    # Cada documento que chega para ser processado deve encontrar uma porta aberta
+    # senao cai na fila de espera por 30s.
+    # Tune o parametro abaixo bem como max_replicas acima para o hpa escalonar
+    # em caso de alta demanda. Tune tb o resources acima.
+    # No caso abaixo tb vai aceitar arquivos de tamanho ate 1GB
+    servico:
+        portnumbers: [ 2002, 2003 ]
+        maxfilesize: 1024MB
+        maxrequestsize: 1024MB
+
+    # Ex do portnumbers com 5 portas
+    #
+    #servico:
+    #    portnumbers: [ 2002, 2003, 2004, 2005, 2006 ]

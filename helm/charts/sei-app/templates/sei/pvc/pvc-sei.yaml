@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 52Gi
+  {{- with .Values.app.pvc.selector }}
+  selector:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+  {{- with .Values.app.storage.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}

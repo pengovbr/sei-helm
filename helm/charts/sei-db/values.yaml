@@ -1,0 +1,65 @@
+db:
+
+    # informe a classe do pvc onde sera criado o volume de banco
+    # deve estar pre-instalado no seu kubernetes um provisionador nfs
+    # gluster ou outro. No caso do docker-desktop ja existe um provisionador
+    # automatico que cria uma pasta na vm do host ou do linux wsl. Para isso deixe
+    # o storageclass vazio
+    # caso contrario tera q criar o pv manualmente
+    storage:
+        storageClass: ""
+
+    image:
+        repository: ghcr.io/pengovbr/sei-helm/mariadb
+        pullPolicy: IfNotPresent
+        tag: "1.0.0-rc1"
+
+        # secret cadastrado no kube para o registry
+        secret: secregistry
+
+    nameOverride: ""
+    fullnameOverride: ""
+
+    tz: America/Sao_Paulo
+
+    # atencao aos resources
+    # seu dba devera orientar se liga ou desliga o mesmo
+    # resources desabilitados por default
+    resources: {}
+    # para habilitar seque exemplo abaixo:
+    # resources:
+    #     limits:
+    #         cpu: 12000m
+    #         memory: 16384Mi
+    #     requests:
+    #         cpu: 12000m
+    #         memory: 16384Mi
+
+    pvc:
+      # caso queira usar um seletor no pvc
+      # para fazer o bind no PV, use como ex abaixo
+      # seletor atual desabilidado
+      selector: {}
+      # para habilitar seque exemplo abaixo
+      # Ex:
+      # selector:
+      #   matchLabels:
+      #     purpose: db
+
+
+    # passe aqui o seu arquivo my.cnf com suas configs de prd
+    # o dba devera informar
+    # atencao a identacao abaixo que eh obrigatoria
+    # o mesmo sera criado no mariadb sem a identacao
+    mycnf: |-
+        [mysqld]
+        #sql-mode=STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+        character-set-server    = latin1
+        collation-server        = latin1_swedish_ci
+        connect_timeout         = 28000
+        net_read_timeout        = 28000
+        max_allowed_packet      = 128M
+        thread_stack            = 192K
+        thread_cache_size       = 8
+        innodb_buffer_pool_size = 128M

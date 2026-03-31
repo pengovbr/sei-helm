@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agendador
+  labels:
+    {{- include "sei-app.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: agendador
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: agendador
+        {{- include "sei-app.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.app.imageCron.secret }}
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: cm-php
+            optional: false
+        image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag }}
+        imagePullPolicy: {{ .Values.app.imageCron.pullPolicy }}
+        name: sei-app
+        startupProbe:
+          exec:
+            command:
+            - sh
+            - '-c'
+            - ls /var/lib/sei/dbcontrol/modulos-install.ok
+          failureThreshold: 100
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        stdin: true
+        tty: true
+        volumeMounts:
+        - mountPath: /etc/php82/conf.d/zzz-sei.ini
+          name: phpconf
+          subPath: zzz-sei.ini
+        - mountPath: /etc/php82/php-fpm.d/zzz-sei-fpm.conf
+          name: phpconf
+          subPath: zzz-sei-fpm.conf
+        - mountPath: /opt/sei/config/ConfiguracaoSEI.php
+          name: se-php-files
+          subPath: ConfiguracaoSEI.php
+        - mountPath: /opt/sip/config/ConfiguracaoSip.php
+          name: se-php-files
+          subPath: ConfiguracaoSip.php
+        - mountPath: /opt/sei/config/mod-pen/certificado.pem
+          name: se-php-files
+          subPath: certificado.pem
+        - mountPath: /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+          name: se-php-files
+          subPath: ConfiguracaoModPEN.php
+        - mountPath: /opt/sei/config/mod-assinatura-eletronica/ConfiguracaoModAssinaturaEletronica.php
+          name: se-php-files
+          subPath: ConfiguracaoModAssinaturaEletronica.php
+        - mountPath: /var/lib/sei
+          name: vol-sei
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: se-php-files
+        secret:
+          secretName: se-php-files
+          items:
+          - key: modPenCertificado.pem
+            path: certificado.pem
+          - key: modPenConfiguracaoModPen.php
+            path: ConfiguracaoModPEN.php
+          - key: modAssinatura.php
+            path: ConfiguracaoModAssinaturaEletronica.php
+          - key: seiConfiguracao.php
+            path: ConfiguracaoSEI.php
+          - key: sipConfiguracao.php
+            path: ConfiguracaoSip.php
+          defaultMode: 0444
+      - name: seiconf
+        configMap:
+          name: cm-seiconfig
+      - name: phpconf
+        configMap:
+          name: cm-phpconf
+      - name: vol-sei
+        persistentVolumeClaim:
+          claimName: vol-sei
