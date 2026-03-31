@@ -65,6 +65,9 @@ Caso use o fornecido, prestar atenção ao Values do chart pois tem informaçõe
 
 Chart opcional. Você pode usar um Solr externo.
 Cada instância deverá ter seu conjunto único de índices.
+
+Você poderá habilitar também, via helm, uma entrada no cluster para disponibilizar uma url para gerenciar o Solr.
+
 Caso deseje inserir novas instâncias de SEI no Cluster, você precisará fazer um upgrade no Solr contendo os índices e usuários para as novas instâncias. Ajuste o arquivo Values com os dados do novo índice (nome, usuário e senha a serem usados pela instancia), sem apagar os antigos, e rode o comando, por ex:
 
 helm upgrade solr charts/sei-solr -n mysolr -f ~/Desktop/clustervalues/meusei.br/solr.yaml
