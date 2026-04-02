@@ -212,6 +212,56 @@ app:
     # indica se o memcached armazena a sessao do php, dispensando o sticky session
     memcached_session: "true"
 
+    # tune os resources para os pods do servidor web
+    # resources desabilitados por default
+    resourcesWeb: {}
+    # para habilitar seque exemplo abaixo:
+    # resourcesWeb:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+    # tune os resources para os pods do servico php
+    # resources desabilitados por default
+    resourcesPhp: {}
+    # para habilitar seque exemplo abaixo:
+    # resourcesPhp:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+    # tune os resources para os pods do servico agendador
+    # resources desabilitados por default
+    resourcesAgendador: {}
+    # para habilitar seque exemplo abaixo:
+    # resourcesAgendador:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+    # tune os resources para os pods dos servicos instaladores
+    # resources desabilitados por default
+    # lembre que eles sobem, executam e depois morrem pra sempre
+    resourcesInstalador: {}
+    # para habilitar seque exemplo abaixo:
+    # resourcesInstalador:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
+
+
     mail:
         tipo: 2
         # preferencia usar a chave servicoExterno acima

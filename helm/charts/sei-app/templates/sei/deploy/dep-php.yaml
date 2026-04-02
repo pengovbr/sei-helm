@@ -34,9 +34,10 @@ spec:
         image: {{ .Values.app.imagePhp.repository }}:{{ .Values.app.imagePhp.tag }}
         imagePullPolicy: {{ .Values.app.imagePhp.pullPolicy }}
         name: php
+        {{- with .Values.app.resourcesPhp }}
         resources:
-          requests:
-            cpu: 500m
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         # livenessProbe:
         #   exec:
         #     command:

@@ -25,6 +25,10 @@ spec:
         image:  {{ .Values.app.imageInstall.repository }}:{{ .Values.app.imageInstall.tag }}
         imagePullPolicy: {{ .Values.app.imageInstall.pullPolicy }}
         name: job-ini-install
+        {{- with .Values.app.resourcesInstalador }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         stdin: true
         tty: true
         volumeMounts:
