@@ -217,36 +217,36 @@ app:
     resourcesWeb: {}
     # para habilitar seque exemplo abaixo:
     # resourcesWeb:
-    #     limits:
-    #         cpu: 500m
-    #         memory: 2048Mi
-    #     requests:
-    #         cpu: 500m
-    #         memory: 2048Mi
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
 
     # tune os resources para os pods do servico php
     # resources desabilitados por default
     resourcesPhp: {}
     # para habilitar seque exemplo abaixo:
     # resourcesPhp:
-    #     limits:
-    #         cpu: 500m
-    #         memory: 2048Mi
-    #     requests:
-    #         cpu: 500m
-    #         memory: 2048Mi
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
 
     # tune os resources para os pods do servico agendador
     # resources desabilitados por default
     resourcesAgendador: {}
     # para habilitar seque exemplo abaixo:
     # resourcesAgendador:
-    #     limits:
-    #         cpu: 500m
-    #         memory: 2048Mi
-    #     requests:
-    #         cpu: 500m
-    #         memory: 2048Mi
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
 
     # tune os resources para os pods dos servicos instaladores
     # resources desabilitados por default
@@ -254,12 +254,12 @@ app:
     resourcesInstalador: {}
     # para habilitar seque exemplo abaixo:
     # resourcesInstalador:
-    #     limits:
-    #         cpu: 500m
-    #         memory: 2048Mi
-    #     requests:
-    #         cpu: 500m
-    #         memory: 2048Mi
+    #   limits:
+    #     cpu: 500m
+    #     memory: 2048Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2048Mi
 
 
     mail:
