@@ -34,9 +34,10 @@ spec:
         image: {{ .Values.app.imageWeb.repository }}:{{ .Values.app.imageWeb.tag }}
         imagePullPolicy: {{ .Values.app.imageWeb.pullPolicy }}
         name: web
+        {{- with .Values.app.resourcesWeb }}
         resources:
-          requests:
-            cpu: 500m
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         # livenessProbe:
         #   exec:
         #     command:

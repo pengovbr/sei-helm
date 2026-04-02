@@ -32,6 +32,10 @@ spec:
         image: {{ .Values.app.imageCron.repository }}:{{ .Values.app.imageCron.tag }}
         imagePullPolicy: {{ .Values.app.imageCron.pullPolicy }}
         name: sei-app
+        {{- with .Values.app.resourcesAgendador }}
+        resources:
+        {{- . | toYaml | nindent 10 }}
+        {{- end }}
         startupProbe:
           exec:
             command:
